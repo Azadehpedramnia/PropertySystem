@@ -1,0 +1,750 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { jwtDecode } from 'jwt-decode';
+
+
+interface Enquiry {
+  //property info
+  id: number;
+  city: string;
+  full_address: string;
+  property_type: 'Office' | 'Retail' | 'Warehouse';
+  property_enquiry_address: string;
+  total_rateable_value: number;
+  //Optional Car Park
+  has_car_park: boolean;
+  car_park_rateable_value: string;
+
+  //Optional Financials
+  rateable_value_info: string;
+
+  //enquirer person info
+  enquirer_name: string;
+  organisation: string;
+  role: 'Est Ag' | 'Landlord' | 'Ass Man';
+  current_position: string;
+  email: string;
+  contact_number: string;
+
+  //Optional Estate Agent Details
+  estate_agent_name: string;
+  estate_agent_contact_number: string;
+  estate_agent_email: string;
+
+  //Optional Landlord Details
+  landlord_name: string;
+  landlord_email: string;
+  landlord_phone: string;
+ 
+  //Optional Management Company (POC)
+  has_management_company: boolean;
+  poc_email: string;
+  poc_contact_number: string;
+ 
+  //Audit
+  enquiry_date: string;
+}
+
+interface JwtPayload {
+  id: number;
+  email: string;
+  role: string;
+  exp: number;
+}
+
+const Dashboard = () => {
+  const router = useRouter();
+
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [error, setError] = useState('');
+  const [editEnquiry, setEditEnquiry] = useState<Enquiry | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const handleEditClick = (emp: Enquiry) => {
+    // EditMode 
+    setEditEnquiry(emp);
+    setEditMode(true);
+  };
+  const handleUpdateEnquiry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editEnquiry) return;
+  
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`http://localhost:5000/api/enquiries/${editEnquiry.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editEnquiry), 
+        });
+      if (res.ok) {
+        const updatedEmp = await res.json();
+        // Update Enquiry
+        setEnquiries((prev) =>
+          prev.map((emp) => (emp.id === updatedEmp.id ? updatedEmp : emp))
+        );
+        // back to normal mode
+        setEditMode(false);
+        setEditEnquiry(null);
+      } else {
+        const errData = await res.json();
+        setError(errData.message || 'Error updating enquiry person');
+      }
+    } catch (error) {
+      setError('Error updating enquiry person');
+    }
+  };
+  
+    // Initialize new enquiry state with default values
+    const [newEnquiry, setNewEnquiry] = useState<Omit<Enquiry, 'id'>>({
+      
+      //property info
+      city:'',
+      full_address: '',
+      property_type: 'Office',
+      property_enquiry_address: '',
+      total_rateable_value: 0,
+      //Optional Car Park
+      has_car_park: false,
+      car_park_rateable_value: '',
+
+      //Optional Financials
+      rateable_value_info: '',
+
+      //enquirer person info
+      enquirer_name: '',
+      organisation: '',
+      role: 'Est Ag' ,
+      current_position:'',
+      email: '',
+      contact_number:'',
+
+      //Optional Estate Agent Details
+      estate_agent_name: '',
+      estate_agent_contact_number: '',
+      estate_agent_email: '',
+
+      //Optional Landlord Details
+      landlord_name: '',
+      landlord_email: '',
+      landlord_phone: '',
+    
+      //Optional Management Company (POC)
+      has_management_company: false,
+      poc_email: '',
+      poc_contact_number: '',
+    
+      //Audit
+      enquiry_date: '',
+      
+    });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    // Decode token to check role
+    const decoded = jwtDecode<JwtPayload>(token);
+    if (decoded.role !== 'ADMIN') {
+      setError('Access denied. Only Admin users can access this page.');
+    } else {
+      fetchEmployees(token);
+    }
+  }, []);
+
+  const fetchEmployees = async (token: string) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/enquiries', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEnquiries(data);
+      } else {
+        const errData = await res.json();
+        setError(errData.message || 'Error fetching enquiries');
+      }
+    } catch (error) {
+      setError('Error fetching enquiries');
+    }
+  };
+
+  // Handle input changes for both text and checkbox fields
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement| HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    let newValue: any = value;
+    if (type === 'checkbox') {
+      newValue = (e.target as HTMLInputElement).checked;
+    }
+    if (type === 'number') {
+      newValue = parseFloat(value);
+    }
+    if (type === 'checkbox') {
+      newValue = (e.target as HTMLInputElement).checked;
+    }
+    setNewEnquiry({
+      ...newEnquiry,
+      [name]: newValue,
+      //[e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddEnquiry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch('http://localhost:5000/api/enquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newEnquiry),
+      });
+      if (res.ok) {
+        const enquiry = await res.json();
+        setEnquiries([...enquiries, enquiry]);
+
+        // Reset the form (you can adjust defaults as needed)
+        setNewEnquiry({
+          city:'',
+          full_address: '',
+          property_type: 'Office',
+          property_enquiry_address: '',
+          total_rateable_value: 0,
+          has_car_park: false,
+          car_park_rateable_value: '',
+          rateable_value_info: '',
+          enquirer_name: '',
+          organisation: '',
+          role: 'Est Ag' ,
+          current_position:'',
+          email: '',
+          contact_number:'',
+          estate_agent_name: '',
+          estate_agent_contact_number: '',
+          estate_agent_email: '',
+          landlord_name: '',
+          landlord_email: '',
+          landlord_phone: '',
+          has_management_company: false,
+          poc_email: '',
+          poc_contact_number: '',
+          enquiry_date: '',
+        });
+      } else {
+        const errData = await res.json();
+        setError(errData.message || 'Error adding enquiry');
+      }
+    } catch (error) {
+      setError('Error adding enquiry');
+    }
+  };
+
+  const handleDeleteEnquiry = async (id: number) => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`http://localhost:5000/api/enquiries/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        setEnquiries(enquiries.filter((enq) => enq.id !== id));
+      } else {
+        const errData = await res.json();
+        setError(errData.message || 'Error deleting enquiry');
+      }
+    } catch (error) {
+      setError('Error deleting enquiry');
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger">{error}</div>
+        <button onClick={handleLogout} className="btn btn-secondary">
+          Logout
+        </button>
+      </div>
+    );
+  }
+
+  //////
+  return (
+    <div className="container mt-5">
+      <div className="d-flex gap-3">
+      <h2>Enquiry Management Dashboard</h2>
+        <button onClick={handleLogout} className="btn btn-secondary mb-3">
+          Sign Out
+        </button>
+      </div>
+      <h3 className="mt-5">Add New Enquiry</h3>
+      <form onSubmit={handleAddEnquiry}>
+
+        <h4 className="mt-4">🙋 Enquirer Details</h4>
+        <div className="mb-3">
+          <label>Enquirer Name</label>
+          <input
+            name="enquirer_name"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.enquirer_name}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Organisation</label>
+          <input
+            name="organisation"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.organisation}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Role</label>
+          <select
+            name="role"
+            className="form-control w-50"
+            value={newEnquiry.role}
+            onChange={handleInputChange}
+          >
+            <option value="Est Ag">Est Ag</option>
+            <option value="Landlord">Landlord</option>
+            <option value="Ass Man">Ass Man</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label>Current position</label>
+          <input
+            name="current_position"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.current_position}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Email</label>
+          <input
+            name="email"
+            type="email"
+            className="form-control w-50"
+            value={newEnquiry.email}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Contact Number</label>
+          <input
+            name="contact_number"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.contact_number}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <h4 className="mt-4">🏙️ Property Details</h4>
+        <div className="mb-3">
+          <label>City</label>
+          <input
+            name="city"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.city}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label>Full Address</label>
+          <input
+            name="full_address"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.full_address}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label> property_type</label>
+          <select
+            name="property_type"
+            className="form-control w-50"
+            value={newEnquiry.property_type}
+            onChange={handleInputChange}
+          >
+            <option value="Office">Office</option>
+            <option value="Retail">Retail</option>
+            <option value="Warehouse">Warehouse</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label>Total Rateable Value</label>
+          <input
+            name="total_rateable_value"
+            type="number"
+            step="0.01" // allows decimal values
+            className="form-control w-50"
+            value={newEnquiry.total_rateable_value}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <h4 className="mt-4">🚗 Car Park</h4>
+        <div className="mb-3 form-check">
+        <label>Has car park</label>
+          <input
+            name="has_car_park"
+            type="checkbox"
+            className="form-check-input"
+            checked={newEnquiry.has_car_park}
+            onChange={handleInputChange}
+          />
+          <label className="form-check-label">Has car park</label>
+        </div>
+        <div className="mb-3">
+          <label> Carpark rateable value</label>
+          <input
+            name="car_park_rateable_value"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.car_park_rateable_value}
+            onChange={handleInputChange}         
+          />
+        </div>
+        <h4 className="mt-4">💰 Financials</h4>
+        <div className="mb-3">
+          <label>Rateable Value Info</label>
+          <input
+            name="rateable_value_info"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.rateable_value_info}
+            onChange={handleInputChange}
+          />
+        </div>
+        <h4 className="mt-4">🏢 Estate Agent</h4>
+        <div className="mb-3">
+          <label>Estate Agent Name</label>
+          <input
+            name="estate_agent_name"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.estate_agent_name}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Estate Agent Contact Number</label>
+          <input
+            name="estate_agent_contact_number"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.estate_agent_contact_number}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Estate Agent Email</label>
+          <input
+            name="estate_agent_email"
+            type="email"
+            className="form-control w-50"
+            value={newEnquiry.estate_agent_email}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <h4 className="mt-4">🏠 Landlord Details</h4>
+        <div className="mb-3">
+          <label>Landlord Name</label>
+          <input
+            name="landlord_name"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.landlord_name}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Landlord Phone</label>
+          <input
+            name="landlord_phone"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.landlord_phone}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Landlord Email</label>
+          <input
+            name="landlord_email"
+            type="email"
+            className="form-control w-50"
+            value={newEnquiry.landlord_email}
+            onChange={handleInputChange}
+          />
+        </div>
+        <h4 className="mt-4">🏢 Management Company (POC)</h4>
+        <div className="mb-3 form-check">
+          <input
+            name="has_management_company"
+            type="checkbox"
+            className="form-check-input"
+            checked={newEnquiry.has_management_company}
+            onChange={handleInputChange}
+          />
+          <label className="form-check-label">Has Management Company</label>
+        </div>
+        <div className="mb-3">
+          <label>POC Email</label>
+          <input
+            name="poc_email"
+            type="email"
+            className="form-control w-50"
+            value={newEnquiry.poc_email}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>POC Contact Number</label>
+          <input
+            name="poc_contact_number"
+            type="text"
+            className="form-control w-50"
+            value={newEnquiry.poc_contact_number}
+            onChange={handleInputChange}
+          />
+        </div>
+        <h4 className="mt-4">🕒 Enquiry Date</h4>
+        <div className="mb-3">
+          <label>Enquiry Date</label>
+          <input
+            name="enquiry_date"
+            type="date"
+            className="form-control w-50"
+            value={newEnquiry.enquiry_date}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        {/* You can add additional fields following the same pattern */}
+        <button type="submit" className="btn btn-primary">
+          Add Enquiry
+        </button>
+      </form>
+      {editMode && editEnquiry && (
+        <div>
+          <h3 className="mt-5">Edit Enquiry</h3>
+          <form onSubmit={handleUpdateEnquiry}>
+            <div className="mb-3">
+              <label>Enquirer Name</label>
+              <input
+                name="enquirer_name"
+                type="text"
+                className="form-control w-50"
+                value={editEnquiry.enquirer_name}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, enquirer_name: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Email</label>
+              <input
+                name="email"
+                type="email"
+                className="form-control w-50"
+                value={editEnquiry.email}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, email: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>City</label>
+              <input
+                name="city"
+                type="text"
+                className="form-control w-50"
+                value={editEnquiry.city}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, city: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Full Address</label>
+              <input
+                name="full_address"
+                type="text"
+                className="form-control w-50"
+                value={editEnquiry.full_address}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, full_address: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Organisation</label>
+              <input
+                name="organisation"
+                type="text"
+                className="form-control w-50"
+                value={editEnquiry.organisation}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, organisation: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Role</label>
+              <select
+                name="role"
+                className="form-control w-50"
+                value={editEnquiry.role}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, role: e.target.value as Enquiry['role'] })
+                }
+              >
+                <option value="Est Ag">Est Ag</option>
+                <option value="Landlord">Landlord</option>
+                <option value="Ass Man">Ass Man</option>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label>Enquiry Date</label>
+              <input
+                name="enquiry_date"
+                type="date"
+                className="form-control w-50"
+                value={editEnquiry.enquiry_date}
+                onChange={(e) =>
+                  setEditEnquiry({ ...editEnquiry, enquiry_date: e.target.value })
+                }
+                required
+              />
+            </div>
+            {/* Add additional fields for editing as needed */}
+            <button type="submit" className="btn btn-primary">
+              Update Enquiry
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary ms-2"
+              onClick={() => {
+                setEditMode(false);
+                setEditEnquiry(null);
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+      )}
+
+      <hr />
+      <h3 className="mt-5">Enquiry List</h3>
+      <table className="table table-bordered">
+        <thead>
+            <tr>
+            <th>Enquirer Name</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>Organisation</th>
+            <th>Role</th>
+            <th>Current Position</th>
+            <th>City</th>
+            <th>Full Address</th>
+            <th>Property Type</th>
+            <th>Total Rateable Value</th>
+            <th>Has Car Park</th>
+            <th>Car Park Rateable Value</th>
+            <th>Rateable Value Info</th>
+            <th>Estate Agent Name</th>
+            <th>Estate Agent Contact</th>
+            <th>Estate Agent Email</th>
+            <th>Landlord Name</th>
+            <th>Landlord Phone</th>
+            <th>Landlord Email</th>
+            <th>Has Management Co.</th>
+            <th>POC Email</th>
+            <th>POC Contact</th>
+            <th>Enquiry Date</th>
+            <th>Actions</th>    
+          </tr>
+        </thead>
+        <tbody>
+          {enquiries.map((enq) => (
+            <tr key={enq.id}>
+                <td>{enq.enquirer_name}</td>
+                <td>{enq.email}</td>
+                <td>{enq.contact_number}</td>
+                <td>{enq.organisation}</td>
+                <td>{enq.role}</td>
+                <td>{enq.current_position}</td>
+                <td>{enq.city}</td>
+                <td>{enq.full_address}</td>
+                <td>{enq.property_type}</td>               
+                <td>{Number(enq.total_rateable_value).toFixed(2)}</td>
+                <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
+                <td>{enq.car_park_rateable_value}</td>
+                <td>{enq.rateable_value_info}</td>
+                <td>{enq.estate_agent_name}</td>
+                <td>{enq.estate_agent_contact_number}</td>
+                <td>{enq.estate_agent_email}</td>
+                <td>{enq.landlord_name}</td>
+                <td>{enq.landlord_phone}</td>
+                <td>{enq.landlord_email}</td>
+                <td>{enq.has_management_company ? 'Yes' : 'No'}</td>
+                <td>{enq.poc_email}</td>
+                <td>{enq.poc_contact_number}</td>
+                <td>{new Date(enq.enquiry_date).toLocaleDateString()}</td>
+            
+              <td>
+                <button className="btn btn-warning me-2" onClick={() => handleEditClick(enq)}>
+                  Edit
+                </button>
+                <button className="btn btn-danger" onClick={() => handleDeleteEnquiry(enq.id)}>
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Dashboard;
