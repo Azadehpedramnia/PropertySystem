@@ -541,18 +541,7 @@ const Dashboard = () => {
             onChange={handleInputChange}
           />
         </div>
-        <h4 className="mt-4">🕒 Enquiry Date</h4>
-        <div className="mb-3">
-          <label>Enquiry Date</label>
-          <input
-            name="enquiry_date"
-            type="date"
-            className="form-control w-50"
-            value={newEnquiry.enquiry_date}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+        
         {/* You can add additional fields following the same pattern */}
         <button type="submit" className="btn btn-primary">
           Add Enquiry
