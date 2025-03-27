@@ -694,6 +694,7 @@ const Dashboard = () => {
       <table className="table table-bordered">
         <thead>
             <tr>
+            <th>Full Address</th>
             <th>Enquirer Name</th>
             <th>Email</th>
             <th>Contact Number</th>
@@ -701,7 +702,7 @@ const Dashboard = () => {
             <th>Role</th>
             <th>Current Position</th>
             <th>City</th>
-            <th>Full Address</th>
+ 
             <th>Property Type</th>
             <th>Total Rateable Value</th>
             <th>Has Car Park</th>
@@ -713,16 +714,13 @@ const Dashboard = () => {
             <th>Landlord Name</th>
             <th>Landlord Phone</th>
             <th>Landlord Email</th>
-            <th>Has Management Co.</th>
-            <th>POC Email</th>
-            <th>POC Contact</th>
-            <th>Enquiry Date</th>
-            <th>Actions</th>    
+           
           </tr>
         </thead>
         <tbody>
           {enquiries.map((enq) => (
             <tr key={enq.id}>
+                <td>{enq.full_address}</td>
                 <td>{enq.enquirer_name}</td>
                 <td>{enq.email}</td>
                 <td>{enq.contact_number}</td>
@@ -730,7 +728,7 @@ const Dashboard = () => {
                 <td>{enq.role}</td>
                 <td>{enq.current_position}</td>
                 <td>{enq.city}</td>
-                <td>{enq.full_address}</td>
+
                 <td>{enq.property_type}</td>               
                 <td>{Number(enq.total_rateable_value).toFixed(2)}</td>
                 <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
@@ -742,10 +740,10 @@ const Dashboard = () => {
                 <td>{enq.landlord_name}</td>
                 <td>{enq.landlord_phone}</td>
                 <td>{enq.landlord_email}</td>
-                <td>{enq.has_management_company ? 'Yes' : 'No'}</td>
-                <td>{enq.poc_email}</td>
-                <td>{enq.poc_contact_number}</td>
-                <td>{new Date(enq.enquiry_date).toLocaleDateString()}</td>
+         
+            
+         
+                
             
               <td>
                 <button className="btn btn-warning me-2" onClick={() => handleEditClick(enq)}>
