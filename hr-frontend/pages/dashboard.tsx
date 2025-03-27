@@ -468,109 +468,106 @@ const Dashboard = () => {
 
 
         {/*i want info about property be in table property details carpark financial be in one horizontal chart */}
+        <div className="card p-4 mb-4" style={{ backgroundColor: "#f8f9fa" }}>
+            <h4 className="mb-3">🏢 Property Information</h4>
+            <div className="row mt-3">
+              {/* Property Details */}
+              <div className="col-md-4">
+                <h5>🏙️ Details</h5>
+                <div className="mb-3">
+                  <label>City</label>
+                  <input
+                    name="city"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.city}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Full Address</label>
+                  <input
+                    name="full_address"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.full_address}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Property Type</label>
+                  <select
+                    name="property_type"
+                    className="form-control"
+                    value={newEnquiry.property_type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Office">Office</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Warehouse">Warehouse</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label>Total Rateable Value</label>
+                  <input
+                    name="total_rateable_value"
+                    type="number"
+                    step="0.01"
+                    className="form-control"
+                    value={newEnquiry.total_rateable_value}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+              </div>
 
-        <div className="row mt-4">
-          {/* Property Details Column */}
-          <div className="col-md-4">
-            <h4>🏙️ Property Details</h4>
-            <div className="mb-3">
-              <label>City</label>
-              <input
-                name="city"
-                type="text"
-                className="form-control"
-                value={newEnquiry.city}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label>Full Address</label>
-              <input
-                name="full_address"
-                type="text"
-                className="form-control"
-                value={newEnquiry.full_address}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label>Property Type</label>
-              <select
-                name="property_type"
-                className="form-control"
-                value={newEnquiry.property_type}
-                onChange={handleInputChange}
-              >
-                <option value="Office">Office</option>
-                <option value="Retail">Retail</option>
-                <option value="Warehouse">Warehouse</option>
-              </select>
-            </div>
-            <div className="mb-3">
-              <label>Total Rateable Value</label>
-              <input
-                name="total_rateable_value"
-                type="number"
-                step="0.01"
-                className="form-control"
-                value={newEnquiry.total_rateable_value}
-                onChange={handleInputChange}
-                required
-              />
+              {/* Car Park */}
+              <div className="col-md-4">
+                <h5>🚗 Car Park</h5>
+                <div className="mb-3 form-check">
+                  <input
+                    name="has_car_park"
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={newEnquiry.has_car_park}
+                    onChange={handleInputChange}
+                  />
+                  <label className="form-check-label">Has car park</label>
+                </div>
+                <div className="mb-3">
+                  <label>Car Park Rateable Value</label>
+                  <input
+                    name="car_park_rateable_value"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.car_park_rateable_value}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              {/* Financials */}
+              <div className="col-md-4">
+                <h5>💰 Financials</h5>
+                <div className="mb-3">
+                  <label>Rateable Value Info</label>
+                  <input
+                    name="rateable_value_info"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.rateable_value_info}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Car Park Column */}
-          <div className="col-md-4">
-            <h4>🚗 Car Park</h4>
-            <div className="mb-3 form-check">
-              <input
-                name="has_car_park"
-                type="checkbox"
-                className="form-check-input"
-                checked={newEnquiry.has_car_park}
-                onChange={handleInputChange}
-              />
-              <label className="form-check-label">Has car park</label>
-            </div>
-            <div className="mb-3">
-              <label>Carpark Rateable Value</label>
-              <input
-                name="car_park_rateable_value"
-                type="text"
-                className="form-control"
-                value={newEnquiry.car_park_rateable_value}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-
-          {/* Financials Column */}
-          <div className="col-md-4">
-            <h4>💰 Financials</h4>
-            <div className="mb-3">
-              <label>Rateable Value Info</label>
-              <input
-                name="rateable_value_info"
-                type="text"
-                className="form-control"
-                value={newEnquiry.rateable_value_info}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-        </div>
         {/* */}
-
-
-
-
-
-        {/**/}
-
-        
+      
+     
         {/* You can add additional fields following the same pattern */}
         <button type="submit" className="btn btn-primary">
           Add Enquiry
