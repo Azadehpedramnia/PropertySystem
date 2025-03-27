@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { jwtDecode } from 'jwt-decode';
+import React from 'react';
 
 
 interface Enquiry {
@@ -61,6 +62,7 @@ const Dashboard = () => {
   const [editMode, setEditMode] = useState(false);
   const [showLandlordDetails, setShowLandlordDetails] = useState(false);
   const [showEstateAgentDetails, setShowEstateAgentDetails] = useState(false);
+  const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
   const handleEditClick = (emp: Enquiry) => {
     // EditMode 
@@ -695,66 +697,103 @@ const Dashboard = () => {
         <thead>
             <tr>
             <th>Full Address</th>
-            <th>Enquirer Name</th>
-            <th>Email</th>
-            <th>Contact Number</th>
-            <th>Organisation</th>
-            <th>Role</th>
-            <th>Current Position</th>
             <th>City</th>
- 
             <th>Property Type</th>
             <th>Total Rateable Value</th>
             <th>Has Car Park</th>
             <th>Car Park Rateable Value</th>
-            <th>Rateable Value Info</th>
-            <th>Estate Agent Name</th>
-            <th>Estate Agent Contact</th>
-            <th>Estate Agent Email</th>
-            <th>Landlord Name</th>
-            <th>Landlord Phone</th>
-            <th>Landlord Email</th>
-           
+            <th>Rateable Value Info</th> 
           </tr>
         </thead>
         <tbody>
-          {enquiries.map((enq) => (
-            <tr key={enq.id}>
-                <td>{enq.full_address}</td>
-                <td>{enq.enquirer_name}</td>
-                <td>{enq.email}</td>
-                <td>{enq.contact_number}</td>
-                <td>{enq.organisation}</td>
-                <td>{enq.role}</td>
-                <td>{enq.current_position}</td>
-                <td>{enq.city}</td>
+          {enquiries.map((enq) => {
+            const isExpanded = expandedRowId === enq.id;
 
-                <td>{enq.property_type}</td>               
-                <td>{Number(enq.total_rateable_value).toFixed(2)}</td>
-                <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
-                <td>{enq.car_park_rateable_value}</td>
-                <td>{enq.rateable_value_info}</td>
-                <td>{enq.estate_agent_name}</td>
-                <td>{enq.estate_agent_contact_number}</td>
-                <td>{enq.estate_agent_email}</td>
-                <td>{enq.landlord_name}</td>
-                <td>{enq.landlord_phone}</td>
-                <td>{enq.landlord_email}</td>
-         
-            
-         
-                
-            
-              <td>
-                <button className="btn btn-warning me-2" onClick={() => handleEditClick(enq)}>
-                  Edit
-                </button>
-                <button className="btn btn-danger" onClick={() => handleDeleteEnquiry(enq.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+            return (
+              <React.Fragment key={enq.id}>
+                {/* Main Row: Property Info */}
+                <tr>
+                  <td>{enq.full_address}</td>
+                  <td>{enq.city}</td>
+                  <td>{enq.property_type}</td>
+                  <td>{Number(enq.total_rateable_value).toFixed(2)}</td>
+                  <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
+                  <td>{enq.car_park_rateable_value}</td>
+                  <td>{enq.rateable_value_info}</td>
+
+                  {/* Actions */}
+                  <td>
+                    {/* Toggle button for contact fields */}
+                    <button
+                      className="btn btn-info me-2"
+                      onClick={() => setExpandedRowId(isExpanded ? null : enq.id)}
+                    >
+                      {isExpanded ? 'Hide Contact' : 'Show Contact'}
+                    </button>
+                    
+                    {/* Existing Edit/Delete */}
+                    <button
+                      className="btn btn-warning me-2"
+                      onClick={() => handleEditClick(enq)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDeleteEnquiry(enq.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+
+                {/* Expanded Row: Contact Info (rendered only if isExpanded === true) */}
+                {isExpanded && (
+                  <tr>
+                    {/* colSpan should match the total # of columns in the main row */}
+                    <td colSpan={8}>
+                      <div>
+                        <strong>Enquirer Name:</strong> {enq.enquirer_name}
+                      </div>
+                      <div>
+                        <strong>Email:</strong> {enq.email}
+                      </div>
+                      <div>
+                        <strong>Contact Number:</strong> {enq.contact_number}
+                      </div>
+                      <div>
+                        <strong>Organisation:</strong> {enq.organisation}
+                      </div>
+                      <div>
+                        <strong>Role:</strong> {enq.role}
+                      </div>
+                      <div>
+                        <strong>Current Position:</strong> {enq.current_position}
+                      </div>
+                      <div>
+                        <strong>Estate Agent Name:</strong> {enq.estate_agent_name}
+                      </div>
+                      <div>
+                        <strong>Estate Agent Contact:</strong> {enq.estate_agent_contact_number}
+                      </div>
+                      <div>
+                        <strong>Estate Agent Email:</strong> {enq.estate_agent_email}
+                      </div>
+                      <div>
+                        <strong>Landlord Name:</strong> {enq.landlord_name}
+                      </div>
+                      <div>
+                        <strong>Landlord Phone:</strong> {enq.landlord_phone}
+                      </div>
+                      <div>
+                        <strong>Landlord Email:</strong> {enq.landlord_email}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
