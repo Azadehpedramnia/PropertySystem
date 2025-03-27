@@ -59,6 +59,9 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [editEnquiry, setEditEnquiry] = useState<Enquiry | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [showLandlordDetails, setShowLandlordDetails] = useState(false);
+  const [showEstateAgentDetails, setShowEstateAgentDetails] = useState(false);
+
   const handleEditClick = (emp: Enquiry) => {
     // EditMode 
     setEditEnquiry(emp);
@@ -364,89 +367,207 @@ const Dashboard = () => {
             required
           />
         </div>
-
-        <h4 className="mt-4">🏙️ Property Details</h4>
+        {/* */}
+        {/* Toggle Buttons for Optional Sections */}
         <div className="mb-3">
-          <label>City</label>
-          <input
-            name="city"
-            type="text"
-            className="form-control w-50"
-            value={newEnquiry.city}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label>Full Address</label>
-          <input
-            name="full_address"
-            type="text"
-            className="form-control w-50"
-            value={newEnquiry.full_address}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label> property_type</label>
-          <select
-            name="property_type"
-            className="form-control w-50"
-            value={newEnquiry.property_type}
-            onChange={handleInputChange}
+          <button
+            type="button"
+            className="btn btn-outline-secondary me-2"
+            onClick={() => setShowLandlordDetails(!showLandlordDetails)}
           >
-            <option value="Office">Office</option>
-            <option value="Retail">Retail</option>
-            <option value="Warehouse">Warehouse</option>
-          </select>
-        </div>
-        <div className="mb-3">
-          <label>Total Rateable Value</label>
-          <input
-            name="total_rateable_value"
-            type="number"
-            step="0.01" // allows decimal values
-            className="form-control w-50"
-            value={newEnquiry.total_rateable_value}
-            onChange={handleInputChange}
-            required
-          />
+            {showLandlordDetails ? "Hide Landlord Details" : "Add Landlord Details"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowEstateAgentDetails(!showEstateAgentDetails)}
+          >
+            {showEstateAgentDetails ? "Hide Estate Agent Details" : "Add Estate Agent Details"}
+          </button>
         </div>
 
-        <h4 className="mt-4">🚗 Car Park</h4>
-        <div className="mb-3 form-check">
-        <label>Has car park</label>
-          <input
-            name="has_car_park"
-            type="checkbox"
-            className="form-check-input"
-            checked={newEnquiry.has_car_park}
-            onChange={handleInputChange}
-          />
-          <label className="form-check-label">Has car park</label>
+        {/* Horizontal Row for Landlord and Estate Agent Details */}
+        {(showLandlordDetails || showEstateAgentDetails) && (
+          <div className="row">
+            {showLandlordDetails && (
+              <div className="col-md-6">
+                <h4>🏠 Landlord Details</h4>
+                <div className="mb-3">
+                  <label>Landlord Name</label>
+                  <input
+                    name="landlord_name"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.landlord_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Landlord Phone</label>
+                  <input
+                    name="landlord_phone"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.landlord_phone}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Landlord Email</label>
+                  <input
+                    name="landlord_email"
+                    type="email"
+                    className="form-control"
+                    value={newEnquiry.landlord_email}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            )}
+            {showEstateAgentDetails && (
+              <div className="col-md-6">
+                <h4>🏢 Estate Agent Details</h4>
+                <div className="mb-3">
+                  <label>Estate Agent Name</label>
+                  <input
+                    name="estate_agent_name"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.estate_agent_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Estate Agent Contact Number</label>
+                  <input
+                    name="estate_agent_contact_number"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.estate_agent_contact_number}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Estate Agent Email</label>
+                  <input
+                    name="estate_agent_email"
+                    type="email"
+                    className="form-control"
+                    value={newEnquiry.estate_agent_email}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+       
+
+
+        {/*i want info about property be in table property details carpark financial be in one horizontal chart */}
+
+        <div className="row mt-4">
+          {/* Property Details Column */}
+          <div className="col-md-4">
+            <h4>🏙️ Property Details</h4>
+            <div className="mb-3">
+              <label>City</label>
+              <input
+                name="city"
+                type="text"
+                className="form-control"
+                value={newEnquiry.city}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Full Address</label>
+              <input
+                name="full_address"
+                type="text"
+                className="form-control"
+                value={newEnquiry.full_address}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label>Property Type</label>
+              <select
+                name="property_type"
+                className="form-control"
+                value={newEnquiry.property_type}
+                onChange={handleInputChange}
+              >
+                <option value="Office">Office</option>
+                <option value="Retail">Retail</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label>Total Rateable Value</label>
+              <input
+                name="total_rateable_value"
+                type="number"
+                step="0.01"
+                className="form-control"
+                value={newEnquiry.total_rateable_value}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Car Park Column */}
+          <div className="col-md-4">
+            <h4>🚗 Car Park</h4>
+            <div className="mb-3 form-check">
+              <input
+                name="has_car_park"
+                type="checkbox"
+                className="form-check-input"
+                checked={newEnquiry.has_car_park}
+                onChange={handleInputChange}
+              />
+              <label className="form-check-label">Has car park</label>
+            </div>
+            <div className="mb-3">
+              <label>Carpark Rateable Value</label>
+              <input
+                name="car_park_rateable_value"
+                type="text"
+                className="form-control"
+                value={newEnquiry.car_park_rateable_value}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          {/* Financials Column */}
+          <div className="col-md-4">
+            <h4>💰 Financials</h4>
+            <div className="mb-3">
+              <label>Rateable Value Info</label>
+              <input
+                name="rateable_value_info"
+                type="text"
+                className="form-control"
+                value={newEnquiry.rateable_value_info}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
         </div>
-        <div className="mb-3">
-          <label> Carpark rateable value</label>
-          <input
-            name="car_park_rateable_value"
-            type="text"
-            className="form-control w-50"
-            value={newEnquiry.car_park_rateable_value}
-            onChange={handleInputChange}         
-          />
-        </div>
-        <h4 className="mt-4">💰 Financials</h4>
-        <div className="mb-3">
-          <label>Rateable Value Info</label>
-          <input
-            name="rateable_value_info"
-            type="text"
-            className="form-control w-50"
-            value={newEnquiry.rateable_value_info}
-            onChange={handleInputChange}
-          />
-        </div>
+        {/* */}
+
+
+
+
+
+        {/**/}
+
         
         {/* You can add additional fields following the same pattern */}
         <button type="submit" className="btn btn-primary">
