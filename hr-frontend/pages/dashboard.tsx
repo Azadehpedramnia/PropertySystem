@@ -703,10 +703,13 @@ const Dashboard = () => {
             <th>Has Car Park</th>
             <th>Car Park Rateable Value</th>
             <th>Rateable Value Info</th> 
+            <th>Contact</th> 
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {enquiries.map((enq) => {
+            // Check if this row is currently expanded
             const isExpanded = expandedRowId === enq.id;
 
             return (
@@ -720,18 +723,19 @@ const Dashboard = () => {
                   <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
                   <td>{enq.car_park_rateable_value}</td>
                   <td>{enq.rateable_value_info}</td>
-
-                  {/* Actions */}
+                  
+                  {/* New "Contact" column with a toggle button */}
                   <td>
-                    {/* Toggle button for contact fields */}
                     <button
-                      className="btn btn-info me-2"
+                      className="btn btn-info"
                       onClick={() => setExpandedRowId(isExpanded ? null : enq.id)}
                     >
                       {isExpanded ? 'Hide Contact' : 'Show Contact'}
                     </button>
-                    
-                    {/* Existing Edit/Delete */}
+                  </td>
+
+                  {/* Actions column (Edit/Delete) */}
+                  <td>
                     <button
                       className="btn btn-warning me-2"
                       onClick={() => handleEditClick(enq)}
@@ -747,47 +751,28 @@ const Dashboard = () => {
                   </td>
                 </tr>
 
-                {/* Expanded Row: Contact Info (rendered only if isExpanded === true) */}
+                {/* Expanded Row: Only show if isExpanded == true */}
                 {isExpanded && (
                   <tr>
-                    {/* colSpan should match the total # of columns in the main row */}
-                    <td colSpan={8}>
-                      <div>
-                        <strong>Enquirer Name:</strong> {enq.enquirer_name}
-                      </div>
-                      <div>
-                        <strong>Email:</strong> {enq.email}
-                      </div>
-                      <div>
-                        <strong>Contact Number:</strong> {enq.contact_number}
-                      </div>
-                      <div>
-                        <strong>Organisation:</strong> {enq.organisation}
-                      </div>
-                      <div>
-                        <strong>Role:</strong> {enq.role}
-                      </div>
-                      <div>
-                        <strong>Current Position:</strong> {enq.current_position}
-                      </div>
-                      <div>
-                        <strong>Estate Agent Name:</strong> {enq.estate_agent_name}
-                      </div>
-                      <div>
-                        <strong>Estate Agent Contact:</strong> {enq.estate_agent_contact_number}
-                      </div>
-                      <div>
-                        <strong>Estate Agent Email:</strong> {enq.estate_agent_email}
-                      </div>
-                      <div>
-                        <strong>Landlord Name:</strong> {enq.landlord_name}
-                      </div>
-                      <div>
-                        <strong>Landlord Phone:</strong> {enq.landlord_phone}
-                      </div>
-                      <div>
-                        <strong>Landlord Email:</strong> {enq.landlord_email}
-                      </div>
+                    {/* colSpan should match the total columns (9 in this example) */}
+                    <td colSpan={9}>
+                      {/* Contact fields */}
+                      <div><strong>Enquirer Name:</strong> {enq.enquirer_name}</div>
+                      <div><strong>Email:</strong> {enq.email}</div>
+                      <div><strong>Contact Number:</strong> {enq.contact_number}</div>
+                      <div><strong>Organisation:</strong> {enq.organisation}</div>
+                      <div><strong>Role:</strong> {enq.role}</div>
+                      <div><strong>Current Position:</strong> {enq.current_position}</div>
+
+                      {/* Estate Agent */}
+                      <div><strong>Estate Agent Name:</strong> {enq.estate_agent_name}</div>
+                      <div><strong>Estate Agent Contact:</strong> {enq.estate_agent_contact_number}</div>
+                      <div><strong>Estate Agent Email:</strong> {enq.estate_agent_email}</div>
+
+                      {/* Landlord */}
+                      <div><strong>Landlord Name:</strong> {enq.landlord_name}</div>
+                      <div><strong>Landlord Phone:</strong> {enq.landlord_phone}</div>
+                      <div><strong>Landlord Email:</strong> {enq.landlord_email}</div>
                     </td>
                   </tr>
                 )}
