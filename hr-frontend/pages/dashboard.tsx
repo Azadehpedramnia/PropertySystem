@@ -393,6 +393,30 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
+                  <label>Organisation</label>
+                  <input
+                    name="organisation"
+                    type="text"
+                    className="form-control w-50"
+                    value={newEnquiry.organisation}
+                    onChange={handleInputChange}
+                    
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Role</label>
+                  <select
+                    name="role"
+                    className="form-control w-50"
+                    value={newEnquiry.role}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Est Ag">Est Ag</option>
+                    <option value="Landlord">Landlord</option>
+                    <option value="Ass Man">Ass Man</option>
+                  </select>
+                </div>
+                <div className="mb-3">
                   <label> Phone</label>
                   <input
                     name="landlord_phone"
@@ -418,32 +442,56 @@ const Dashboard = () => {
               <div className="col-md-6">
                 <h4>Contact Details</h4>
                 <div className="mb-3">
-                  <label> Name</label>
+                  <label>Name</label>
                   <input
-                    name="estate_agent_name"
+                    name="landlord_name"
                     type="text"
                     className="form-control"
-                    value={newEnquiry.estate_agent_name}
+                    value={newEnquiry.landlord_name}
                     onChange={handleInputChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label> Contact Number</label>
+                  <label>Organisation</label>
                   <input
-                    name="estate_agent_contact_number"
+                    name="organisation"
+                    type="text"
+                    className="form-control w-50"
+                    value={newEnquiry.organisation}
+                    onChange={handleInputChange}
+                    
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Role</label>
+                  <select
+                    name="role"
+                    className="form-control w-50"
+                    value={newEnquiry.role}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Est Ag">Est Ag</option>
+                    <option value="Landlord">Landlord</option>
+                    <option value="Ass Man">Ass Man</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label> Phone</label>
+                  <input
+                    name="landlord_phone"
                     type="text"
                     className="form-control"
-                    value={newEnquiry.estate_agent_contact_number}
+                    value={newEnquiry.landlord_phone}
                     onChange={handleInputChange}
                   />
                 </div>
                 <div className="mb-3">
                   <label> Email</label>
                   <input
-                    name="estate_agent_email"
+                    name="landlord_email"
                     type="email"
                     className="form-control"
-                    value={newEnquiry.estate_agent_email}
+                    value={newEnquiry.landlord_email}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -738,7 +786,110 @@ const Dashboard = () => {
       )} 
 
       <hr />
-      
+      <h3 className="mt-5">Enquiry List</h3>
+      <div className="table-responsive">
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+            
+              {/* Property Info Columns */}
+              <th>Landlod / Organisation</th>
+              <th>City</th>
+              <th>Address</th>
+              <th>Property Type</th>
+              <th>Building Rateable Value</th>
+              <th>Rateable Property Before Relief</th>
+              <th>Has Car Park</th>
+              <th>Car Park Rateable Value</th>
+              <th>Car Park Rates payable Before Reilief</th>
+              <th>Total Rateable Value</th>
+              <th>Total Rate Payable</th>
+
+              {/* Contact Info Columns */}
+              <th>Enquirer Name</th>
+              <th>Email</th>
+              <th>Contact Number</th>
+              <th>Organisation</th>
+              <th>Role</th>
+
+              {/* Estate Agent */}
+              <th>Enquirer Name</th>
+              <th>Email</th>
+              <th>Contact Number</th>
+              <th>Organisation</th>
+              <th>Role</th>
+
+              {/* Landlord */}
+              <th>Enquirer Name</th>
+              <th>Email</th>
+              <th>Contact Number</th>
+              <th>Organisation</th>
+              <th>Role</th>
+
+              {/* Actions */}
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {enquiries.map((enq) => (
+              <tr key={enq.id}>
+
+                 {/* Property Info Columns */}
+                <td>{enq.full_address}</td>
+                <td>{enq.city}</td>
+                <td>{enq.property_type}</td>
+                <td>{Number(enq.total_rateable_value).toFixed(2)}</td>
+                <td>{enq.has_car_park ? 'Yes' : 'No'}</td>
+                <td>{enq.car_park_rateable_value}</td>
+                <td>{enq.rateable_value_info}</td>
+                <td>{enq.rateable_value_info}</td>
+                <td>{enq.rateable_value_info}</td>
+                <td>{enq.rateable_value_info}</td>
+                <td>{enq.rateable_value_info}</td>
+
+
+
+                {/* Contact Info */}
+                <td>{enq.enquirer_name}</td>
+                <td>{enq.email}</td>
+                <td>{enq.contact_number}</td>
+                <td>{enq.organisation}</td>
+                <td>{enq.role}</td>
+
+                {/* Estate Agent */}
+                <td>{enq.estate_agent_name}</td>
+                <td>{enq.landlord_name}</td>
+                <td>{enq.landlord_name}</td>
+                <td>{enq.estate_agent_contact_number}</td>
+                <td>{enq.estate_agent_email}</td>
+
+                {/* Landlord */}
+                <td>{enq.landlord_name}</td>
+                <td>{enq.landlord_name}</td>
+                <td>{enq.landlord_name}</td>
+                <td>{enq.landlord_phone}</td>
+                <td>{enq.landlord_email}</td>
+
+                {/* Actions */}
+                <td>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={() => handleEditClick(enq)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteEnquiry(enq.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
