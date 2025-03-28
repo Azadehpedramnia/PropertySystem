@@ -308,7 +308,7 @@ const Dashboard = () => {
             className="form-control w-50"
             value={newEnquiry.enquirer_name}
             onChange={handleInputChange}
-            required
+            
           />
         </div>
         <div className="mb-3">
@@ -319,7 +319,7 @@ const Dashboard = () => {
             className="form-control w-50"
             value={newEnquiry.organisation}
             onChange={handleInputChange}
-            required
+            
           />
         </div>
         <div className="mb-3">
@@ -336,17 +336,6 @@ const Dashboard = () => {
           </select>
         </div>
         <div className="mb-3">
-          <label>Current position</label>
-          <input
-            name="current_position"
-            type="text"
-            className="form-control w-50"
-            value={newEnquiry.current_position}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
           <label>Email</label>
           <input
             name="email"
@@ -354,7 +343,7 @@ const Dashboard = () => {
             className="form-control w-50"
             value={newEnquiry.email}
             onChange={handleInputChange}
-            required
+         
           />
         </div>
         <div className="mb-3">
@@ -365,7 +354,7 @@ const Dashboard = () => {
             className="form-control w-50"
             value={newEnquiry.contact_number}
             onChange={handleInputChange}
-            required
+          
           />
         </div>
         {/* */}
@@ -482,6 +471,17 @@ const Dashboard = () => {
               <div className="col-md-4">
                 <h5>🏙️ Details</h5>
                 <div className="mb-3">
+                  <label>Landlod / Organisation</label>
+                  <input
+                    name="organisation"
+                    type="text"
+                    className="form-control w-50"
+                    value={newEnquiry.organisation}
+                    onChange={handleInputChange}
+                    
+                  />
+                </div>
+                <div className="mb-3">
                   <label>City</label>
                   <input
                     name="city"
@@ -489,18 +489,18 @@ const Dashboard = () => {
                     className="form-control"
                     value={newEnquiry.city}
                     onChange={handleInputChange}
-                    required
+                   
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Full Address</label>
+                  <label>Address</label>
                   <input
                     name="full_address"
                     type="text"
                     className="form-control"
                     value={newEnquiry.full_address}
                     onChange={handleInputChange}
-                    required
+                    
                   />
                 </div>
                 <div className="mb-3">
@@ -515,18 +515,6 @@ const Dashboard = () => {
                     <option value="Retail">Retail</option>
                     <option value="Warehouse">Warehouse</option>
                   </select>
-                </div>
-                <div className="mb-3">
-                  <label>Total Rateable Value</label>
-                  <input
-                    name="total_rateable_value"
-                    type="number"
-                    step="0.01"
-                    className="form-control"
-                    value={newEnquiry.total_rateable_value}
-                    onChange={handleInputChange}
-                    required
-                  />
                 </div>
               </div>
 
@@ -553,13 +541,37 @@ const Dashboard = () => {
                     onChange={handleInputChange}
                   />
                 </div>
+                <div className="mb-3">
+                  <label>Car Park Rates payable Payale Before Reilief</label>
+                  <input
+                    name="landlord_name"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.landlord_name}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
+
+
 
               {/* Financials */}
               <div className="col-md-4">
                 <h5>💰 Financials</h5>
                 <div className="mb-3">
-                  <label>Rateable Value Info</label>
+                  <label>Building Rateable Value</label>
+                  <input
+                    name="total_rateable_value"
+                    type="number"
+                    step="0.01"
+                    className="form-control"
+                    value={newEnquiry.total_rateable_value}
+                    onChange={handleInputChange}
+                 
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Rateable Property Before Relief</label>
                   <input
                     name="rateable_value_info"
                     type="text"
@@ -568,7 +580,32 @@ const Dashboard = () => {
                     onChange={handleInputChange}
                   />
                 </div>
+                <h5>🧾Total Rate</h5>
+                <div className="mb-3">
+                  <label>Total Rateable Value</label>
+                  <input
+                    name="landlord_phone"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.landlord_phone}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Total Rate Payable</label>
+                  <input
+                    name="estate_agent_contact_number"
+                    type="text"
+                    className="form-control"
+                    value={newEnquiry.estate_agent_contact_number}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
+
+              {/* */}
+              
+
             </div>
           </div>
 
@@ -580,6 +617,11 @@ const Dashboard = () => {
           Add Enquiry
         </button>
       </form>
+      {/* */}
+
+
+
+      {/* */}
       {editMode && editEnquiry && (
         <div>
           <h3 className="mt-5">Edit Enquiry</h3>
@@ -594,7 +636,7 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, enquirer_name: e.target.value })
                 }
-                required
+           
               />
             </div>
             <div className="mb-3">
@@ -607,7 +649,7 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, email: e.target.value })
                 }
-                required
+            
               />
             </div>
             <div className="mb-3">
@@ -620,7 +662,7 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, city: e.target.value })
                 }
-                required
+              
               />
             </div>
             <div className="mb-3">
@@ -633,7 +675,7 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, full_address: e.target.value })
                 }
-                required
+               
               />
             </div>
             <div className="mb-3">
@@ -646,7 +688,7 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, organisation: e.target.value })
                 }
-                required
+              
               />
             </div>
             <div className="mb-3">
@@ -674,10 +716,10 @@ const Dashboard = () => {
                 onChange={(e) =>
                   setEditEnquiry({ ...editEnquiry, enquiry_date: e.target.value })
                 }
-                required
+                
               />
             </div>
-            {/* Add additional fields for editing as needed */}
+            {/* Add additional fields for editing as needed  */}
             <button type="submit" className="btn btn-primary">
               Update Enquiry
             </button>
@@ -693,7 +735,7 @@ const Dashboard = () => {
             </button>
           </form>
         </div>
-      )}
+      )} 
 
       <hr />
       <h3 className="mt-5">Enquiry List</h3>
