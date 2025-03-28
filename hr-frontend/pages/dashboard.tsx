@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { jwtDecode } from 'jwt-decode';
 import React from 'react';
 
-
 interface Enquiry {
   //property info
   id: number;
@@ -290,7 +289,7 @@ const Dashboard = () => {
 
   //////
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 ">
       <div className="d-flex gap-3">
       <h2>Enquiry Management Dashboard</h2>
         <button onClick={handleLogout} className="btn btn-secondary mb-3">
@@ -372,19 +371,19 @@ const Dashboard = () => {
         {/* */}
         {/* Toggle Buttons for Optional Sections */}
         <div className="mb-3">
-          <button
+          {/*<button
             type="button"
             className="btn btn-outline-secondary me-2"
             onClick={() => setShowLandlordDetails(!showLandlordDetails)}
           >
             {showLandlordDetails ? "Hide Landlord Details" : "Add Landlord Details"}
-          </button>
+          </button>*/}
           <button
             type="button"
             className="btn btn-outline-secondary"
             onClick={() => setShowEstateAgentDetails(!showEstateAgentDetails)}
           >
-            {showEstateAgentDetails ? "Hide Estate Agent Details" : "Add Estate Agent Details"}
+            {showEstateAgentDetails ?(<span className="">−</span> ) : (<span className="">+</span> )}
           </button>
         </div>
 
@@ -393,9 +392,9 @@ const Dashboard = () => {
           <div className="row">
             {showLandlordDetails && (
               <div className="col-md-6">
-                <h4>🏠 Landlord Details</h4>
+                <h4>Contact Details</h4>
                 <div className="mb-3">
-                  <label>Landlord Name</label>
+                  <label>Name</label>
                   <input
                     name="landlord_name"
                     type="text"
@@ -405,7 +404,7 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Landlord Phone</label>
+                  <label> Phone</label>
                   <input
                     name="landlord_phone"
                     type="text"
@@ -415,7 +414,7 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Landlord Email</label>
+                  <label> Email</label>
                   <input
                     name="landlord_email"
                     type="email"
@@ -428,9 +427,9 @@ const Dashboard = () => {
             )}
             {showEstateAgentDetails && (
               <div className="col-md-6">
-                <h4>🏢 Estate Agent Details</h4>
+                <h4>Contact Details</h4>
                 <div className="mb-3">
-                  <label>Estate Agent Name</label>
+                  <label> Name</label>
                   <input
                     name="estate_agent_name"
                     type="text"
@@ -440,7 +439,7 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Estate Agent Contact Number</label>
+                  <label> Contact Number</label>
                   <input
                     name="estate_agent_contact_number"
                     type="text"
@@ -450,7 +449,7 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label>Estate Agent Email</label>
+                  <label> Email</label>
                   <input
                     name="estate_agent_email"
                     type="email"
@@ -459,6 +458,14 @@ const Dashboard = () => {
                     onChange={handleInputChange}
                   />
                 </div>
+
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary me-2"
+                  onClick={() => setShowLandlordDetails(!showLandlordDetails)}
+                >
+                  {showLandlordDetails ? (<span className="">−</span> ) : (<span className="">+</span> )}
+                </button>
               </div>
             )}
           </div>
@@ -466,7 +473,7 @@ const Dashboard = () => {
 
        
 
-
+        <hr />
         {/*i want info about property be in table property details carpark financial be in one horizontal chart */}
         <div className="card p-4 mb-4" style={{ backgroundColor: "#f8f9fa" }}>
             <h4 className="mb-3">🏢 Property Information</h4>
@@ -762,14 +769,14 @@ const Dashboard = () => {
                       <div><strong>Current Position:</strong> {enq.current_position}</div>
 
                       {/* Estate Agent */}
-                      <div><strong>Estate Agent Name:</strong> {enq.estate_agent_name}</div>
-                      <div><strong>Estate Agent Contact:</strong> {enq.estate_agent_contact_number}</div>
-                      <div><strong>Estate Agent Email:</strong> {enq.estate_agent_email}</div>
+                      <div><strong>Second Name:</strong> {enq.estate_agent_name}</div>
+                      <div><strong>Second Contact:</strong> {enq.estate_agent_contact_number}</div>
+                      <div><strong>Second Email:</strong> {enq.estate_agent_email}</div>
 
                       {/* Landlord */}
-                      <div><strong>Landlord Name:</strong> {enq.landlord_name}</div>
-                      <div><strong>Landlord Phone:</strong> {enq.landlord_phone}</div>
-                      <div><strong>Landlord Email:</strong> {enq.landlord_email}</div>
+                      <div><strong>Third Name:</strong> {enq.landlord_name}</div>
+                      <div><strong>Third Phone:</strong> {enq.landlord_phone}</div>
+                      <div><strong>Third Email:</strong> {enq.landlord_email}</div>
                     </td>
                   </tr>
                 )}
