@@ -389,7 +389,7 @@ const Dashboard = () => {
 
         {/* Horizontal Row for Landlord and Estate Agent Details */}
         {(showLandlordDetails || showEstateAgentDetails) && (
-          <div className="row">
+          <div className="">
             {showLandlordDetails && (
               <div className="col-md-6">
                 <h4>Contact Details</h4>
