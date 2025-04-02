@@ -46,6 +46,25 @@ app.post('/api/people', async (req, res) => {
   }
 });
 
+//Get
+app.get('/api/people', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id,
+              name,
+              organisation,
+              role,
+              email,
+              contact_number
+       FROM people`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // EDIT (PUT) - Update a single person by ID
 app.put('/api/people/:id',  async (req, res) => {
   try {
