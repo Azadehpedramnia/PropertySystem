@@ -91,6 +91,26 @@ export default function Dashboard() {
     fetchPeople();
   };
 
+  // Add Person
+  const addPersoon = async () => {  
+    await fetch('http://localhost:5000/api/people', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // Pass the entire person object
+      body: JSON.stringify(newPerson),
+    });
+    // Reset fields
+    setNewPerson({
+      name: '',
+      organisation: '',
+      role: '',
+      email: '',
+      contact_number: '',
+    });
+    // Reload table
+    fetchPeople();
+  };
+
   const addProperty = async () => {
     await fetch('http://localhost:5000/api/propertiies', {
       method: 'POST',
@@ -110,6 +130,74 @@ export default function Dashboard() {
         Sign Out
       </button>
 
+     {/* Add Person Form */}
+     <div className="mb-6 p-4 border rounded-lg">
+        <h2 className="text-lg font-semibold mb-2">Add Person</h2>
+        <form onSubmit={addPersoon} className="space-y-2">
+          <input
+            className="border p-2 w-full"
+            placeholder="Name"
+            value={newPerson.name}
+            onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Organisation"
+            value={newPerson.organisation}
+            onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Role"
+            value={newPerson.role}
+            onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Email"
+            value={newPerson.email}
+            onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Contact Number"
+            value={newPerson.contact_number}
+            onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
+          />
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+            Add Person
+          </button>
+        </form>
+      </div>
+
+     {/* Display People in a Table */}
+     <div className="mb-6 p-4 border rounded-lg shadow">
+        <h2 className="text-lg font-semibold mb-2">People List</h2>
+        <table className="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Name</th>
+              <th className="border p-2">Organisation</th>
+              <th className="border p-2">Role</th>
+              <th className="border p-2">Email</th>
+              <th className="border p-2">Contact Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {people.map((person) => (
+              <tr key={person.id} className="text-center">
+                <td className="border p-2">{person.name}</td>
+                <td className="border p-2">{person.organisation}</td>
+                <td className="border p-2">{person.role}</td>
+                <td className="border p-2">{person.email}</td>
+                <td className="border p-2">{person.contact_number}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <hr/>
       {/* Add People */}
       <div className="mb-4">
         <input
