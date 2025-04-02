@@ -400,55 +400,7 @@ export default function Dashboard() {
             ))}
           </tbody>
         </table>
-
-
-
-
       <hr/>
-      {/* Add People */}
-      <div className="mb-4">
-        <input
-          className="border p-2 mr-2"
-          placeholder="Add person name"
-          value={newPersonName}
-          onChange={(e) => setNewPersonName(e.target.value)}
-        />
-        <button onClick={addPerson} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Add Person
-        </button>
-      </div>
-
-      {/* Add Property */}
-      <div className="mb-4">
-        <input
-          className="border p-2 mr-2"
-          placeholder="Add property address"
-          value={newPropertyAddress}
-          onChange={(e) => setNewPropertyAddress(e.target.value)}
-        />
-        <button onClick={addProperty} className="bg-green-500 text-white px-4 py-2 rounded">
-          Add Property
-        </button>
-      </div>
-
-      {/* Display Lists */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">People</h2>
-        <ul className="list-disc list-inside">
-          {people.map(person => (
-            <li key={person.id}>{person.name}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">Properties</h2>
-        <ul className="list-disc list-inside">
-          {properties.map(property => (
-            <li key={property.id}>{property.address}</li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 }
