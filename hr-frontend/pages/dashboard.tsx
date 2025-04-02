@@ -19,13 +19,13 @@ interface Property {
   city: string;
   address: string;
   property_type: string;
-  building_rateable_value: number;
-  rates_payable_before_relief: number;
+  building_rateable_value: number | null;
+  rates_payable_before_relief:number | null;
   has_car_park: boolean;
   car_park_rateable_value: number | null;
   car_park_rates_payable_before_relief: number | null;
-  total_rateable_value: number;
-  total_rate_payable: number;
+  total_rateable_value:number | null;
+  total_rate_payable: number | null;
 }
 export default function Dashboard() {
   const [people, setPeople] = useState<Person[]>([]);
@@ -47,13 +47,13 @@ export default function Dashboard() {
     city: '',
     address: '',
     property_type: '',
-    building_rateable_value: 0,
-    rates_payable_before_relief: 0,
+    building_rateable_value: null,
+    rates_payable_before_relief: null,
     has_car_park: false,
     car_park_rateable_value: null,
     car_park_rates_payable_before_relief: null,
-    total_rateable_value: 0,
-    total_rate_payable: 0,
+    total_rateable_value: null,
+    total_rate_payable: null,
   });
 
 
@@ -136,13 +136,13 @@ export default function Dashboard() {
         city: '',
         address: '',
         property_type: '',
-        building_rateable_value: 0,
-        rates_payable_before_relief: 0,
+        building_rateable_value: null,
+        rates_payable_before_relief:null,
         has_car_park: false,
         car_park_rateable_value: null,
         car_park_rates_payable_before_relief: null,
-        total_rateable_value: 0,
-        total_rate_payable: 0,
+        total_rateable_value: null,
+        total_rate_payable:null,
       });
       // Reload table
       fetchProperties();
@@ -257,26 +257,105 @@ export default function Dashboard() {
             className="border p-2 w-full"
             placeholder="Building rateable value"
             type="number"
-            value={newProperty.building_rateable_value}
+            value={newProperty.building_rateable_value ?? ''} 
             onChange={(e) =>
               setNewProperty({
                 ...newProperty,
-                building_rateable_value: Number(e.target.value),
+                building_rateable_value:
+                  e.target.value === '' ? null : Number(e.target.value),
               })
             }
           />
+
           <input
             className="border p-2 w-full"
             placeholder="Rates payable before relief"
             type="number"
-            value={newProperty.rates_payable_before_relief}
+            value={newProperty.rates_payable_before_relief ?? ''}
             onChange={(e) =>
               setNewProperty({
                 ...newProperty,
-                rates_payable_before_relief: Number(e.target.value),
+                rates_payable_before_relief: 
+                e.target.value === '' ? null : Number(e.target.value),
               })
             }
           />
+          <label className="inline-flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={newProperty.has_car_park}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  has_car_park: e.target.checked,
+                })
+              }
+            />
+            <span>Has Car Park?</span>
+          </label>
+          {/* Car Park Rateable Value */}
+          <input
+            className="border p-2 w-full"
+            placeholder="Car park rateable value"
+            type="number"
+            value={newProperty.car_park_rateable_value ?? ''} 
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                // if blank, store null; otherwise convert to Number
+                car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+              })
+            }
+          />
+
+          {/* Car Park Rates Payable Before Relief */}
+          <input
+            className="border p-2 w-full"
+            placeholder="Car park rates payable before relief"
+            type="number"
+            value={newProperty.car_park_rates_payable_before_relief ?? ''} 
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                car_park_rates_payable_before_relief:
+                  e.target.value === '' ? null : Number(e.target.value),
+              })
+            }
+          />
+
+         {/* Total Rateable Value */}
+          <input
+            className="border p-2 w-full"
+            placeholder="Total rateable value"
+            type="number"
+            value={newProperty.total_rateable_value ?? ''}
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                total_rateable_value: e.target.value === '' 
+                  ? null 
+                  : Number(e.target.value),
+              })
+            }
+          />
+
+          {/* Total Rate Payable */}
+          <input
+            className="border p-2 w-full"
+            placeholder="Total rate payable"
+            type="number"
+            value={newProperty.total_rate_payable ?? ''}
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                total_rate_payable: e.target.value === '' 
+                  ? null 
+                  : Number(e.target.value),
+              })
+            }
+          />
+
+
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
             Add Property
           </button>
@@ -290,10 +369,17 @@ export default function Dashboard() {
       <table className="min-w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
-              <th className="border p-2">Inquirer</th>
+              <th className="border p-2">Landlord/Organisation</th>
               <th className="border p-2">City</th>
               <th className="border p-2">Address</th>
               <th className="border p-2">Property Type</th>
+              <th className="border p-2">Building rateable value</th>
+              <th className="border p-2">Rates payable before relief</th>
+              <th className="border p-2">Has car park</th>
+              <th className="border p-2">Car park rateable value</th>
+              <th className="border p-2">Car park rates payable before relief</th>
+              <th className="border p-2">Total rateable value</th>
+              <th className="border p-2">Total rate payable</th>
             </tr>
           </thead>
           <tbody>
@@ -303,6 +389,13 @@ export default function Dashboard() {
                 <td className="border p-2">{property.city}</td>
                 <td className="border p-2">{property.address}</td>
                 <td className="border p-2">{property.property_type}</td>
+                <td className="border p-2">{property.building_rateable_value}</td>
+                <td className="border p-2">{property.rates_payable_before_relief}</td>
+                <td className="border p-2">{property.has_car_park? 'Yes' : 'No'}</td>
+                <td className="border p-2">{property.car_park_rateable_value}</td>
+                <td className="border p-2">{property.car_park_rates_payable_before_relief}</td>
+                <td className="border p-2">{property.total_rateable_value}</td>
+                <td className="border p-2">{property.total_rate_payable}</td>
               </tr>
             ))}
           </tbody>
