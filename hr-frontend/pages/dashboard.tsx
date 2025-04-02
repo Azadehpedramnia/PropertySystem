@@ -144,21 +144,8 @@ const Dashboard = () => {
       
     });
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login');
-      return;
-    }
 
-    // Decode token to check role
-    const decoded = jwtDecode<JwtPayload>(token);
-    if (decoded.role !== 'ADMIN') {
-      setError('Access denied. Only Admin users can access this page.');
-    } else {
-      fetchEmployees(token);
-    }
-  }, []);
+
 
   const fetchEmployees = async (token: string) => {
     try {
