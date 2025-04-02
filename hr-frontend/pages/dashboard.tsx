@@ -121,6 +121,33 @@ export default function Dashboard() {
     fetchProperties();
   };
 
+    // Add Property
+    const addProperrty = async (e: React.FormEvent) => {
+      e.preventDefault(); // Prevent full page reload
+      await fetch('http://localhost:5000/api/propertiies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Pass the entire property object
+        body: JSON.stringify(newProperty),
+      });
+      // Reset fields
+      setNewProperty({
+        inquirer: '',
+        city: '',
+        address: '',
+        property_type: '',
+        building_rateable_value: 0,
+        rates_payable_before_relief: 0,
+        has_car_park: false,
+        car_park_rateable_value: null,
+        car_park_rates_payable_before_relief: null,
+        total_rateable_value: 0,
+        total_rate_payable: 0,
+      });
+      // Reload table
+      fetchProperties();
+    };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
@@ -196,6 +223,93 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
+
+ 
+       {/* Add Property Form */}
+       <div className="mb-6 p-4 border rounded-lg">
+        <h2 className="text-lg font-semibold mb-2">Add Property</h2>
+        <form onSubmit={addProperrty} className="space-y-2">
+          <input
+            className="border p-2 w-full"
+            placeholder="Landlord/Organisation"
+            value={newProperty.inquirer}
+            onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="City"
+            value={newProperty.city}
+            onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Address"
+            value={newProperty.address}
+            onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Property Type"
+            value={newProperty.property_type}
+            onChange={(e) => setNewProperty({ ...newProperty, property_type: e.target.value })}
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Building rateable value"
+            type="number"
+            value={newProperty.building_rateable_value}
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                building_rateable_value: Number(e.target.value),
+              })
+            }
+          />
+          <input
+            className="border p-2 w-full"
+            placeholder="Rates payable before relief"
+            type="number"
+            value={newProperty.rates_payable_before_relief}
+            onChange={(e) =>
+              setNewProperty({
+                ...newProperty,
+                rates_payable_before_relief: Number(e.target.value),
+              })
+            }
+          />
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+            Add Property
+          </button>
+        </form>
+      </div>
+
+      {/* Display Properties in a Table */}
+      <div className="mb-6 p-4 border rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-2">Properties List</h2>
+      </div>
+      <table className="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Inquirer</th>
+              <th className="border p-2">City</th>
+              <th className="border p-2">Address</th>
+              <th className="border p-2">Property Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {properties.map((property) => (
+              <tr key={property.id} className="text-center">
+                <td className="border p-2">{property.inquirer}</td>
+                <td className="border p-2">{property.city}</td>
+                <td className="border p-2">{property.address}</td>
+                <td className="border p-2">{property.property_type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+
+
 
       <hr/>
       {/* Add People */}
