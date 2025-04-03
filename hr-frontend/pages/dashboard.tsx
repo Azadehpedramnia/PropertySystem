@@ -69,6 +69,8 @@ export default function Dashboard() {
 
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
+    // NEW: Store the currently clicked/selected person from the header
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
  
   // For your join table form:
   const [newPersonProperty, setNewPersonProperty] = useState({
@@ -113,6 +115,13 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Error fetching person-properties:', error);
     }
+  };
+
+  // --------------------------
+  // NEW: Handler for clicking on a Person name in the header
+  // --------------------------
+  const handlePersonHeaderClick = (person: Person) => {
+    setSelectedPerson(person);
   };
 
   const addPerson = async () => {
@@ -228,7 +237,7 @@ export default function Dashboard() {
     };
 
     //
-    
+
     //
 
     // Toggle the is_related value for a given (person, property) pair
@@ -641,7 +650,8 @@ export default function Dashboard() {
           <tr className="bg-gray-200">
             <th className="border min-w-[150px] min-h-[50px] p-2 text-center">Property \ Person</th>
             {people.map((person) => (
-              <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center">
+              <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center"
+                onClick={() => handlePersonHeaderClick(person)}>           
                 {person.name}
               </th>
             ))}
@@ -676,6 +686,26 @@ export default function Dashboard() {
           ))}
         </tbody>
       </table>
+      
+      {/* If selectedPerson is set, show more details below */}
+      {selectedPerson && (
+        <div className="p-4 mt-4 border rounded">
+          <h2 className="text-xl font-semibold mb-2">Selected Person</h2>
+          <p><strong>Name:</strong> {selectedPerson.name}</p>
+          <p><strong>Organisation:</strong> {selectedPerson.organisation}</p>
+          <p><strong>Role:</strong> {selectedPerson.role}</p>
+          <p><strong>Email:</strong> {selectedPerson.email}</p>
+          <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
+          <button
+            className="mt-2 bg-gray-300 px-4 py-2 rounded"
+            onClick={() => setSelectedPerson(null)}
+          >
+            Close
+          </button>
+        </div>
+      )}
+
+
     </div>
      {/** */}
       <div>
