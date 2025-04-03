@@ -41,6 +41,7 @@ interface PersonProperty {
 export default function Dashboard() {
   const [people, setPeople] = useState<Person[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
+  const [editPropertyMode, setEditPropertyMode] = useState(false);
 
   const [newPersonName, setNewPersonName] = useState('');
   const [newPropertyAddress, setNewPropertyAddress] = useState('');
@@ -562,25 +563,204 @@ export default function Dashboard() {
       {selectedPropety && (
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Selected Property</h2>
-          <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
-          <p><strong>City:</strong> {selectedPropety.city}</p>
-          <p><strong>Address:</strong> {selectedPropety.address}</p>
-          <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
-          <p><strong>Building rateable value:</strong> {selectedPropety.rates_payable_before_relief}</p>
-          <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
-          <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes': 'No'}</p>
-          <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
-          <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
-          <p><strong>Total rateable value:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
-          <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>
-          <button
-            className="mt-2 bg-gray-300 px-4 py-2 rounded"
-            onClick={() => setSelectedProperty(null)}
-          >
-            Close
-          </button>
+
+          {editPropertyMode ? (
+            <>
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.inquirer}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, inquirer: e.target.value })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.city}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, city: e.target.value })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.address}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, address: e.target.value })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.property_type}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, property_type: e.target.value })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.building_rateable_value ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.rates_payable_before_relief ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              <label className="inline-flex items-center space-x-2 my-1">
+                <input
+                  type="checkbox"
+                  checked={selectedPropety.has_car_park}
+                  onChange={(e) =>
+                    setSelectedProperty({
+                      ...selectedPropety,
+                      has_car_park: e.target.checked, // ✅ checkbox gives true/false
+                    })
+                  }
+                />
+                <span>Has Car Park?</span>
+              </label>
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.car_park_rateable_value ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.car_park_rates_payable_before_relief ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    car_park_rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.total_rateable_value ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    total_rateable_value : e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.total_rate_payable ?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    total_rate_payable : e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              />
+              {/* Repeat for other fields */}
+            </>
+          ) : (
+            <>
+              <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
+              <p><strong>City:</strong> {selectedPropety.city}</p>
+              <p><strong>Address:</strong> {selectedPropety.address}</p>
+              <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
+              <p><strong>Building rateable value:</strong> {selectedPropety.building_rateable_value}</p>
+              <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
+              <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
+              <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
+              <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
+              <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
+              <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>
+            </>
+          )}
+
+          {/* ACTION BUTTONS */}
+          <div className="mt-4 space-x-2">
+            {editPropertyMode ? (
+              <>
+                <button
+                  onClick={async () => {
+                    // Call PUT API to update property
+                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(selectedPropety),
+                    });
+                    if (res.ok) {
+                      setEditPropertyMode(false);
+                      fetchProperties();
+                    } else {
+                      alert('Update failed');
+                    }
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setEditPropertyMode(false)}
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setEditPropertyMode(true)}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={async () => {
+                    const confirmDelete = confirm('Are you sure you want to delete this property?');
+                    if (!confirmDelete) return;
+                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
+                      method: 'DELETE',
+                    });
+                    if (res.ok) {
+                      setSelectedProperty(null);
+                      fetchProperties();
+                    } else {
+                      alert('Delete failed');
+                    }
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+            <button
+              className="bg-gray-300 px-4 py-2 rounded"
+              onClick={() => setSelectedProperty(null)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
+
+
+      
     </div>
 
       
