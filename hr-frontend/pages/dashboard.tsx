@@ -308,7 +308,7 @@ export default function Dashboard() {
     //
    
   return (
-    <div className="p-6">
+    <div className="mb-6 p-4 border rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
       {/* Logout Button */}
@@ -496,54 +496,54 @@ export default function Dashboard() {
       
       {/* */}
 
-      <div>
+      <div className="mb-6 p-4 border rounded-lg">
       <h2 className="text-lg font-semibold mb-2">
          Relationships
       </h2>
       
-      <table className="min-w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border min-w-[150px] min-h-[50px] p-2 text-center">Property \ Person</th>
-            {people.map((person) => (
-              <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center"
-                onClick={() => handlePersonHeaderClick(person)}>           
-                {person.name || 'Name'}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {properties.map((property) => (
-            <tr key={property.id} className="text-center" >  
-              {/* Left column = property address */}
-              <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
-              {property.address || 'Address'}
-              </td>
-
-              {/* For each person, check if related */}
-              {people.map((person) => {
-                const relation = personProperties.find(
-                  (pp) =>
-                    pp.property_id === property.id &&
-                    pp.person_id === person.id
-                );
-                const isRelated = relation?.is_related ?? false;
-
-                return (
-                  <td
-                    key={person.id}
-                    className="border min-w-[100px] min-h-[50px] p-2 cursor-pointer text-center align-middle"
-                    onClick={() => handleToggle(person.id, property.id)}
-                  >
-                    {isRelated ? '✔️' : ''}
-                  </td>
-                );
-              })}
+        <table className="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border min-w-[150px] min-h-[50px] p-2 text-center">Property \ Person</th>
+              {people.map((person) => (
+                <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center"
+                  onClick={() => handlePersonHeaderClick(person)}>           
+                  {person.name || 'Name'}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {properties.map((property) => (
+              <tr key={property.id} className="text-center" >  
+                {/* Left column = property address */}
+                <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
+                {property.address || 'Address'}
+                </td>
+
+                {/* For each person, check if related */}
+                {people.map((person) => {
+                  const relation = personProperties.find(
+                    (pp) =>
+                      pp.property_id === property.id &&
+                      pp.person_id === person.id
+                  );
+                  const isRelated = relation?.is_related ?? false;
+
+                  return (
+                    <td
+                      key={person.id}
+                      className="border min-w-[100px] min-h-[50px] p-2 cursor-pointer text-center align-middle"
+                      onClick={() => handleToggle(person.id, property.id)}
+                    >
+                      {isRelated ? '✔️' : ''}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       
 
 
@@ -551,7 +551,6 @@ export default function Dashboard() {
       {selectedPerson && (
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Selected Person</h2>
-
           {/* ✅ Place this inside the block, right after opening it: */}
           {(() => {
             const relatedProperties = personProperties
