@@ -75,7 +75,9 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
- 
+  const [editingPropertyId, setEditingPropertyId] = useState<number | null>(null);
+  const [editedProperty, setEditedProperty] = useState<Partial<Property>>({});
+  
   // For your join table form:
   const [newPersonProperty, setNewPersonProperty] = useState({
     person_id: 0,
@@ -686,18 +688,119 @@ export default function Dashboard() {
                     <ul className="space-y-2">
                       {relatedProperties.map((property) => (
                         <li key={property.id} className="border p-3 rounded bg-gray-50">
-                          <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
-                          <p><strong>City:</strong> {property.city}</p>
-                          <p><strong>Address:</strong> {property.address}</p>
-                          <p><strong>Property Type:</strong> {property.property_type}</p>
-                          <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
-                          <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
-                          <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
-                          <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
-                          <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
-                          <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
-                          <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                        </li>
+                        {editingPropertyId === property.id ? (
+                          <>
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.inquirer ?? property.inquirer}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, inquirer: e.target.value })}
+                            />
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.city ?? property.city}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                            />
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.address ?? property.address}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
+                            />
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.property_type ?? property.property_type}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, property_type: e.target.value })}
+                            />
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.building_rateable_value ?? property.building_rateable_value ?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty, building_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            />
+                            {/* Add other fields similarly... */}
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                className="bg-gray-300 px-4 py-2 rounded"
+                                onClick={async () => {
+                                  const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ ...property, ...editedProperty }),
+                                  });
+                                  if (res.ok) {
+                                    setEditingPropertyId(null);
+                                    setEditedProperty({});
+                                    fetchProperties();
+                                    fetchPersonProperties();
+                                  } else {
+                                    alert('Update failed');
+                                  }
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                className="bg-gray-300 px-4 py-2 rounded"
+                                onClick={() => {
+                                  setEditingPropertyId(null);
+                                  setEditedProperty({});
+                                }}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
+                            <p><strong>City:</strong> {property.city}</p>
+                            <p><strong>Address:</strong> {property.address}</p>
+                            <p><strong>Property Type:</strong> {property.property_type}</p>
+                            <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
+                            <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
+                            <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
+                            <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
+                            <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
+                            <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                      
+                            {/* ACTION BUTTONS */}
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                className="bg-gray-300 px-4 py-2 rounded"
+                                onClick={() => {
+                                  setEditingPropertyId(property.id);
+                                  setEditedProperty(property); // preload existing
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="bg-gray-300 px-4 py-2 rounded"
+                                onClick={async () => {
+                                  const confirmDelete = confirm('Are you sure you want to delete this property?');
+                                  if (!confirmDelete) return;
+                      
+                                  const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                    method: 'DELETE',
+                                  });
+                      
+                                  if (res.ok) {
+                                    fetchProperties();
+                                    fetchPersonProperties();
+                                  } else {
+                                    alert('Failed to delete property');
+                                  }
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </li>
+                      
                       ))}
                     </ul>
                   </div>
