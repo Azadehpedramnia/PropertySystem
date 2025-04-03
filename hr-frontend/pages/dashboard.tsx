@@ -543,26 +543,179 @@ export default function Dashboard() {
         </tbody>
       </table>
       
+
+
       {/* If selectedPerson is set, show more details below */}
       {selectedPerson && (
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Selected Person</h2>
-          <p><strong>Name:</strong> {selectedPerson.name}</p>
-          <p><strong>Organisation:</strong> {selectedPerson.organisation}</p>
-          <p><strong>Role:</strong> {selectedPerson.role}</p>
-          <p><strong>Email:</strong> {selectedPerson.email}</p>
-          <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
-          <button
-            className="mt-2 bg-gray-300 px-4 py-2 rounded"
-            onClick={() => setSelectedPerson(null)}
-          >
-            Close
-          </button>
+
+          {/* ✅ Place this inside the block, right after opening it: */}
+          {(() => {
+            const relatedProperties = personProperties
+              .filter((pp) => pp.person_id === selectedPerson.id && pp.is_related)
+              .map((pp) => properties.find((prop) => prop.id === pp.property_id))
+              .filter((p): p is Property => !!p); // remove undefined values
+
+            return (
+              <>
+                {/* Person Details + Edit Mode UI (already in your code) */}
+                {/* Your existing form/view for person goes here... */}
+                  
+                {editPersonMode ? (
+                  <>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.name}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, name: e.target.value })
+                      }
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.organisation}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, organisation: e.target.value })
+                      }
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.role}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, role: e.target.value })
+                      }
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.email}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, email: e.target.value })
+                      }
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.contact_number}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, contact_number: e.target.value })
+                      }
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p><strong>Name:</strong> {selectedPerson.name}</p>
+                    <p><strong>Organisation:</strong> {selectedPerson.organisation}</p>
+                    <p><strong>Role:</strong> {selectedPerson.role}</p>
+                    <p><strong>Email:</strong> {selectedPerson.email}</p>
+                    <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
+                  </>
+                )}
+
+                {/* ACTION BUTTONS - your existing Save/Edit/Delete/Close logic */}
+                {/* ... */}
+
+                {/* ACTION BUTTONS */}
+                <div className="mt-4 space-x-2">
+                  {editPersonMode ? (
+                    <>
+                      <button
+                        onClick={async () => {
+                          const res = await fetch(`http://localhost:5000/api/people/${selectedPerson.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(selectedPerson),
+                          });
+                          if (res.ok) {
+                            setEditPersonMode(false);
+                            fetchPeople();
+                          } else {
+                            alert('Failed to update person');
+                          }
+                        }}
+                        className="bg-gray-300 px-4 py-2 rounded"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditPersonMode(false)}
+                        className="bg-gray-300 px-4 py-2 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => setEditPersonMode(true)}
+                        className="bg-gray-300 px-4 py-2 rounded"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={async () => {
+                          const confirmDelete = confirm('Are you sure you want to delete this person?');
+                          if (!confirmDelete) return;
+
+                          const res = await fetch(`http://localhost:5000/api/people/${selectedPerson.id}`, {
+                            method: 'DELETE',
+                          });
+
+                          if (res.ok) {
+                            setSelectedPerson(null);
+                            fetchPeople();
+                          } else {
+                            alert('Failed to delete person');
+                          }
+                        }}
+                        className="bg-gray-300 px-4 py-2 rounded"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                  <button
+                    className="bg-gray-300 px-4 py-2 rounded"
+                    onClick={() => setSelectedPerson(null)}
+                  >
+                    Close
+                  </button>
+                </div>      
+                {/* ✅ Now insert related properties here */}
+                {relatedProperties.length > 0 && (
+                  <div className="mt-6 border-t pt-4">
+                    <h3 className="text-lg font-semibold mb-2">Related Properties</h3>
+                    <ul className="space-y-2">
+                      {relatedProperties.map((property) => (
+                        <li key={property.id} className="border p-3 rounded bg-gray-50">
+                          <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
+                          <p><strong>City:</strong> {property.city}</p>
+                          <p><strong>Address:</strong> {property.address}</p>
+                          <p><strong>Property Type:</strong> {property.property_type}</p>
+                          <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
+                          <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
+                          <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
+                          <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
+                          <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
+                          <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
+                          <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 
-      {/* If selectedProperty is set, show more details below */}
+    {/*
+
+    */}
+
+
+    {/* If selectedProperty is set, show more details below */}
       {selectedPropety && (
+      
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Selected Property</h2>
 
