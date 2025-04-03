@@ -556,7 +556,7 @@ export default function Dashboard() {
           <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
           <p><strong>Building rateable value:</strong> {selectedPropety.rates_payable_before_relief}</p>
           <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
-          <p><strong>Has car park:</strong> {selectedPropety.has_car_park}</p>
+          <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes': 'No'}</p>
           <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
           <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
           <p><strong>Total rateable value:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
