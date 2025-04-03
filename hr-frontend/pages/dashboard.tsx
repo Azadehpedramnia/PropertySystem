@@ -71,6 +71,7 @@ export default function Dashboard() {
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
   
   // NEW: Store the currently clicked/selected person and property from the header
+  const [showModal, setShowModal] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
  
@@ -129,6 +130,15 @@ export default function Dashboard() {
   const handlePropertyHeaderClick = (property: Property) => {
     setSelectedProperty(property);
   };
+
+  function openModal(person: Person) {
+    setSelectedPerson(person);
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
 
 
   const addPerson = async () => {
@@ -481,11 +491,11 @@ export default function Dashboard() {
       
       {/* */}
 
-     <div>
+      <div>
       <h2 className="text-lg font-semibold mb-2">
-        Property vs. Person Relationships
+         Relationships
       </h2>
-
+      
       <table className="min-w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
