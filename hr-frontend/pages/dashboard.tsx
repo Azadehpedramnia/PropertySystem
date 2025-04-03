@@ -503,7 +503,7 @@ export default function Dashboard() {
             <tr key={property.id} className="text-center" >  
               {/* Left column = property address */}
               <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
-              {property.address || 'Address required'}
+              {property.address || 'Address'}
               </td>
 
               {/* For each person, check if related */}
