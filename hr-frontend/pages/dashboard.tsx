@@ -343,34 +343,6 @@ export default function Dashboard() {
         </form>
       </div>
 
-     {/* Display People in a Table */}
-     <div className="mb-6 p-4 border rounded-lg shadow">
-        <h2 className="text-lg font-semibold mb-2">People List</h2>
-        <table className="min-w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Organisation</th>
-              <th className="border p-2">Role</th>
-              <th className="border p-2">Email</th>
-              <th className="border p-2">Contact Number</th>
-            </tr>
-          </thead>
-          <tbody>
-            {people.map((person) => (
-              <tr key={person.id} className="text-center">
-                <td className="border p-2">{person.name}</td>
-                <td className="border p-2">{person.organisation}</td>
-                <td className="border p-2">{person.role}</td>
-                <td className="border p-2">{person.email}</td>
-                <td className="border p-2">{person.contact_number}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
- 
        {/* Add Property Form */}
        <div className="mb-6 p-4 border rounded-lg">
         <h2 className="text-lg font-semibold mb-2">Add Property</h2>
@@ -500,153 +472,15 @@ export default function Dashboard() {
               })
             }
           />
-
-
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
             Add Property
           </button>
         </form>
       </div>
 
-      {/* Display Properties in a Table */}
-      <div className="mb-6 p-4 border rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-2">Properties List</h2>
-      </div>
-      <table className="min-w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Landlord/Organisation</th>
-              <th className="border p-2">City</th>
-              <th className="border p-2">Address</th>
-              <th className="border p-2">Property Type</th>
-              <th className="border p-2">Building rateable value</th>
-              <th className="border p-2">Rates payable before relief</th>
-              <th className="border p-2">Has car park</th>
-              <th className="border p-2">Car park rateable value</th>
-              <th className="border p-2">Car park rates payable before relief</th>
-              <th className="border p-2">Total rateable value</th>
-              <th className="border p-2">Total rate payable</th>
-            </tr>
-          </thead>
-          <tbody>
-            {properties.map((property) => (
-              <tr key={property.id} className="text-center">
-                <td className="border p-2">{property.inquirer}</td>
-                <td className="border p-2">{property.city}</td>
-                <td className="border p-2">{property.address}</td>
-                <td className="border p-2">{property.property_type}</td>
-                <td className="border p-2">{property.building_rateable_value}</td>
-                <td className="border p-2">{property.rates_payable_before_relief}</td>
-                <td className="border p-2">{property.has_car_park? 'Yes' : 'No'}</td>
-                <td className="border p-2">{property.car_park_rateable_value}</td>
-                <td className="border p-2">{property.car_park_rates_payable_before_relief}</td>
-                <td className="border p-2">{property.total_rateable_value}</td>
-                <td className="border p-2">{property.total_rate_payable}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      <hr/>
-      {/* */}
-      <div>
-      <h2 className="text-lg font-semibold mb-2">Person-Property Relationships</h2>
       
-      <table className="min-w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Person ID</th>
-            <th className="border p-2">Property ID</th>
-            <th className="border p-2">Is Related</th>
-          </tr>
-        </thead>
-        <tbody>
-          {personProperties.map((pp) => (
-            <tr key={pp.id} className="text-center">
-              <td className="border p-2">{pp.id}</td>
-              <td className="border p-2">{pp.person_id}</td>
-              <td className="border p-2">{pp.property_id}</td>
-              <td className="border p-2">{pp.is_related ? 'Yes' : 'No'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    {/* */}
-    <div className="mb-6 p-4 border rounded-lg">
-      <h2 className="text-lg font-semibold mb-2">Add Person-Property Relationship</h2>
-      <form onSubmit={addPersonProperty} className="space-y-2">
+      {/* */}
 
-        {/* Choose which Person by ID */}
-        <label className="block">
-          <span>Select Person:</span>
-          <select
-            className="border p-2 w-full"
-            value={newPersonProperty.person_id}
-            onChange={(e) =>
-              setNewPersonProperty({
-                ...newPersonProperty,
-                person_id: Number(e.target.value),
-              })
-            }
-          >
-            <option value={0}>-- Select Person --</option>
-            {people.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name} (ID {p.id})
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Choose which Property by ID */}
-        <label className="block">
-          <span>Select Property:</span>
-          <select
-            className="border p-2 w-full"
-            value={newPersonProperty.property_id}
-            onChange={(e) =>
-              setNewPersonProperty({
-                ...newPersonProperty,
-                property_id: Number(e.target.value),
-              })
-            }
-          >
-            <option value={0}>-- Select Property --</option>
-            {properties.map((prop) => (
-              <option key={prop.id} value={prop.id}>
-                {prop.address} (ID {prop.id})
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Set is_related */}
-        <label className="inline-flex items-center space-x-2">
-          <input
-            type="checkbox"
-            checked={newPersonProperty.is_related}
-            onChange={(e) =>
-              setNewPersonProperty({
-                ...newPersonProperty,
-                is_related: e.target.checked,
-              })
-            }
-          />
-          <span>Is Related?</span>
-        </label>
-
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Add Relationship
-        </button>
-      </form>
-    </div>
-    {/*
-     * 
-     */}
      <div>
       <h2 className="text-lg font-semibold mb-2">
         Property vs. Person Relationships
@@ -735,32 +569,9 @@ export default function Dashboard() {
           </button>
         </div>
       )}
+    </div>
 
-    </div>
-     {/** */}
-      <div>
-      <h2 className="text-lg font-semibold mb-2">Person-Property Relationships</h2>
-      <table className="min-w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Person Name</th>
-            <th className="border p-2">Property Address</th>
-            <th className="border p-2">Is Related?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {personProperties.map((pp) => (
-            <tr key={pp.id} className="text-center">
-              <td className="border p-2">{pp.id}</td>
-              <td className="border p-2">{pp.person_name}</td>
-              <td className="border p-2">{pp.property_address}</td>
-              <td className="border p-2">{pp.is_related ? 'Yes' : 'No'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      
     </div>
   );
 }
