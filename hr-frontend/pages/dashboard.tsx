@@ -69,8 +69,10 @@ export default function Dashboard() {
 
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
-    // NEW: Store the currently clicked/selected person from the header
+  
+  // NEW: Store the currently clicked/selected person and property from the header
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+  const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
  
   // For your join table form:
   const [newPersonProperty, setNewPersonProperty] = useState({
@@ -118,11 +120,16 @@ export default function Dashboard() {
   };
 
   // --------------------------
-  // NEW: Handler for clicking on a Person name in the header
+  // NEW: Handler for clicking on a Person name  and property address in the header
   // --------------------------
   const handlePersonHeaderClick = (person: Person) => {
     setSelectedPerson(person);
   };
+
+  const handlePropertyHeaderClick = (property: Property) => {
+    setSelectedProperty(property);
+  };
+
 
   const addPerson = async () => {
     await fetch('http://localhost:5000/api/people', {
@@ -659,9 +666,9 @@ export default function Dashboard() {
         </thead>
         <tbody>
           {properties.map((property) => (
-            <tr key={property.id} className="text-center">
+            <tr key={property.id} className="text-center" >  
               {/* Left column = property address */}
-              <td className="border min-w-[150px] min-h-[50px] p-2 text-left">{property.address}</td>
+              <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>{property.address}</td>
 
               {/* For each person, check if related */}
               {people.map((person) => {
@@ -705,6 +712,29 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* If selectedProperty is set, show more details below */}
+      {selectedPropety && (
+        <div className="p-4 mt-4 border rounded">
+          <h2 className="text-xl font-semibold mb-2">Selected Property</h2>
+          <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
+          <p><strong>City:</strong> {selectedPropety.city}</p>
+          <p><strong>Address:</strong> {selectedPropety.address}</p>
+          <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
+          <p><strong>Building rateable value:</strong> {selectedPropety.rates_payable_before_relief}</p>
+          <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
+          <p><strong>Has car park:</strong> {selectedPropety.has_car_park}</p>
+          <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
+          <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
+          <p><strong>Total rateable value:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
+          <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>
+          <button
+            className="mt-2 bg-gray-300 px-4 py-2 rounded"
+            onClick={() => setSelectedProperty(null)}
+          >
+            Close
+          </button>
+        </div>
+      )}
 
     </div>
      {/** */}
