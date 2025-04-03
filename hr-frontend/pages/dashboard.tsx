@@ -348,7 +348,7 @@ export default function Dashboard() {
             value={newPerson.contact_number}
             onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
           />
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-gray-300 px-4 py-2 rounded">
             Add Person
           </button>
         </form>
@@ -483,7 +483,7 @@ export default function Dashboard() {
               })
             }
           />
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-gray-300 px-4 py-2 rounded">
             Add Property
           </button>
         </form>
@@ -710,13 +710,13 @@ export default function Dashboard() {
                       alert('Update failed');
                     }
                   }}
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setEditPropertyMode(false)}
-                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                  className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Cancel
                 </button>
@@ -725,7 +725,7 @@ export default function Dashboard() {
               <>
                 <button
                   onClick={() => setEditPropertyMode(true)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded"
+                  className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Edit
                 </button>
@@ -743,7 +743,7 @@ export default function Dashboard() {
                       alert('Delete failed');
                     }
                   }}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Delete
                 </button>
@@ -758,9 +758,6 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-
-
-      
     </div>
 
       
