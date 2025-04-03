@@ -502,7 +502,9 @@ export default function Dashboard() {
           {properties.map((property) => (
             <tr key={property.id} className="text-center" >  
               {/* Left column = property address */}
-              <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>{property.address}</td>
+              <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
+              {property.address || 'Address required'}
+              </td>
 
               {/* For each person, check if related */}
               {people.map((person) => {
