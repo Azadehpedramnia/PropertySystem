@@ -42,9 +42,12 @@ export default function Dashboard() {
   const [people, setPeople] = useState<Person[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [editPropertyMode, setEditPropertyMode] = useState(false);
-
+  const [editPersonMode, setEditPersonMode] = useState(false);
   const [newPersonName, setNewPersonName] = useState('');
   const [newPropertyAddress, setNewPropertyAddress] = useState('');
+  const [editingPersonIdForProperty, setEditingPersonIdForProperty] = useState<number | null>(null);
+  const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
+
  
   const [newPerson, setNewPerson] = useState<Omit<Person, 'id'>>({
     name: '',
@@ -812,12 +815,18 @@ export default function Dashboard() {
 
     {/*
 
+
+       
     */}
 
+      
+
+
+
+    {/**/}
 
     {/* If selectedProperty is set, show more details below */}
-      {selectedPropety && (
-      
+      {selectedPropety && (  
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Selected Property</h2>
 
@@ -949,73 +958,202 @@ export default function Dashboard() {
           )}
 
           {/* ACTION BUTTONS */}
-          <div className="mt-4 space-x-2">
-            {editPropertyMode ? (
-              <>
+            <div className="mt-4 space-x-2">
+              {editPropertyMode ? (
+                <>
+                  <button
+                    onClick={async () => {
+                      // Call PUT API to update property
+                      const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(selectedPropety),
+                      });
+                      if (res.ok) {
+                        setEditPropertyMode(false);
+                        fetchProperties();
+                      } else {
+                        alert('Update failed');
+                      }
+                    }}
+                    className="bg-gray-300 px-4 py-2 rounded"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditPropertyMode(false)}
+                    className="bg-gray-300 px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setEditPropertyMode(true)}
+                      className="bg-gray-300 px-4 py-2 rounded"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const confirmDelete = confirm('Are you sure you want to delete this property?');
+                        if (!confirmDelete) return;
+                        const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
+                          method: 'DELETE',
+                        });
+                        if (res.ok) {
+                          setSelectedProperty(null);
+                          fetchProperties();
+                        } else {
+                          alert('Delete failed');
+                        }
+                      }}
+                      className="bg-gray-300 px-4 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
                 <button
-                  onClick={async () => {
-                    // Call PUT API to update property
-                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(selectedPropety),
-                    });
-                    if (res.ok) {
-                      setEditPropertyMode(false);
-                      fetchProperties();
-                    } else {
-                      alert('Update failed');
-                    }
-                  }}
                   className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={() => setSelectedProperty(null)}
                 >
-                  Save
+                  Close
                 </button>
-                <button
-                  onClick={() => setEditPropertyMode(false)}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setEditPropertyMode(true)}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={async () => {
-                    const confirmDelete = confirm('Are you sure you want to delete this property?');
-                    if (!confirmDelete) return;
-                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                      method: 'DELETE',
-                    });
-                    if (res.ok) {
-                      setSelectedProperty(null);
-                      fetchProperties();
-                    } else {
-                      alert('Delete failed');
-                    }
-                  }}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Delete
-                </button>
-              </>
-            )}
-            <button
-              className="bg-gray-300 px-4 py-2 rounded"
-              onClick={() => setSelectedProperty(null)}
-            >
-              Close
-            </button>
-          </div>
+              </div>
+
+              {personProperties.length > 0 && people.length > 0 && selectedPropety && (
+  (() => {
+    const relatedPeople = personProperties
+      .filter((pp) => pp.property_id === selectedPropety.id && pp.is_related)
+      .map((pp) => people.find((p) => p.id === pp.person_id))
+      .filter((p): p is Person => !!p);
+
+    return (
+      relatedPeople.length > 0 && (
+        <div className="mt-6 border-t pt-4">
+          <h3 className="text-lg font-semibold mb-2">People Related to This Property</h3>
+          <ul className="space-y-2">
+            {relatedPeople.map((person) => (
+              <li key={person.id} className="border p-3 rounded bg-gray-50">
+                {editingPersonIdForProperty === person.id ? (
+                  <>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={editedPersonForProperty.name ?? person.name}
+                      onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, name: e.target.value })}
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={editedPersonForProperty.organisation ?? person.organisation}
+                      onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, organisation: e.target.value })}
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={editedPersonForProperty.role ?? person.role}
+                      onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, role: e.target.value })}
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={editedPersonForProperty.email ?? person.email}
+                      onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, email: e.target.value })}
+                    />
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={editedPersonForProperty.contact_number ?? person.contact_number}
+                      onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, contact_number: e.target.value })}
+                    />
+
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        className="bg-blue-500 text-white px-3 py-1 rounded"
+                        onClick={async () => {
+                          const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ...person, ...editedPersonForProperty }),
+                          });
+                          if (res.ok) {
+                            setEditingPersonIdForProperty(null);
+                            setEditedPersonForProperty({});
+                            fetchPeople();
+                          } else {
+                            alert('Failed to update person');
+                          }
+                        }}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                        onClick={() => {
+                          setEditingPersonIdForProperty(null);
+                          setEditedPersonForProperty({});
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p><strong>Name:</strong> {person.name}</p>
+                    <p><strong>Organisation:</strong> {person.organisation}</p>
+                    <p><strong>Role:</strong> {person.role}</p>
+                    <p><strong>Email:</strong> {person.email}</p>
+                    <p><strong>Contact Number:</strong> {person.contact_number}</p>
+
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        className="bg-yellow-500 text-white px-3 py-1 rounded"
+                        onClick={() => {
+                          setEditingPersonIdForProperty(person.id);
+                          setEditedPersonForProperty(person);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded"
+                        onClick={async () => {
+                          const confirmDelete = confirm('Are you sure you want to delete this person?');
+                          if (!confirmDelete) return;
+                          const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+                            method: 'DELETE',
+                          });
+                          if (res.ok) {
+                            fetchPeople();
+                            fetchPersonProperties();
+                          } else {
+                            alert('Delete failed');
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
-      )}
-    </div>
+      )
+    );
+  })()
+)}
+
+
+
+
+
+
+
+
+            </div>
+          )}
+      </div>
 
       
     </div>
