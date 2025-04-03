@@ -323,6 +323,7 @@ export default function Dashboard() {
             placeholder="Name"
             value={newPerson.name}
             onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+            required
           />
           <input
             className="border p-2 w-full"
@@ -363,6 +364,7 @@ export default function Dashboard() {
             placeholder="Landlord/Organisation"
             value={newProperty.inquirer}
             onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
+            required
           />
           <input
             className="border p-2 w-full"
@@ -504,7 +506,7 @@ export default function Dashboard() {
             {people.map((person) => (
               <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center"
                 onClick={() => handlePersonHeaderClick(person)}>           
-                {person.name}
+                {person.name || 'Name'}
               </th>
             ))}
           </tr>
