@@ -18,7 +18,7 @@ const pool = new Pool({
 // People
 // ------------------------------
 
-app.get('/api/people/:id', async (req, res) => {
+{/*app.get('/api/people/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query('SELECT * FROM people WHERE id = $1', [id]);
@@ -29,7 +29,7 @@ app.get('/api/people/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
+});*/}
 
 
 app.post('/api/people', async (req, res) => {
@@ -267,7 +267,7 @@ app.delete('/api/propertiies/:id', async (req, res) => {
 // ------------------------------
 
 // GET: Retrieve all person-property relationships
-app.get('/api/person-properties',   async (req, res) => {
+{/*app.get('/api/person-properties',   async (req, res) => {
   try {
     // Optionally, you can join with persons and properties tables to get additional info:
     // const result = await pool.query(
@@ -281,7 +281,28 @@ app.get('/api/person-properties',   async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});*/}
+
+app.get('/api/person-properties', async (req, res) => {
+  try {
+    const query = `
+      SELECT
+        pp.id,
+        pp.is_related,
+        p.name as person_name,
+        pr.address as property_address
+      FROM person_property pp
+      JOIN persons p ON p.id = pp.person_id
+      JOIN properties pr ON pr.id = pp.property_id
+    `;
+
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
 
 // POST: Create a new person-property relationship
 app.post('/api/person-properties', async (req, res) => {
