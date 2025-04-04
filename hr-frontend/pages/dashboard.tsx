@@ -4,11 +4,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+
 interface Person {
   id: number;
   name: string;
   organisation :string;
-  role:string;
+  role: 'Est Ag' | 'Landlord' | 'Ass Man'| '';
   email:string;
   contact_number:string
 }
@@ -18,7 +19,7 @@ interface Property {
   inquirer: string;
   city: string;
   address: string;
-  property_type: string;
+  property_type: 'Office' | 'Retail' | 'Warehouse'|'';
   building_rateable_value: number | null;
   rates_payable_before_relief:number | null;
   has_car_park: boolean;
@@ -336,12 +337,17 @@ export default function Dashboard() {
             value={newPerson.organisation}
             onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
           />
-          <input
-            className="border p-2 w-full"
-            placeholder="Role"
-            value={newPerson.role}
-            onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value })}
-          />
+          <select
+              className="border p-2 w-full"
+              value={newPerson.role}
+              onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
+            >
+              <option value="" disabled>Role</option>
+              <option value="Est Ag">Est Ag</option>
+              <option value="Landlord">Landlord</option>
+              <option value="Ass Man">Ass Man</option>
+          </select>
+
           <input
             className="border p-2 w-full"
             placeholder="Email"
@@ -383,12 +389,18 @@ export default function Dashboard() {
             value={newProperty.address}
             onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
           />
-          <input
+          <select
             className="border p-2 w-full"
-            placeholder="Property Type"
             value={newProperty.property_type}
-            onChange={(e) => setNewProperty({ ...newProperty, property_type: e.target.value })}
-          />
+            onChange={(e) =>
+              setNewProperty({ ...newProperty, property_type: e.target.value as Property['property_type'] })
+            }
+          >
+            <option value="" disabled>Property type</option>
+            <option value="Office">Office</option>
+            <option value="Retail">Retail</option>
+            <option value="Warehouse">Warehouse</option>
+          </select>
           <input
             className="border p-2 w-full"
             placeholder="Building rateable value"
@@ -585,15 +597,23 @@ export default function Dashboard() {
                         setSelectedPerson({ ...selectedPerson, organisation: e.target.value })
                       }
                     /></p>
-                   <p>
-                   <label><strong>Role:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.role}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson, role: e.target.value })
-                      }
-                    /></p>
+                      <p>
+                      <label><strong>Role:</strong></label>
+                      <select
+                        className="border p-2 w-full my-1"
+                        value={selectedPerson.role}
+                        onChange={(e) =>
+                          setSelectedPerson({
+                            ...selectedPerson,
+                            role: e.target.value as Person['role'],
+                          })
+                        }
+                      >
+                        <option value="Est Ag">Est Ag</option>
+                        <option value="Landlord">Landlord</option>
+                        <option value="Ass Man">Ass Man</option>
+                      </select>
+                    </p>
                     <p>
                     <label><strong>Email:</strong></label>
                     <input
@@ -723,12 +743,23 @@ export default function Dashboard() {
                               onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
                             /></p> 
                             <p> 
-                            <label><strong>Property Type:</strong></label>     
-                            <input
-                              className="border p-1 w-full my-1"
-                              value={editedProperty.property_type ?? property.property_type}
-                              onChange={(e) => setEditedProperty({ ...editedProperty, property_type: e.target.value })}
-                            /></p> 
+                              <label><strong>Property Type:</strong></label>     
+                              <select
+                                className="border p-1 w-full my-1"
+                                value={editedProperty.property_type ?? property.property_type}
+                                onChange={(e) =>
+                                  setEditedProperty({
+                                    ...editedProperty,
+                                    property_type: e.target.value as Property['property_type'],
+                                  })
+                                }
+                              >
+                                <option value="Office">Office</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Warehouse">Warehouse</option>
+                              </select>
+                            </p>
+ 
                             <p>
                             <label><strong>Building rateable value:</strong></label>     
                             <input
@@ -941,17 +972,26 @@ export default function Dashboard() {
                   setSelectedProperty({ ...selectedPropety, address: e.target.value })
                 }
               /></p>
-                <p> 
-                <label><strong>Property Type:</strong></label> 
-              <input
-                className="border p-2 w-full my-1"
-                value={selectedPropety.property_type}
-                onChange={(e) =>
-                  setSelectedProperty({ ...selectedPropety, property_type: e.target.value })
-                }
-              /></p>
-                <p> 
-                <label><strong>Building rateable value:</strong></label> 
+              <p> 
+                  <label><strong>Property Type:</strong></label> 
+                  <select
+                    className="border p-2 w-full my-1"
+                    value={selectedPropety.property_type}
+                    onChange={(e) =>
+                      setSelectedProperty({
+                        ...selectedPropety,
+                        property_type: e.target.value as Property['property_type'],
+                      })
+                    }
+                  >
+                    <option value="Office">Office</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Warehouse">Warehouse</option>
+                  </select>
+              </p>
+
+              <p> 
+              <label><strong>Building rateable value:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -963,8 +1003,8 @@ export default function Dashboard() {
                   })
                 }
               /></p>
-                <p> 
-                <label><strong>Rates payable before relief:</strong></label> 
+              <p> 
+              <label><strong>Rates payable before relief:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -1156,13 +1196,24 @@ export default function Dashboard() {
                                     value={editedPersonForProperty.organisation ?? person.organisation}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, organisation: e.target.value })}
                                   /></p>
-                                   <p>
-                                   <label><strong>Role:</strong></label>
-                                  <input
-                                    className="border p-2 w-full my-1"
-                                    value={editedPersonForProperty.role ?? person.role}
-                                    onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, role: e.target.value })}
-                                  /></p>
+                                    <p>
+                                    <label><strong>Role:</strong></label>
+                                    <select
+                                      className="border p-2 w-full my-1"
+                                      value={editedPersonForProperty.role ?? person.role}
+                                      onChange={(e) =>
+                                        setEditedPersonForProperty({
+                                          ...editedPersonForProperty,
+                                          role: e.target.value as Person['role'],
+                                        })
+                                      }
+                                    >
+                                      <option value="Est Ag">Est Ag</option>
+                                      <option value="Landlord">Landlord</option>
+                                      <option value="Ass Man">Ass Man</option>
+                                    </select>
+                                  </p>
+
 
                                   <p>
                                   <label><strong>Email:</strong></label>
