@@ -402,7 +402,6 @@ export default function Dashboard() {
               })
             }
           />
-
           <input
             className="border p-2 w-full"
             placeholder="Rates payable before relief"
@@ -504,12 +503,12 @@ export default function Dashboard() {
          Relationships
       </h2>
       
-        <table className="min-w-full border-collapse border border-gray-300">
+        <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
           <thead>
             <tr className="bg-gray-200">
               <th className="border min-w-[150px] min-h-[50px] p-2 text-center">Property \ Person</th>
               {people.map((person) => (
-                <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center"
+                <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center "
                   onClick={() => handlePersonHeaderClick(person)}>           
                   {person.name || 'Name'}
                 </th>
@@ -568,41 +567,51 @@ export default function Dashboard() {
                   
                 {editPersonMode ? (
                   <>
+                    <p>
+                    <label><strong>Name:</strong></label>
                     <input
                       className="border p-2 w-full my-1"
                       value={selectedPerson.name}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, name: e.target.value })
                       }
-                    />
+                    /></p>
+                    <p>
+                    <label><strong>Organisation:</strong></label>
                     <input
-                      className="border p-2 w-full my-1"
+                      className="border p-2 w- my-1"
                       value={selectedPerson.organisation}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, organisation: e.target.value })
                       }
-                    />
+                    /></p>
+                   <p>
+                   <label><strong>Role:</strong></label>
                     <input
                       className="border p-2 w-full my-1"
                       value={selectedPerson.role}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, role: e.target.value })
                       }
-                    />
+                    /></p>
+                    <p>
+                    <label><strong>Email:</strong></label>
                     <input
                       className="border p-2 w-full my-1"
                       value={selectedPerson.email}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, email: e.target.value })
                       }
-                    />
+                    /></p>
+                    <p>
+                    <label><strong>Contact:</strong></label>
                     <input
                       className="border p-2 w-full my-1"
                       value={selectedPerson.contact_number}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, contact_number: e.target.value })
                       }
-                    />
+                    /></p>
                   </>
                 ) : (
                   <>
@@ -691,27 +700,37 @@ export default function Dashboard() {
                       {relatedProperties.map((property) => (
                         <li key={property.id} className="border p-3 rounded bg-gray-50">
                         {editingPropertyId === property.id ? (
-                          <>
+                          <>               
+                            <p>
+                            <label><strong>Landlord/Organisation:</strong></label>                         
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.inquirer ?? property.inquirer}
                               onChange={(e) => setEditedProperty({ ...editedProperty, inquirer: e.target.value })}
-                            />
+                            /></p> 
+                            <p> 
+                            <label><strong>City:</strong></label>     
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.city ?? property.city}
                               onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
-                            />
+                            /></p> 
+                            <p> 
+                            <label><strong>Address:</strong></label>     
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.address ?? property.address}
                               onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
-                            />
+                            /></p> 
+                            <p> 
+                            <label><strong>Property Type:</strong></label>     
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.property_type ?? property.property_type}
                               onChange={(e) => setEditedProperty({ ...editedProperty, property_type: e.target.value })}
-                            />
+                            /></p> 
+                            <p>
+                            <label><strong>Building rateable value:</strong></label>     
                             <input
                               className="border p-1 w-full my-1"
                               type="number"
@@ -719,7 +738,70 @@ export default function Dashboard() {
                               onChange={(e) =>
                                 setEditedProperty({ ...editedProperty, building_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
                               }
-                            />
+                            /></p>
+                            <p>
+                            <label><strong>Rates payable before relief:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.rates_payable_before_relief?? property.rates_payable_before_relief?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty, rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            /></p>
+                            <p>
+                              <label className="inline-flex items-center space-x-2 my-1">
+                                <input
+                                  type="checkbox"
+                                  checked={editedProperty.has_car_park ?? property.has_car_park}
+                                  onChange={(e) =>
+                                    setEditedProperty({ ...editedProperty, has_car_park: e.target.checked })
+                                  }
+                                />
+                                <span><strong>Has Car Park?</strong></span>
+                              </label>
+                            </p>
+                            <p>
+                            <label><strong>Car park rateable value:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.car_park_rateable_value ?? property.car_park_rateable_value ?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty, car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            /></p>
+                            <p>
+                            <label><strong>Car park rates payable before relief:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.car_park_rates_payable_before_relief ?? property.car_park_rates_payable_before_relief ?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty,car_park_rates_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            /></p>
+                            <p>
+                            <label><strong>Total rateable value:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.total_rateable_value ?? property.total_rateable_value?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty, total_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            /></p>
+                            <p>
+                            <label><strong>Total rate payable:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="number"
+                              value={editedProperty.total_rate_payable ?? property.total_rate_payable ?? ''}
+                              onChange={(e) =>
+                                setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
+                              }
+                            /></p>
+
                             {/* Add other fields similarly... */}
                             <div className="flex gap-2 mt-2">
                               <button
@@ -832,34 +914,44 @@ export default function Dashboard() {
 
           {editPropertyMode ? (
             <>
+              <p> 
+              <label><strong>Landlord/Organisation:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.inquirer}
                 onChange={(e) =>
                   setSelectedProperty({ ...selectedPropety, inquirer: e.target.value })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>City:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.city}
                 onChange={(e) =>
                   setSelectedProperty({ ...selectedPropety, city: e.target.value })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Address:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.address}
                 onChange={(e) =>
                   setSelectedProperty({ ...selectedPropety, address: e.target.value })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Property Type:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.property_type}
                 onChange={(e) =>
                   setSelectedProperty({ ...selectedPropety, property_type: e.target.value })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Building rateable value:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -870,7 +962,9 @@ export default function Dashboard() {
                     building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Rates payable before relief:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -881,7 +975,7 @@ export default function Dashboard() {
                     rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
               <label className="inline-flex items-center space-x-2 my-1">
                 <input
                   type="checkbox"
@@ -893,8 +987,10 @@ export default function Dashboard() {
                     })
                   }
                 />
-                <span>Has Car Park?</span>
+                <span><strong>Has Car Park?</strong></span>
               </label>
+              <p> 
+              <label><strong>Car park rateable value:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -905,7 +1001,9 @@ export default function Dashboard() {
                     car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Car park rates payable before relief:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -916,7 +1014,9 @@ export default function Dashboard() {
                     car_park_rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Total rateable value:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -927,7 +1027,9 @@ export default function Dashboard() {
                     total_rateable_value : e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
+                <p> 
+                <label><strong>Total rate payable:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 type="number"
@@ -938,7 +1040,7 @@ export default function Dashboard() {
                     total_rate_payable : e.target.value === '' ? null : Number(e.target.value),
                   })
                 }
-              />
+              /></p>
               {/* Repeat for other fields */}
             </>
           ) : (
@@ -1039,32 +1141,44 @@ export default function Dashboard() {
                             <li key={person.id} className="border p-3 rounded bg-gray-50">
                               {editingPersonIdForProperty === person.id ? (
                                 <>
+                                  <p>
+                                  <label><strong>Name:</strong></label>
                                   <input
                                     className="border p-2 w-full my-1"
                                     value={editedPersonForProperty.name ?? person.name}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, name: e.target.value })}
-                                  />
+                                  /></p>
+                                  
+                                  <p>
+                                  <label><strong>Organisation:</strong></label>
                                   <input
                                     className="border p-2 w-full my-1"
                                     value={editedPersonForProperty.organisation ?? person.organisation}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, organisation: e.target.value })}
-                                  />
+                                  /></p>
+                                   <p>
+                                   <label><strong>Role:</strong></label>
                                   <input
                                     className="border p-2 w-full my-1"
                                     value={editedPersonForProperty.role ?? person.role}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, role: e.target.value })}
-                                  />
+                                  /></p>
+
+                                  <p>
+                                  <label><strong>Email:</strong></label>
                                   <input
                                     className="border p-2 w-full my-1"
                                     value={editedPersonForProperty.email ?? person.email}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, email: e.target.value })}
-                                  />
+                                  /></p>
+
+                                  <p>
+                                  <label><strong>Contact Number:</strong></label>
                                   <input
                                     className="border p-2 w-full my-1"
                                     value={editedPersonForProperty.contact_number ?? person.contact_number}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, contact_number: e.target.value })}
-                                  />
-
+                                  /></p>
                                   <div className="flex gap-2 mt-2">
                                     <button
                                       className="bg-gray-300 px-4 py-2 rounded"
@@ -1143,19 +1257,9 @@ export default function Dashboard() {
                   );
                 })()
               )}
-
-
-
-
-
-
-
-
             </div>
           )}
-      </div>
-
-      
+      </div>    
     </div>
   );
 }
