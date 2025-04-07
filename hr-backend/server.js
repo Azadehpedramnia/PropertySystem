@@ -18,27 +18,13 @@ const pool = new Pool({
 // People
 // ------------------------------
 
-{/*app.get('/api/people/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query('SELECT * FROM people WHERE id = $1', [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Person not found' });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});*/}
-
-
 app.post('/api/people', async (req, res) => {
   try {
-    const { name, organisation, role, email, contact_number } = req.body;
+    const { name, organisation, role, email, contact_number,family } = req.body;
     const result = await pool.query(
-      `INSERT INTO people (name, organisation, role, email, contact_number)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [name, organisation, role, email, contact_number]
+      `INSERT INTO people (name, organisation, role, email, contact_number, family)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [name, organisation, role, email, contact_number, family]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -55,7 +41,8 @@ app.get('/api/people', async (req, res) => {
               organisation,
               role,
               email,
-              contact_number
+              contact_number,
+              family
        FROM people`
     );
     res.json(result.rows);
@@ -69,7 +56,7 @@ app.get('/api/people', async (req, res) => {
 app.put('/api/people/:id',  async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, organisation, role, email, contact_number } = req.body;
+    const { name, organisation, role, email, contact_number, family } = req.body;
 
     const result = await pool.query(
       `UPDATE people
@@ -77,10 +64,11 @@ app.put('/api/people/:id',  async (req, res) => {
            organisation = $2,
            role = $3,
            email = $4,
-           contact_number = $5
-       WHERE id = $6
+           contact_number = $5,
+           family = $6,
+       WHERE id = $7
        RETURNING *`,
-      [name, organisation, role, email, contact_number, id]
+      [name, organisation, role, email, contact_number,family, id]
     );
 
     if (result.rows.length === 0) {
@@ -111,7 +99,7 @@ app.delete('/api/people/:id',  async (req, res) => {
 
 
 // ------------------------------
-// Properties
+// Propertiies
 // ------------------------------
 
 app.get('/api/propertiies', async (req, res) => {
@@ -128,7 +116,8 @@ app.get('/api/propertiies', async (req, res) => {
               car_park_rateable_value,
               car_park_rates_payable_before_relief,
               total_rateable_value,
-              total_rate_payable
+              total_rate_payable,
+              donation_due
        FROM propertiies`
     );
     res.json(result.rows);
@@ -150,7 +139,8 @@ app.post('/api/propertiies', async (req, res) => {
       car_park_rateable_value,
       car_park_rates_payable_before_relief,
       total_rateable_value,
-      total_rate_payable
+      total_rate_payable,
+      donation_due
     } = req.body;
 
     const result = await pool.query(
@@ -165,9 +155,10 @@ app.post('/api/propertiies', async (req, res) => {
           car_park_rateable_value,
           car_park_rates_payable_before_relief,
           total_rateable_value,
-          total_rate_payable
+          total_rate_payable,
+          donation_due
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        RETURNING *`,
       [
         inquirer,
@@ -180,7 +171,8 @@ app.post('/api/propertiies', async (req, res) => {
         car_park_rateable_value,
         car_park_rates_payable_before_relief,
         total_rateable_value,
-        total_rate_payable
+        total_rate_payable,
+        donation_due
       ]
     );
     res.json(result.rows[0]);
@@ -203,7 +195,8 @@ app.put('/api/propertiies/:id', async (req, res) => {
       car_park_rateable_value,
       car_park_rates_payable_before_relief,
       total_rateable_value,
-      total_rate_payable
+      total_rate_payable,
+      donation_due
     } = req.body;
 
     const result = await pool.query(
@@ -218,8 +211,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
            car_park_rateable_value = $8,
            car_park_rates_payable_before_relief = $9,
            total_rateable_value = $10,
-           total_rate_payable = $11
-       WHERE id = $12
+           total_rate_payable = $11,
+           donation_due = $12
+       WHERE id = $13
        RETURNING *`,
       [
         inquirer,
@@ -233,6 +227,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
         car_park_rates_payable_before_relief,
         total_rateable_value,
         total_rate_payable,
+        donation_due,
         id
       ]
     );
@@ -267,22 +262,6 @@ app.delete('/api/propertiies/:id', async (req, res) => {
 // ------------------------------
 
 // GET: Retrieve all person-property relationships
-{/*app.get('/api/person-properties',   async (req, res) => {
-  try {
-    // Optionally, you can join with persons and properties tables to get additional info:
-    // const result = await pool.query(
-    //   `SELECT pp.id, pp.is_related, p.name AS person_name, pr.address AS property_address
-    //    FROM person_property pp
-    //    JOIN persons p ON p.id = pp.person_id
-    //    JOIN properties pr ON pr.id = pp.property_id`
-    // );
-    const result = await pool.query('SELECT * FROM person_property');
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});*/}
-
 app.get('/api/person_property', async (req, res) => {
   try {
     const query = `
