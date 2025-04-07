@@ -119,11 +119,11 @@ export default function Dashboard() {
   // Fetch the person-property relationships from your backend
   const fetchPersonProperties = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/person-properties');
+      const res = await fetch('http://localhost:5000/api/person_property');
       const data = await res.json();
       setPersonProperties(data);
     } catch (error) {
-      console.error('Error fetching person-properties:', error);
+      console.error('Error fetching person_property', error);
     }
   };
 
@@ -226,7 +226,7 @@ export default function Dashboard() {
       }
     
       try {
-        const res = await fetch('http://localhost:5000/api/person-properties', {
+        const res = await fetch('http://localhost:5000/api/person_property', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -256,7 +256,7 @@ export default function Dashboard() {
         fetchPersonProperties();
       } catch (error) {
         console.error(error);
-        alert('Failed to add person-property relationship');
+        alert('Failed to add person_property relationship');
       }
     };
 
@@ -276,7 +276,7 @@ export default function Dashboard() {
         // If it exists, toggle the relationship with a PUT
         const newValue = !existing.is_related;
         const res = await fetch(
-          `http://localhost:5000/api/person-properties/${existing.id}`,
+          `http://localhost:5000/api/person_property/${existing.id}`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -286,7 +286,7 @@ export default function Dashboard() {
         if (!res.ok) throw new Error('Failed to update relationship');
       } else {
         // If no row yet, create one with isRelated=true
-        const res = await fetch('http://localhost:5000/api/person-properties', {
+        const res = await fetch('http://localhost:5000/api/person_property', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

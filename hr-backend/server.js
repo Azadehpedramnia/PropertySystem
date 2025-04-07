@@ -283,17 +283,19 @@ app.delete('/api/propertiies/:id', async (req, res) => {
   }
 });*/}
 
-app.get('/api/person-properties', async (req, res) => {
+app.get('/api/person_property', async (req, res) => {
   try {
     const query = `
       SELECT
         pp.id,
         pp.is_related,
+        pp.person_id,
+        pp.property_id,
         p.name as person_name,
         pr.address as property_address
       FROM person_property pp
-      JOIN persons p ON p.id = pp.person_id
-      JOIN properties pr ON pr.id = pp.property_id
+      JOIN people p ON p.id = pp.person_id
+      JOIN propertiies pr ON pr.id = pp.property_id
     `;
 
     const result = await pool.query(query);
@@ -305,7 +307,7 @@ app.get('/api/person-properties', async (req, res) => {
 
 
 // POST: Create a new person-property relationship
-app.post('/api/person-properties', async (req, res) => {
+app.post('/api/person_property', async (req, res) => {
   try {
     const { personId, propertyId, isRelated } = req.body;
     const result = await pool.query(
@@ -320,7 +322,7 @@ app.post('/api/person-properties', async (req, res) => {
 });
 
 // PUT: Update an existing person-property relationship
-app.put('/api/person-properties/:id',  async (req, res) => {
+app.put('/api/person_property/:id',  async (req, res) => {
   try {
     const { id } = req.params;
     const { isRelated } = req.body;
@@ -338,7 +340,7 @@ app.put('/api/person-properties/:id',  async (req, res) => {
 });
 
 // DELETE: Remove a person-property relationship
-app.delete('/api/person-properties/:id',  async (req, res) => {
+app.delete('/api/person_property/:id',  async (req, res) => {
   try {
     const { id } = req.params;
     await pool.query('DELETE FROM person_property WHERE id = $1', [id]);
