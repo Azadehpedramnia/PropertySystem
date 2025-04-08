@@ -117,7 +117,8 @@ app.get('/api/propertiies', async (req, res) => {
               car_park_rates_payable_before_relief,
               total_rateable_value,
               total_rate_payable,
-              donation_due
+              donation_due,
+              post_code
        FROM propertiies`
     );
     res.json(result.rows);
@@ -140,7 +141,8 @@ app.post('/api/propertiies', async (req, res) => {
       car_park_rates_payable_before_relief,
       total_rateable_value,
       total_rate_payable,
-      donation_due
+      donation_due,
+      post_code
     } = req.body;
 
     const result = await pool.query(
@@ -156,9 +158,10 @@ app.post('/api/propertiies', async (req, res) => {
           car_park_rates_payable_before_relief,
           total_rateable_value,
           total_rate_payable,
-          donation_due
+          donation_due,
+          post_code
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING *`,
       [
         inquirer,
@@ -172,7 +175,8 @@ app.post('/api/propertiies', async (req, res) => {
         car_park_rates_payable_before_relief,
         total_rateable_value,
         total_rate_payable,
-        donation_due
+        donation_due,
+        post_code
       ]
     );
     res.json(result.rows[0]);
@@ -196,7 +200,8 @@ app.put('/api/propertiies/:id', async (req, res) => {
       car_park_rates_payable_before_relief,
       total_rateable_value,
       total_rate_payable,
-      donation_due
+      donation_due,
+      post_code
     } = req.body;
 
     const result = await pool.query(
@@ -212,8 +217,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
            car_park_rates_payable_before_relief = $9,
            total_rateable_value = $10,
            total_rate_payable = $11,
-           donation_due = $12
-       WHERE id = $13
+           donation_due = $12,
+           post_code = $13
+       WHERE id = $14
        RETURNING *`,
       [
         inquirer,
@@ -228,6 +234,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
         total_rateable_value,
         total_rate_payable,
         donation_due,
+        post_code,
         id
       ]
     );
