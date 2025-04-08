@@ -32,6 +32,7 @@ interface Property {
   total_rateable_value:number | null;
   total_rate_payable: number | null;
   donation_due : Date | null;
+  post_code : string;
 }
 
 interface PersonProperty {
@@ -89,6 +90,7 @@ export default function Dashboard() {
     total_rateable_value: null,
     total_rate_payable: null,
     donation_due:null,
+    post_code : '',
   });
 
   // State for the join table
@@ -231,6 +233,7 @@ export default function Dashboard() {
         total_rateable_value: null,
         total_rate_payable:null,
         donation_due:null,
+        post_code:'',
       });
       // Reload table
       fetchProperties();
@@ -522,13 +525,24 @@ export default function Dashboard() {
             />
           </div>
 
+           {/* Post Code */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>post Code:</label>
+            <input
+              className="form-control"
+              placeholder="post code"
+              value={newProperty.post_code}
+              onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
+            />
+          </div>
+
           {/* Property Type */}
           <div className="d-flex align-items-center mb-3">
             <label className="me-3 mb-0" style={{ width: '160px' }}>Property Type:</label>
             <input
               list="property-type-options"
               className="form-control"
-              placeholder="Select or type property type"
+              placeholder="property type"
               value={newProperty.property_type}
               onChange={(e) =>
                 setNewProperty({
@@ -550,7 +564,7 @@ export default function Dashboard() {
             <input
               type="number"
               className="form-control"
-              placeholder="Value"
+              placeholder="Building Rateable Value"
               value={newProperty.building_rateable_value ?? ''}
               onChange={(e) =>
                 setNewProperty({
@@ -563,7 +577,7 @@ export default function Dashboard() {
 
           {/* Rates Payable Before Relief */}
           <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Before Relief:</label>
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Payable Before Relief:</label>
             <input
               type="number"
               className="form-control"
@@ -592,7 +606,7 @@ export default function Dashboard() {
 
           {/* Car Park Rateable Value */}
           <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Value:</label>
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rateable Value:</label>
             <input
               type="number"
               className="form-control"
@@ -609,7 +623,7 @@ export default function Dashboard() {
 
           {/* Car Park Rates Payable Before Relief */}
           <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rates Payable:</label>
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rates Payable Before Relife:</label>
             <input
               type="number"
               className="form-control"
