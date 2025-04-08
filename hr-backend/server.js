@@ -20,11 +20,38 @@ const pool = new Pool({
 
 app.post('/api/people', async (req, res) => {
   try {
-    const { name, organisation, role, email, contact_number,family } = req.body;
+    const { name, organisation, role, email, contact_number,family,
+      your_curren_position,
+      property_address_for_enquiry,
+      total_rateable_value_of_the_property,
+       estate_agents_name,
+       estate_agent_contact_number,
+       estate_agent_email,
+       poc_email,
+       poc_contact_numbe,
+       poc_leases } = req.body;
     const result = await pool.query(
-      `INSERT INTO people (name, organisation, role, email, contact_number, family)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [name, organisation, role, email, contact_number, family]
+      `INSERT INTO people (name, organisation, role, email, contact_number, family, 
+       your_curren_position,
+       property_address_for_enquiry,
+       total_rateable_value_of_the_property,
+        estate_agents_name,
+        estate_agent_contact_number,
+        estate_agent_email,
+        poc_email,
+        poc_contact_numbe,
+        poc_leases
+        )
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`,
+      [name, organisation, role, email, contact_number, family,your_curren_position,
+        property_address_for_enquiry,
+        total_rateable_value_of_the_property,
+         estate_agents_name,
+         estate_agent_contact_number,
+         estate_agent_email,
+         poc_email,
+         poc_contact_numbe,
+         poc_leases]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -42,7 +69,16 @@ app.get('/api/people', async (req, res) => {
               role,
               email,
               contact_number,
-              family
+              family,
+              your_curren_position,
+       property_address_for_enquiry,
+       total_rateable_value_of_the_property,
+        estate_agents_name,
+        estate_agent_contact_number,
+        estate_agent_email,
+        poc_email,
+        poc_contact_numbe,
+        poc_leases
        FROM people`
     );
     res.json(result.rows);
@@ -56,7 +92,17 @@ app.get('/api/people', async (req, res) => {
 app.put('/api/people/:id',  async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, organisation, role, email, contact_number, family } = req.body;
+    const { name, organisation, role, email, contact_number, family,
+      your_curren_position,
+       property_address_for_enquiry,
+       total_rateable_value_of_the_property,
+        estate_agents_name,
+        estate_agent_contact_number,
+        estate_agent_email,
+        poc_email,
+        poc_contact_numbe,
+        poc_leases
+     } = req.body;
 
     const result = await pool.query(
       `UPDATE people
@@ -66,9 +112,27 @@ app.put('/api/people/:id',  async (req, res) => {
            email = $4,
            contact_number = $5,
            family = $6,
-       WHERE id = $7
+           your_curren_position = $7,
+       property_address_for_enquiry = $8,
+       total_rateable_value_of_the_property = $9,
+        estate_agents_name = $10,
+        estate_agent_contact_number = $11,
+        estate_agent_email = $12,
+        poc_email = $13,
+        poc_contact_numbe = $14,
+        poc_leases= $15
+       WHERE id = $16
        RETURNING *`,
-      [name, organisation, role, email, contact_number,family, id]
+      [name, organisation, role, email, contact_number,family,
+        your_curren_position,
+        property_address_for_enquiry,
+        total_rateable_value_of_the_property,
+         estate_agents_name,
+         estate_agent_contact_number,
+         estate_agent_email,
+         poc_email,
+         poc_contact_numbe,
+         poc_leases, id]
     );
 
     if (result.rows.length === 0) {
@@ -118,7 +182,18 @@ app.get('/api/propertiies', async (req, res) => {
               total_rateable_value,
               total_rate_payable,
               donation_due,
-              post_code
+              post_code,
+              landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period
        FROM propertiies`
     );
     res.json(result.rows);
@@ -142,7 +217,18 @@ app.post('/api/propertiies', async (req, res) => {
       total_rateable_value,
       total_rate_payable,
       donation_due,
-      post_code
+      post_code,
+      landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period
     } = req.body;
 
     const result = await pool.query(
@@ -159,9 +245,21 @@ app.post('/api/propertiies', async (req, res) => {
           total_rateable_value,
           total_rate_payable,
           donation_due,
-          post_code
+          post_code,
+          landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
+       $14, $15, $16, $17, &18, $19, $20, $21, $22, $23, $24)
        RETURNING *`,
       [
         inquirer,
@@ -176,7 +274,18 @@ app.post('/api/propertiies', async (req, res) => {
         total_rateable_value,
         total_rate_payable,
         donation_due,
-        post_code
+        post_code,
+        landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period
       ]
     );
     res.json(result.rows[0]);
@@ -201,7 +310,18 @@ app.put('/api/propertiies/:id', async (req, res) => {
       total_rateable_value,
       total_rate_payable,
       donation_due,
-      post_code
+      post_code,
+      landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period
     } = req.body;
 
     const result = await pool.query(
@@ -218,8 +338,19 @@ app.put('/api/propertiies/:id', async (req, res) => {
            total_rateable_value = $10,
            total_rate_payable = $11,
            donation_due = $12,
-           post_code = $13
-       WHERE id = $14
+           post_code = $13,
+           landlord_name = $14,
+              landlord_email = $15,
+              landlord_no = $16,
+              rateablevalue_ratespayabl = $17,
+              rates_for_each = $18,
+              point_of_company = $19,
+              rates_multiplier = $20,
+              strate_date_of_lease = $21,
+              length_of_lease = $22,
+              end_date_of_lease = $23,
+              lease_period = $24
+       WHERE id = $25
        RETURNING *`,
       [
         inquirer,
@@ -235,6 +366,17 @@ app.put('/api/propertiies/:id', async (req, res) => {
         total_rate_payable,
         donation_due,
         post_code,
+        landlord_name,
+              landlord_email,
+              landlord_no,
+              rateablevalue_ratespayabl,
+              rates_for_each,
+              point_of_company,
+              rates_multiplier,
+              strate_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              lease_period,
         id
       ]
     );

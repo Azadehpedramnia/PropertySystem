@@ -16,6 +16,15 @@ interface Person {
   email:string;
   contact_number:string;
   family : string;
+  your_curren_position:string,
+  property_address_for_enquiry:string,
+  total_rateable_value_of_the_property:string,
+   estate_agents_name:string,
+   estate_agent_contact_number:string,
+   estate_agent_email:string,
+   poc_email:string,
+   poc_contact_numbe:string,
+   poc_leases:string;
 }
 
 interface Property {
@@ -33,6 +42,17 @@ interface Property {
   total_rate_payable: number | null;
   donation_due : Date | null;
   post_code : string;
+  landlord_name :string;
+              landlord_email:string;
+              landlord_no:string;
+              rateablevalue_ratespayabl:string;
+              rates_for_each:string;
+              point_of_company:string;
+              rates_multiplier:string;
+              strate_date_of_lease:string;
+              length_of_lease:string;
+              end_date_of_lease:Date | null;
+              lease_period:string;
 }
 
 interface PersonProperty {
@@ -75,6 +95,15 @@ export default function Dashboard() {
     email: '',
     contact_number: '',
     family:'',
+    your_curren_position:'',
+    property_address_for_enquiry:'',
+    total_rateable_value_of_the_property:'',
+     estate_agents_name:'',
+     estate_agent_contact_number:'',
+     estate_agent_email:'',
+     poc_email:'',
+     poc_contact_numbe:'',
+     poc_leases:''
   });
 
   const [newProperty, setNewProperty] = useState<Omit<Property, 'id'>>({
@@ -91,6 +120,18 @@ export default function Dashboard() {
     total_rate_payable: null,
     donation_due:null,
     post_code : '',
+    landlord_name:'',
+    landlord_email:'',
+    landlord_no:'',
+    rateablevalue_ratespayabl:'',
+    rates_for_each:'',
+    point_of_company:'',
+    rates_multiplier:'',
+    strate_date_of_lease:'',
+    length_of_lease:'',
+    end_date_of_lease:null,
+    lease_period:'',
+    
   });
 
   // State for the join table
@@ -195,6 +236,15 @@ export default function Dashboard() {
       email: '',
       contact_number: '',
       family:'',
+      your_curren_position:'',
+      property_address_for_enquiry:'',
+      total_rateable_value_of_the_property:'',
+       estate_agents_name:'',
+       estate_agent_contact_number:'',
+       estate_agent_email:'',
+       poc_email:'',
+       poc_contact_numbe:'',
+       poc_leases:''
     });
     // Reload table
     fetchPeople();
@@ -234,6 +284,17 @@ export default function Dashboard() {
         total_rate_payable:null,
         donation_due:null,
         post_code:'',
+        landlord_name:'',
+        landlord_email:'',
+        landlord_no:'',
+        rateablevalue_ratespayabl:'',
+        rates_for_each:'',
+        point_of_company:'',
+        rates_multiplier:'',
+        strate_date_of_lease:'',
+        length_of_lease:'',
+        end_date_of_lease:null,
+        lease_period:'',
       });
       // Reload table
       fetchProperties();
@@ -431,38 +492,127 @@ export default function Dashboard() {
 
             {/* Column 2 */}
             <div className="col-md-3 bg-light p-3 rounded">
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field C:</label>
-                <input className="form-control" />
+
+              {/* Row: your_curren_position */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">your curren position:</label>
+                <input
+                  className="form-control"
+                  placeholder="your curren position"
+                  value={newPerson.your_curren_position}
+                  onChange={(e) => setNewPerson({ ...newPerson, your_curren_position: e.target.value })}
+                  required
+                />
               </div>
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field D:</label>
-                <input className="form-control" />
+
+              {/* Row: property_address_for_enquiry*/}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">property address for enquiry:</label>
+                <input
+                  className="form-control"
+                  placeholder="property address for enquiry"
+                  value={newPerson.property_address_for_enquiry}
+                  onChange={(e) => setNewPerson({ ...newPerson, property_address_for_enquiry: e.target.value })}
+                  required
+                />
               </div>
+
+              {/* Row: total_rateable_value_of_the_property */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">total rateable value of the property:</label>
+                <input
+                  className="form-control"
+                  placeholder="total rateable value of the property"
+                  value={newPerson.total_rateable_value_of_the_property}
+                  onChange={(e) => setNewPerson({ ...newPerson, total_rateable_value_of_the_property: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row:  estate_agents_name */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">estate agents name:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agents name"
+                  value={newPerson.estate_agents_name}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agents_name: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: estate_agent_contact_number */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">estate agent contact number:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agent contact number"
+                  value={newPerson.estate_agent_contact_number}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_contact_number: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row:  estate_agent_email */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agent email"
+                  value={newPerson.estate_agent_email}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_email: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: poc_email */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">poc_email:</label>
+                <input
+                  className="form-control"
+                  placeholder="poc email"
+                  value={newPerson.poc_email}
+                  onChange={(e) => setNewPerson({ ...newPerson,poc_email: e.target.value })}
+                  required
+                />
+              </div>
+
+              
+              {/* Row:  poc_contact_numbe */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50"> poc_contact_numbe :</label>
+                <input
+                  className="form-control"
+                  placeholder=" poc contact numbe "
+                  value={newPerson.poc_contact_numbe}
+                  onChange={(e) => setNewPerson({ ...newPerson, poc_contact_numbe : e.target.value })}
+                  required
+                />
+              </div>
+
+              
+              {/* Row:  poc_leases */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Is there a management company who will be POC for leases/invoices etc?:</label>
+                <input
+                  className="form-control"
+                  placeholder="poc leases"
+                  value={newPerson.poc_leases}
+                  onChange={(e) => setNewPerson({ ...newPerson, poc_leases: e.target.value })}
+                  required
+                />
+              </div>
+
             </div>
 
             {/* Column 3 */}
             <div className="col-md-3  p-3 rounded">
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field E:</label>
-                <input className="form-control" />
-              </div>
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field F:</label>
-                <input className="form-control" />
-              </div>
+      
             </div>
 
             {/* Column 4 */}
             <div className="col-md-3 bg-light p-3 rounded">
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field G:</label>
-                <input className="form-control" />
-              </div>
-              <div className="mb-3 d-flex align-items-center">
-                <label className="form-label me-2 mb-0 w-50">Field H:</label>
-                <input className="form-control" />
-              </div>
+ 
             </div>
           </div>
           {/* Submit Button */}
@@ -491,7 +641,7 @@ export default function Dashboard() {
           {/* Column 1 */}
           <div className="col-md-3  p-3 rounded">
            {/* */}
-              {/* Landlord / Organisation */}
+          {/* Landlord / Organisation */}
           <div className="d-flex align-items-center mb-3">
             <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
             <input
@@ -693,38 +843,141 @@ export default function Dashboard() {
 
           {/* Column 2 */}
           <div className="col-md-3 bg-light p-3 rounded">
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field C:</label>
-              <input className="form-control" />
+            {/* landlord_name*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord_name:</label>
+              <input
+                className="form-control"
+                placeholder="landlord_name"
+                value={newProperty.landlord_name}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_name: e.target.value })}
+                required
+              />
             </div>
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field D:</label>
-              <input className="form-control" />
+            {/* landlord_email */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> landlord_email:</label>
+              <input
+                className="form-control"
+                placeholder=" landlord_email"
+                value={newProperty.landlord_email}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
+                required
+              />
+            </div>
+            {/* landlord_no */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord contact Number:</label>
+              <input
+                className="form-control"
+                placeholder="landlord_no"
+                value={newProperty.landlord_no}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
+                required
+              />
+            </div>
+            {/* rateablevalue_ratespayabl */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
+              <input
+                className="form-control"
+                placeholder="Landlord / Organisation"
+                value={newProperty. rateablevalue_ratespayabl}
+                onChange={(e) => setNewProperty({ ...newProperty, rateablevalue_ratespayabl: e.target.value })}
+                required
+              />
+            </div>
+            {/*  rates_for_each */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> rates_for_each:</label>
+              <input
+                className="form-control"
+                placeholder=" rates_for_each"
+                value={newProperty. rates_for_each}
+                onChange={(e) => setNewProperty({ ...newProperty,  rates_for_each: e.target.value })}
+                required
+              />
+            </div>
+            {/* point_of_company*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>point_of_company:</label>
+              <input
+                className="form-control"
+                placeholder="point_of_company"
+                value={newProperty.point_of_company}
+                onChange={(e) => setNewProperty({ ...newProperty, point_of_company: e.target.value })}
+                required
+              />
+            </div>
+            {/* rates_multiplier */}
+                        <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>rates_multiplier:</label>
+              <input
+                className="form-control"
+                placeholder="rates_multiplier"
+                value={newProperty.rates_multiplier}
+                onChange={(e) => setNewProperty({ ...newProperty, rates_multiplier: e.target.value })}
+                required
+              />
+            </div>
+            {/* strate_date_of_lease */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>strate_date_of_lease:</label>
+              <input
+                className="form-control"
+                placeholder="strate_date_of_lease"
+                value={newProperty.strate_date_of_lease}
+                onChange={(e) => setNewProperty({ ...newProperty, strate_date_of_lease: e.target.value })}
+                required
+              />
+            </div>
+            {/*  length_of_lease */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> length_of_lease:</label>
+              <input
+                className="form-control"
+                placeholder=" length_of_lease"
+                value={newProperty. length_of_lease}
+                onChange={(e) => setNewProperty({ ...newProperty,  length_of_lease: e.target.value })}
+                required
+              />
+            </div>
+            {/* end_date_of_lease */}
+            <div className="d-flex align-items-center mb-4">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>end_date_of_lease:</label>
+              <input
+                type="date"
+                className="form-control"
+                value={newProperty.end_date_of_lease ? newProperty.end_date_of_lease.toISOString().split('T')[0] : ''}
+                onChange={(e) =>
+                  setNewProperty({
+                    ...newProperty,
+                    donation_due: e.target.value ? new Date(e.target.value) : null,
+                  })
+                }
+              />
+            </div>
+            {/* lease_period*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>lease_period:</label>
+              <input
+                className="form-control"
+                placeholder="lease_period"
+                value={newProperty.lease_period}
+                onChange={(e) => setNewProperty({ ...newProperty,lease_period: e.target.value })}
+                required
+              />
             </div>
           </div>
 
           {/* Column 3 */}
           <div className="col-md-3  p-3 rounded">
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field E:</label>
-              <input className="form-control" />
-            </div>
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field F:</label>
-              <input className="form-control" />
-            </div>
+        
           </div>
 
           {/* Column 4 */}
           <div className="col-md-3 bg-light p-3 rounded">
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field G:</label>
-              <input className="form-control" />
-            </div>
-            <div className="mb-3 d-flex align-items-center">
-              <label className="form-label me-2 mb-0 w-50">Field H:</label>
-              <input className="form-control" />
-            </div>
+  
           </div>
           </div>
           {/* Submit */}
