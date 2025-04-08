@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
 type Role = 'Est Ag' | 'Landlord' | 'Ass Man' | string;
 
@@ -52,8 +53,20 @@ export default function Dashboard() {
   const [newPropertyAddress, setNewPropertyAddress] = useState('');
   const [editingPersonIdForProperty, setEditingPersonIdForProperty] = useState<number | null>(null);
   const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
+  const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
 
- 
+  const handlePersonHeaderClickp = (person: Person) => {
+    setOpenPersonPopups((prev) => {
+      // Avoid duplicates
+      if (prev.find((p) => p.id === person.id)) return prev;
+      return [...prev, person];
+    });
+  };
+  
+  const closePersonPopup = (id: number) => {
+    setOpenPersonPopups((prev) => prev.filter((p) => p.id !== id));
+  };
+  
   const [newPerson, setNewPerson] = useState<Omit<Person, 'id'>>({
     name: '',
     organisation: '',
@@ -330,309 +343,152 @@ export default function Dashboard() {
 
      {/* Add Person Form */}
      <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-2">Add Person</h2>
-        <form onSubmit={addPersoon} className="space-y-2">
-          <input
-            className="border p-2 w-full"
-            placeholder="Name"
-            value={newPerson.name}
-            onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
-            required
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="Last name"
-            value={newPerson.family}
-            onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
-            required
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="Organisation"
-            value={newPerson.organisation}
-            onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
-          />
-          <select
-              className="border p-2 w-full"
-              value={newPerson.role}
-              onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
-            >
-              <option value="" disabled>Role</option>
-              <option value="Est Ag">Est Ag</option>
-              <option value="Landlord">Landlord</option>
-              <option value="Ass Man">Ass Man</option>
-          </select>
-
-          <input
-            className="border p-2 w-full"
-            placeholder="Email"
-            value={newPerson.email}
-            onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="Contact Number"
-            value={newPerson.contact_number}
-            onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
-          />
-          <button type="submit" className="bg-gray-300 px-4 py-2 rounded">
-            Add Person
-          </button>
-        </form>
-      </div>
-
-      {/* */}
-      <div className="mb-6 p-4 border rounded-lg">
         <h2 className="text-lg font-semibold mb-4">Add Person</h2>
-        <form onSubmit={addPersoon} className="space-y-3">
+        <form onSubmit={addPersoon} className="space-y-4">
+  
+          {/* */}
+          <div className="row g-3">
 
-          {/* Row: Name */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Name:</label>
-            <input
-              className="form-control"
-              placeholder="Name"
-              value={newPerson.name}
-              onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
-              required
-            />
+            {/* Column 1 */}
+            <div className="col-md-3  p-3 rounded">
+
+              {/* Row: Name */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="Name"
+                  value={newPerson.name}
+                  onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+                  required
+                />
+              </div>
+              {/* Row: Last Name */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="Last Name"
+                  value={newPerson.family}
+                  onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: Organisation */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Organisation:</label>
+                <input
+                  className="form-control"
+                  placeholder="Organisation"
+                  value={newPerson.organisation}
+                  onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
+                />
+              </div>
+
+              {/* Row: Role */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Role:</label>
+                <input
+                  list="role-options"
+                  className="form-control"
+                  placeholder="Select or type role"
+                  value={newPerson.role}
+                  onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
+                />
+                <datalist id="role-options">
+                  <option value="Est Ag" />
+                  <option value="Landlord" />
+                  <option value="Ass Man" />
+                </datalist>
+              </div>
+
+              {/* Row: Email */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Email:</label>
+                <input
+                  className="form-control"
+                  placeholder="Email"
+                  value={newPerson.email}
+                  onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
+                />
+              </div>
+
+              {/* Row: Contact Number */}
+              <div className="d-flex align-items-center mb-4">
+                <label className="form-label me-2 mb-0 w-50">Contact No:</label>
+                <input
+                  className="form-control"
+                  placeholder="Contact Number"
+                  value={newPerson.contact_number}
+                  onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
+                />
+              </div>
+            </div>
+
+            {/* Column 2 */}
+            <div className="col-md-3 bg-light p-3 rounded">
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field C:</label>
+                <input className="form-control" />
+              </div>
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field D:</label>
+                <input className="form-control" />
+              </div>
+            </div>
+
+            {/* Column 3 */}
+            <div className="col-md-3  p-3 rounded">
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field E:</label>
+                <input className="form-control" />
+              </div>
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field F:</label>
+                <input className="form-control" />
+              </div>
+            </div>
+
+            {/* Column 4 */}
+            <div className="col-md-3 bg-light p-3 rounded">
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field G:</label>
+                <input className="form-control" />
+              </div>
+              <div className="mb-3 d-flex align-items-center">
+                <label className="form-label me-2 mb-0 w-50">Field H:</label>
+                <input className="form-control" />
+              </div>
+            </div>
           </div>
-
-          {/* Row: Last Name */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Last Name:</label>
-            <input
-              className="form-control"
-              placeholder="Last Name"
-              value={newPerson.family}
-              onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
-              required
-            />
-          </div>
-
-          {/* Row: Organisation */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Organisation:</label>
-            <input
-              className="form-control"
-              placeholder="Organisation"
-              value={newPerson.organisation}
-              onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
-            />
-          </div>
-
-          {/* Row: Role */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Role:</label>
-            <input
-              list="role-options"
-              className="form-control"
-              placeholder="Select or type role"
-              value={newPerson.role}
-              onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
-            />
-            <datalist id="role-options">
-              <option value="Est Ag" />
-              <option value="Landlord" />
-              <option value="Ass Man" />
-            </datalist>
-          </div>
-
-
-          {/* Row: Email */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Email:</label>
-            <input
-              className="form-control"
-              placeholder="Email"
-              value={newPerson.email}
-              onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
-            />
-          </div>
-
-          {/* Row: Contact Number */}
-          <div className="d-flex align-items-center mb-4">
-            <label className="me-3 mb-0" style={{ width: '120px' }}>Contact No:</label>
-            <input
-              className="form-control"
-              placeholder="Contact Number"
-              value={newPerson.contact_number}
-              onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
-            />
-          </div>
-
           {/* Submit Button */}
           <div className="text-end">
             <button type="submit" className="btn btn-primary">
               Add Person
             </button>
-          </div>
-
+          </div>        
         </form>
       </div>
+
+      {/* */}
+
 
 
 
        {/* Add Property Form */}
-       <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-2">Add Property</h2>
-        <form onSubmit={addProperrty} className="space-y-2">
-          <input
-            className="border p-2 w-full"
-            placeholder="Landlord/Organisation"
-            value={newProperty.inquirer}
-            onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
-            required
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="City"
-            value={newProperty.city}
-            onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="Address"
-            value={newProperty.address}
-            onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
-          />
-          <select
-            className="border p-2 w-full"
-            value={newProperty.property_type}
-            onChange={(e) =>
-              setNewProperty({ ...newProperty, property_type: e.target.value as Property['property_type'] })
-            }
-          >
-            <option value="" disabled>Property type</option>
-            <option value="Office">Office</option>
-            <option value="Retail">Retail</option>
-            <option value="Warehouse">Warehouse</option>
-          </select>
-          <input
-            className="border p-2 w-full"
-            placeholder="Building rateable value"
-            type="number"
-            value={newProperty.building_rateable_value ?? ''} 
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                building_rateable_value:
-                  e.target.value === '' ? null : Number(e.target.value),
-              })
-            }
-          />
-          <input
-            className="border p-2 w-full"
-            placeholder="Rates payable before relief"
-            type="number"
-            value={newProperty.rates_payable_before_relief ?? ''}
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                rates_payable_before_relief: 
-                e.target.value === '' ? null : Number(e.target.value),
-              })
-            }
-          />
-          <label className="inline-flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={newProperty.has_car_park}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  has_car_park: e.target.checked,
-                })
-              }
-            />
-            <span>Has Car Park?</span>
-          </label>
-          {/* Car Park Rateable Value */}
-          <input
-            className="border p-2 w-full"
-            placeholder="Car park rateable value"
-            type="number"
-            value={newProperty.car_park_rateable_value ?? ''} 
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                // if blank, store null; otherwise convert to Number
-                car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-              })
-            }
-          />
-
-          {/* Car Park Rates Payable Before Relief */}
-          <input
-            className="border p-2 w-full"
-            placeholder="Car park rates payable before relief"
-            type="number"
-            value={newProperty.car_park_rates_payable_before_relief ?? ''} 
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                car_park_rates_payable_before_relief:
-                  e.target.value === '' ? null : Number(e.target.value),
-              })
-            }
-          />
-
-         {/* Total Rateable Value */}
-          <input
-            className="border p-2 w-full"
-            placeholder="Total rateable value"
-            type="number"
-            value={newProperty.total_rateable_value ?? ''}
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                total_rateable_value: e.target.value === '' 
-                  ? null 
-                  : Number(e.target.value),
-              })
-            }
-          />
-
-          {/* Total Rate Payable */}
-          <input
-            className="border p-2 w-full"
-            placeholder="Total rate payable"
-            type="number"
-            value={newProperty.total_rate_payable ?? ''}
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                total_rate_payable: e.target.value === '' 
-                  ? null 
-                  : Number(e.target.value),
-              })
-            }
-          />
-          <p style={{ marginBottom: '16px' }}>
-          <label  style={{ display: 'block', marginBottom: '6px' }}><strong>Donation Due</strong></label>
-          <input
-            type="date"
-            className="border p-2 w-full"
-            placeholder="Donation Due "
-            value={newProperty.donation_due ? newProperty.donation_due.toISOString().split('T')[0] : ''}
-            onChange={(e) =>
-              setNewProperty({
-                ...newProperty,
-                donation_due: e.target.value ? new Date(e.target.value) : null,
-              })
-            }
-          /></p>
-          <button type="submit" className="bg-gray-300 px-4 py-2 rounded">
-            Add Property
-          </button>
-        </form>
-      </div>
-      {/* */}
       <div className="mb-6 p-4 border rounded-lg">
         <h2 className="text-lg font-semibold mb-4">Add Property</h2>
         <form onSubmit={addProperrty}>
 
-          {/* Landlord / Organisation */}
+            {/* */}
+            {/* */}
+          <div className="row g-3">
+
+          {/* Column 1 */}
+          <div className="col-md-3  p-3 rounded">
+           {/* */}
+              {/* Landlord / Organisation */}
           <div className="d-flex align-items-center mb-3">
             <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
             <input
@@ -818,7 +674,45 @@ export default function Dashboard() {
               }
             />
           </div>
+          {/* */}
+          </div>
 
+          {/* Column 2 */}
+          <div className="col-md-3 bg-light p-3 rounded">
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field C:</label>
+              <input className="form-control" />
+            </div>
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field D:</label>
+              <input className="form-control" />
+            </div>
+          </div>
+
+          {/* Column 3 */}
+          <div className="col-md-3  p-3 rounded">
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field E:</label>
+              <input className="form-control" />
+            </div>
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field F:</label>
+              <input className="form-control" />
+            </div>
+          </div>
+
+          {/* Column 4 */}
+          <div className="col-md-3 bg-light p-3 rounded">
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field G:</label>
+              <input className="form-control" />
+            </div>
+            <div className="mb-3 d-flex align-items-center">
+              <label className="form-label me-2 mb-0 w-50">Field H:</label>
+              <input className="form-control" />
+            </div>
+          </div>
+          </div>
           {/* Submit */}
           <div className="text-end">
             <button type="submit" className="btn btn-primary px-4 py-2">
@@ -827,9 +721,8 @@ export default function Dashboard() {
           </div>
         </form>
       </div>
-
       
-      {/* */}
+      {/* Table for Relationship*/}
 
       <div className="mb-6 p-4 border rounded-lg">
       <h2 className="text-lg font-semibold mb-2">
@@ -880,6 +773,66 @@ export default function Dashboard() {
           </tbody>
         </table>
       
+
+
+
+
+        {/* */}
+        {openPersonPopups.map((person) => {
+            const relatedProperties = personProperties
+              .filter((pp) => pp.person_id === person.id && pp.is_related)
+              .map((pp) => properties.find((prop) => prop.id === pp.property_id))
+              .filter((p): p is Property => !!p);
+
+            return (
+              <div
+                key={person.id}
+                className="fixed top-20 right-5 bg-white border shadow-lg rounded-lg p-4 z-50 w-[300px] max-h-[80vh] overflow-auto"
+                style={{ marginBottom: '1rem' }}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-lg font-bold">{person.name}</h3>
+                  <button
+                    onClick={() => closePersonPopup(person.id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    ✖
+                  </button>
+                </div>
+                <p><strong>Organisation:</strong> {person.organisation}</p>
+                <p><strong>Role:</strong> {person.role}</p>
+                <p><strong>Email:</strong> {person.email}</p>
+                <p><strong>Contact:</strong> {person.contact_number}</p>
+
+                <div className="mt-4">
+                  <h4 className="font-semibold">Related Properties</h4>
+                  <ul className="list-disc list-inside text-sm">
+                    {relatedProperties.length > 0 ? (
+                      relatedProperties.map((property) => (
+                        <li key={property.id}>
+                          {property.address} ({property.city})
+                        </li>
+                      ))
+                    ) : (
+                      <li>No related properties</li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
+
+        {/* */}
+
+
+
+
+
+
+
+
+
+
 
 
       {/* If selectedPerson is set, show more details below */}
@@ -1246,16 +1199,6 @@ export default function Dashboard() {
           })()}
         </div>
       )}
-
-    {/*
-
-
-       
-    */}
-
-      
-
-
 
     {/**/}
 
