@@ -405,590 +405,7 @@ export default function Dashboard() {
         Sign Out
       </button>
 
-     {/* Add Person Form */}
-     <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Add Person</h2>
-        <form onSubmit={addPersoon} className="space-y-4">
-  
-          {/* */}
-          <div className="row g-3">
-
-            {/* Column 1 */}
-            <div className="col-md-3  p-3 rounded">
-
-              {/* Row: Name */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Name:</label>
-                <input
-                  className="form-control"
-                  placeholder="Name"
-                  value={newPerson.name}
-                  onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
-                  required
-                />
-              </div>
-              {/* Row: Last Name */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
-                <input
-                  className="form-control"
-                  placeholder="Last Name"
-                  value={newPerson.family}
-                  onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: Organisation */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Organisation:</label>
-                <input
-                  className="form-control"
-                  placeholder="Organisation"
-                  value={newPerson.organisation}
-                  onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
-                />
-              </div>
-
-              {/* Row: Role */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Role:</label>
-                <input
-                  list="role-options"
-                  className="form-control"
-                  placeholder="Select or type role"
-                  value={newPerson.role}
-                  onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
-                />
-                <datalist id="role-options">
-                  <option value="Est Ag" />
-                  <option value="Landlord" />
-                  <option value="Ass Man" />
-                </datalist>
-              </div>
-
-              {/* Row: Email */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Email:</label>
-                <input
-                  className="form-control"
-                  placeholder="Email"
-                  value={newPerson.email}
-                  onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
-                />
-              </div>
-
-              {/* Row: Contact Number */}
-              <div className="d-flex align-items-center mb-4">
-                <label className="form-label me-2 mb-0 w-50">Contact No:</label>
-                <input
-                  className="form-control"
-                  placeholder="Contact Number"
-                  value={newPerson.contact_number}
-                  onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
-                />
-              </div>
-            </div>
-
-            {/* Column 2 */}
-            <div className="col-md-3 bg-light p-3 rounded">
-
-              {/* Row: your_curren_position */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">your curren position:</label>
-                <input
-                  className="form-control"
-                  placeholder="your curren position"
-                  value={newPerson.your_curren_position}
-                  onChange={(e) => setNewPerson({ ...newPerson, your_curren_position: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: property_address_for_enquiry*/}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">property address for enquiry:</label>
-                <input
-                  className="form-control"
-                  placeholder="property address for enquiry"
-                  value={newPerson.property_address_for_enquiry}
-                  onChange={(e) => setNewPerson({ ...newPerson, property_address_for_enquiry: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: total_rateable_value_of_the_property */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">total rateable value of the property:</label>
-                <input
-                  className="form-control"
-                  placeholder="total rateable value of the property"
-                  value={newPerson.total_rateable_value_of_the_property}
-                  onChange={(e) => setNewPerson({ ...newPerson, total_rateable_value_of_the_property: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row:  estate_agents_name */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">estate agents name:</label>
-                <input
-                  className="form-control"
-                  placeholder="estate agents name"
-                  value={newPerson.estate_agents_name}
-                  onChange={(e) => setNewPerson({ ...newPerson, estate_agents_name: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: estate_agent_contact_number */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">estate agent contact number:</label>
-                <input
-                  className="form-control"
-                  placeholder="estate agent contact number"
-                  value={newPerson.estate_agent_contact_number}
-                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_contact_number: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row:  estate_agent_email */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
-                <input
-                  className="form-control"
-                  placeholder="estate agent email"
-                  value={newPerson.estate_agent_email}
-                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_email: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: poc_email */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">poc_email:</label>
-                <input
-                  className="form-control"
-                  placeholder="poc email"
-                  value={newPerson.poc_email}
-                  onChange={(e) => setNewPerson({ ...newPerson,poc_email: e.target.value })}
-                  required
-                />
-              </div>
-
-              
-              {/* Row:  poc_contact_numbe */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50"> poc_contact_numbe :</label>
-                <input
-                  className="form-control"
-                  placeholder=" poc contact numbe "
-                  value={newPerson.poc_contact_numbe}
-                  onChange={(e) => setNewPerson({ ...newPerson, poc_contact_numbe : e.target.value })}
-                  required
-                />
-              </div>
-
-              
-              {/* Row:  poc_leases */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Is there a management company who will be POC for leases/invoices etc?:</label>
-                <input
-                  className="form-control"
-                  placeholder="poc leases"
-                  value={newPerson.poc_leases}
-                  onChange={(e) => setNewPerson({ ...newPerson, poc_leases: e.target.value })}
-                  required
-                />
-              </div>
-
-            </div>
-
-            {/* Column 3 */}
-            <div className="col-md-3  p-3 rounded">
-      
-            </div>
-
-            {/* Column 4 */}
-            <div className="col-md-3 bg-light p-3 rounded">
- 
-            </div>
-          </div>
-          {/* Submit Button */}
-          <div className="text-end">
-            <button type="submit" className="btn btn-primary">
-              Add Person
-            </button>
-          </div>        
-        </form>
-      </div>
-
       {/* */}
-
-
-
-
-       {/* Add Property Form */}
-      <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Add Property</h2>
-        <form onSubmit={addProperrty}>
-
-            {/* */}
-            {/* */}
-          <div className="row g-3">
-
-          {/* Column 1 */}
-          <div className="col-md-3  p-3 rounded">
-           {/* */}
-          {/* Landlord / Organisation */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
-            <input
-              className="form-control"
-              placeholder="Landlord / Organisation"
-              value={newProperty.inquirer}
-              onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
-              required
-            />
-          </div>
-
-          {/* City */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>City:</label>
-            <input
-              className="form-control"
-              placeholder="City"
-              value={newProperty.city}
-              onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Address:</label>
-            <input
-              className="form-control"
-              placeholder="Address"
-              value={newProperty.address}
-              onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
-            />
-          </div>
-
-           {/* Post Code */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>post Code:</label>
-            <input
-              className="form-control"
-              placeholder="post code"
-              value={newProperty.post_code}
-              onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
-            />
-          </div>
-
-          {/* Property Type */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Property Type:</label>
-            <input
-              list="property-type-options"
-              className="form-control"
-              placeholder="property type"
-              value={newProperty.property_type}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  property_type: e.target.value as Property['property_type'],
-                })
-              }
-            />
-            <datalist id="property-type-options">
-              <option value="Office" />
-              <option value="Retail" />
-              <option value="Warehouse" />
-            </datalist>
-          </div>
-
-          {/* Building Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Building Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Building Rateable Value"
-              value={newProperty.building_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Rates Payable Before Relief */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Payable Before Relief:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Rates payable before relief"
-              value={newProperty.rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Has Car Park */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Has Car Park?</label>
-            <input
-              type="checkbox"
-              checked={newProperty.has_car_park}
-              onChange={(e) =>
-                setNewProperty({ ...newProperty, has_car_park: e.target.checked })
-              }
-            />
-          </div>
-
-          {/* Car Park Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Car park rateable value"
-              value={newProperty.car_park_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Car Park Rates Payable Before Relief */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rates Payable Before Relife:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Rates before relief"
-              value={newProperty.car_park_rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  car_park_rates_payable_before_relief:
-                    e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Total Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Total rateable value"
-              value={newProperty.total_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  total_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Total Rate Payable */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rate Payable:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Total rate payable"
-              value={newProperty.total_rate_payable ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  total_rate_payable: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Donation Due */}
-          <div className="d-flex align-items-center mb-4">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Donation Due:</label>
-            <input
-              type="date"
-              className="form-control"
-              value={newProperty.donation_due ? newProperty.donation_due.toISOString().split('T')[0] : ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  donation_due: e.target.value ? new Date(e.target.value) : null,
-                })
-              }
-            />
-          </div>
-          {/* */}
-          </div>
-
-          {/* Column 2 */}
-          <div className="col-md-3 bg-light p-3 rounded">
-            {/* landlord_name*/}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord_name:</label>
-              <input
-                className="form-control"
-                placeholder="landlord_name"
-                value={newProperty.landlord_name}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_name: e.target.value })}
-                required
-              />
-            </div>
-            {/* landlord_email */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}> landlord_email:</label>
-              <input
-                className="form-control"
-                placeholder=" landlord_email"
-                value={newProperty.landlord_email}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
-                required
-              />
-            </div>
-            {/* landlord_no */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord contact Number:</label>
-              <input
-                className="form-control"
-                placeholder="landlord_no"
-                value={newProperty.landlord_no}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
-                required
-              />
-            </div>
-            {/* rateablevalue_ratespayabl */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
-              <input
-                className="form-control"
-                placeholder="Landlord / Organisation"
-                value={newProperty. rateablevalue_ratespayabl}
-                onChange={(e) => setNewProperty({ ...newProperty, rateablevalue_ratespayabl: e.target.value })}
-                required
-              />
-            </div>
-            {/*  rates_for_each */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}> rates_for_each:</label>
-              <input
-                className="form-control"
-                placeholder=" rates_for_each"
-                value={newProperty. rates_for_each}
-                onChange={(e) => setNewProperty({ ...newProperty,  rates_for_each: e.target.value })}
-                required
-              />
-            </div>
-            {/* point_of_company*/}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>point_of_company:</label>
-              <input
-                className="form-control"
-                placeholder="point_of_company"
-                value={newProperty.point_of_company}
-                onChange={(e) => setNewProperty({ ...newProperty, point_of_company: e.target.value })}
-                required
-              />
-            </div>
-            {/* rates_multiplier */}
-                        <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>rates_multiplier:</label>
-              <input
-                className="form-control"
-                placeholder="rates_multiplier"
-                value={newProperty.rates_multiplier}
-                onChange={(e) => setNewProperty({ ...newProperty, rates_multiplier: e.target.value })}
-                required
-              />
-            </div>
-            {/* strate_date_of_lease */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>strate_date_of_lease:</label>
-              <input
-                className="form-control"
-                placeholder="strate_date_of_lease"
-                value={newProperty.strate_date_of_lease}
-                onChange={(e) => setNewProperty({ ...newProperty, strate_date_of_lease: e.target.value })}
-                required
-              />
-            </div>
-            {/*  length_of_lease */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}> length_of_lease:</label>
-              <input
-                className="form-control"
-                placeholder=" length_of_lease"
-                value={newProperty. length_of_lease}
-                onChange={(e) => setNewProperty({ ...newProperty,  length_of_lease: e.target.value })}
-                required
-              />
-            </div>
-            {/* end_date_of_lease */}
-            <div className="d-flex align-items-center mb-4">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>end_date_of_lease:</label>
-              <input
-                type="date"
-                className="form-control"
-                value={newProperty.end_date_of_lease ? newProperty.end_date_of_lease.toISOString().split('T')[0] : ''}
-                onChange={(e) =>
-                  setNewProperty({
-                    ...newProperty,
-                    donation_due: e.target.value ? new Date(e.target.value) : null,
-                  })
-                }
-              />
-            </div>
-            {/* lease_period*/}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>lease_period:</label>
-              <input
-                className="form-control"
-                placeholder="lease_period"
-                value={newProperty.lease_period}
-                onChange={(e) => setNewProperty({ ...newProperty,lease_period: e.target.value })}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Column 3 */}
-          <div className="col-md-3  p-3 rounded">
-        
-          </div>
-
-          {/* Column 4 */}
-          <div className="col-md-3 bg-light p-3 rounded">
-  
-          </div>
-          </div>
-          {/* Submit */}
-          <div className="text-end">
-            <button type="submit" className="btn btn-primary px-4 py-2">
-              Add Property
-            </button>
-          </div>
-        </form>
-      </div>
-      
       {/* Table for Relationship*/}
 
       <div className="mb-6 p-4 border rounded-lg">
@@ -1173,14 +590,106 @@ export default function Dashboard() {
                         setSelectedPerson({ ...selectedPerson, contact_number: e.target.value })
                       }
                     /></p>
+                                        <p>
+                    <label><strong>your curren position::</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.your_curren_position}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, your_curren_position: e.target.value })
+                      }
+                    /></p>
+                                        <p>
+                    <label><strong>property address for enquiry:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.property_address_for_enquiry}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, property_address_for_enquiry: e.target.value })
+                      }
+                    /></p>
+                                        <p>
+                    <label><strong> total rateable value of the property:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.total_rateable_value_of_the_property}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,  total_rateable_value_of_the_property: e.target.value })
+                      }
+                    /></p>
+                                        <p>
+                    <label><strong> Estate agents name:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.estate_agents_name}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
+                      }
+                    /></p>
+                                                            <p>
+                    <label><strong> Estate agent contact number :</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.estate_agents_name}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
+                      }
+                    /></p>
+                                                            <p>
+                    <label><strong> Estate agents email:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.estate_agents_name}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
+                      }
+                    /></p>
+                                        <p>
+                    <label><strong> Poc email:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.poc_email}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,  poc_email: e.target.value })
+                      }
+                    /></p>
+                                        <p>
+                    <label><strong> Poc contact number:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.poc_contact_numbe}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson,  poc_contact_numbe: e.target.value })
+                      }
+                    /></p>
+                                                            <p>
+                    <label><strong> Is there a management company who will be POC for leases/invoices etc?:</strong></label>
+                    <input
+                      className="border p-2 w-full my-1"
+                      value={selectedPerson.poc_leases}
+                      onChange={(e) =>
+                        setSelectedPerson({ ...selectedPerson, poc_leases: e.target.value })
+                      }
+                    /></p>
                   </>
                 ) : (
                   <>
                     <p><strong>Name:</strong> {selectedPerson.name}</p>
+                    <p><strong>Last Name:</strong> {selectedPerson.family}</p>
                     <p><strong>Organisation:</strong> {selectedPerson.organisation}</p>
                     <p><strong>Role:</strong> {selectedPerson.role}</p>
                     <p><strong>Email:</strong> {selectedPerson.email}</p>
                     <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
+
+                    <p><strong>your curren position:</strong> {selectedPerson.your_curren_position}</p>
+                    <p><strong>property address for enquiry:</strong> {selectedPerson.property_address_for_enquiry}</p>
+                    <p><strong>total rateable value of the property:</strong> {selectedPerson.total_rateable_value_of_the_property}</p>
+                    <p><strong>estate agents name:</strong> {selectedPerson.estate_agents_name}</p>
+                    <p><strong>estate agent contact number:</strong> {selectedPerson.estate_agent_contact_number}</p>
+                    <p><strong>estate agent email:</strong> {selectedPerson.estate_agent_email}</p>
+                    <p><strong>poc email:</strong> {selectedPerson.poc_email}</p>
+                    <p><strong>poc contact number:</strong> {selectedPerson.poc_contact_numbe}</p>
+                    <p><strong>Is there a management company who will be POC for leases/invoices etc? </strong> {selectedPerson.poc_leases}</p>
                   </>
                 )}
 
@@ -1420,6 +929,21 @@ export default function Dashboard() {
                             <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
                             <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
                             <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+
+                            <p><strong>Landlord name :</strong> {property.total_rate_payable}</p>
+                            <p><strong>Landlord email address :</strong> {property.total_rate_payable}</p>
+                            <p><strong>Landlord phone number :</strong> {property.total_rate_payable}</p>
+                            <p><strong>Rateable Value/ Rates Payable :</strong> {property.total_rate_payable}</p>
+                            <p><strong>Rateable Value/ Rates Payable for each property in case of multiple offices in the same building:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Name of point of contact for the property from Management Company.:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+
+
                       
                             {/* ACTION BUTTONS */}
                             <div className="flex gap-2 mt-2">
@@ -1841,7 +1365,617 @@ export default function Dashboard() {
               )}
             </div>
           )}
-      </div>    
+      </div>  
+      {/* */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     {/* Add Person Form */}
+     <div className="mb-6 p-4 border rounded-lg">
+        <h2 className="text-lg font-semibold mb-4">Inquirer Details</h2>
+        <form onSubmit={addPersoon} className="space-y-4">
+  
+          {/* */}
+          <div className="row g-3">
+
+            {/* Column 1 */}
+            <div className="col-md-3  p-3 rounded">
+
+              {/* Row: Name */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="Name"
+                  value={newPerson.name}
+                  onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+                  required
+                />
+              </div>
+              {/* Row: Last Name */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="Last Name"
+                  value={newPerson.family}
+                  onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: Organisation */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Organisation:</label>
+                <input
+                  className="form-control"
+                  placeholder="Organisation"
+                  value={newPerson.organisation}
+                  onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
+                />
+              </div>
+
+              {/* Row: Role */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Role:</label>
+                <input
+                  list="role-options"
+                  className="form-control"
+                  placeholder="Select or type role"
+                  value={newPerson.role}
+                  onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
+                />
+                <datalist id="role-options">
+                  <option value="Est Ag" />
+                  <option value="Landlord" />
+                  <option value="Ass Man" />
+                </datalist>
+              </div>
+
+              {/* Row: Email */}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Email:</label>
+                <input
+                  className="form-control"
+                  placeholder="Email"
+                  value={newPerson.email}
+                  onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
+                />
+              </div>
+
+              {/* Row: Contact Number */}
+              <div className="d-flex align-items-center mb-4">
+                <label className="form-label me-2 mb-0 w-50">Contact No:</label>
+                <input
+                  className="form-control"
+                  placeholder="Contact Number"
+                  value={newPerson.contact_number}
+                  onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
+                />
+              </div>
+            </div>
+
+            {/* Column 2 
+            <div className="col-md-3 bg-light p-3 rounded">
+
+              {/* Row: your_curren_position 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">your curren position:</label>
+                <input
+                  className="form-control"
+                  placeholder="your curren position"
+                  value={newPerson.your_curren_position}
+                  onChange={(e) => setNewPerson({ ...newPerson, your_curren_position: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: property_address_for_enquiry
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">property address for enquiry:</label>
+                <input
+                  className="form-control"
+                  placeholder="property address for enquiry"
+                  value={newPerson.property_address_for_enquiry}
+                  onChange={(e) => setNewPerson({ ...newPerson, property_address_for_enquiry: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: total_rateable_value_of_the_property 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">total rateable value of the property:</label>
+                <input
+                  className="form-control"
+                  placeholder="total rateable value of the property"
+                  value={newPerson.total_rateable_value_of_the_property}
+                  onChange={(e) => setNewPerson({ ...newPerson, total_rateable_value_of_the_property: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row:  estate_agents_name 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">estate agents name:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agents name"
+                  value={newPerson.estate_agents_name}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agents_name: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: estate_agent_contact_number 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">estate agent contact number:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agent contact number"
+                  value={newPerson.estate_agent_contact_number}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_contact_number: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row:  estate_agent_email 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
+                <input
+                  className="form-control"
+                  placeholder="estate agent email"
+                  value={newPerson.estate_agent_email}
+                  onChange={(e) => setNewPerson({ ...newPerson, estate_agent_email: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row: poc_email 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">poc_email:</label>
+                <input
+                  className="form-control"
+                  placeholder="poc email"
+                  value={newPerson.poc_email}
+                  onChange={(e) => setNewPerson({ ...newPerson,poc_email: e.target.value })}
+                  required
+                />
+              </div>
+
+              
+              {/* Row:  poc_contact_numbe 
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50"> poc_contact_numbe :</label>
+                <input
+                  className="form-control"
+                  placeholder=" poc contact numbe "
+                  value={newPerson.poc_contact_numbe}
+                  onChange={(e) => setNewPerson({ ...newPerson, poc_contact_numbe : e.target.value })}
+                  required
+                />
+              </div>
+
+              
+              {/* Row:  poc_leases             <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Is there a management company who will be POC for leases/invoices etc?:</label>
+                <input
+                  className="form-control"
+                  placeholder="poc leases"
+                  value={newPerson.poc_leases}
+                  onChange={(e) => setNewPerson({ ...newPerson, poc_leases: e.target.value })}
+                  required
+                />
+              </div>
+
+            </div>
+
+            {/* Column 3 */}
+            <div className="col-md-3  p-3 rounded">
+      
+            </div>
+
+            {/* Column 4 */}
+            <div className="col-md-3 bg-light p-3 rounded">
+ 
+            </div>
+          </div>
+          {/* Submit Button */}
+          <div className="text-end">
+            <button type="submit" className="btn btn-primary">
+              Add Details
+            </button>
+          </div>        
+        </form>
+      </div>
+
+      {/* */}
+
+
+
+
+       {/* Add Property Form */}
+      <div className="mb-6 p-4 border rounded-lg">
+        <h2 className="text-lg font-semibold mb-4">Add Property</h2>
+        <form onSubmit={addProperrty}>
+
+            {/* */}
+            {/* */}
+          <div className="row g-3">
+
+          {/* Column 1 */}
+          <div className="col-md-3  p-3 rounded">
+           {/* */}
+          {/* Landlord / Organisation */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
+            <input
+              className="form-control"
+              placeholder="Landlord / Organisation"
+              value={newProperty.inquirer}
+              onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
+              required
+            />
+          </div>
+
+          {/* City */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>City:</label>
+            <input
+              className="form-control"
+              placeholder="City"
+              value={newProperty.city}
+              onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
+            />
+          </div>
+
+          {/* Address */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Address:</label>
+            <input
+              className="form-control"
+              placeholder="Address"
+              value={newProperty.address}
+              onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
+            />
+          </div>
+
+           {/* Post Code */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>post Code:</label>
+            <input
+              className="form-control"
+              placeholder="post code"
+              value={newProperty.post_code}
+              onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
+            />
+          </div>
+
+          {/* Property Type */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Property Type:</label>
+            <input
+              list="property-type-options"
+              className="form-control"
+              placeholder="property type"
+              value={newProperty.property_type}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  property_type: e.target.value as Property['property_type'],
+                })
+              }
+            />
+            <datalist id="property-type-options">
+              <option value="Office" />
+              <option value="Retail" />
+              <option value="Warehouse" />
+            </datalist>
+          </div>
+
+          {/* Building Rateable Value */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Building Rateable Value:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Building Rateable Value"
+              value={newProperty.building_rateable_value ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Rates Payable Before Relief */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Payable Before Relief:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Rates payable before relief"
+              value={newProperty.rates_payable_before_relief ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Has Car Park */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Has Car Park?</label>
+            <input
+              type="checkbox"
+              checked={newProperty.has_car_park}
+              onChange={(e) =>
+                setNewProperty({ ...newProperty, has_car_park: e.target.checked })
+              }
+            />
+          </div>
+
+          {/* Car Park Rateable Value */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rateable Value:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Car park rateable value"
+              value={newProperty.car_park_rateable_value ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Car Park Rates Payable Before Relief */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rates Payable Before Relife:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Rates before relief"
+              value={newProperty.car_park_rates_payable_before_relief ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  car_park_rates_payable_before_relief:
+                    e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Total Rateable Value */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rateable Value:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Total rateable value"
+              value={newProperty.total_rateable_value ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  total_rateable_value: e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Total Rate Payable */}
+          <div className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rate Payable:</label>
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Total rate payable"
+              value={newProperty.total_rate_payable ?? ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  total_rate_payable: e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            />
+          </div>
+
+          {/* Donation Due */}
+          <div className="d-flex align-items-center mb-4">
+            <label className="me-3 mb-0" style={{ width: '160px' }}>Donation Due:</label>
+            <input
+              type="date"
+              className="form-control"
+              value={newProperty.donation_due ? newProperty.donation_due.toISOString().split('T')[0] : ''}
+              onChange={(e) =>
+                setNewProperty({
+                  ...newProperty,
+                  donation_due: e.target.value ? new Date(e.target.value) : null,
+                })
+              }
+            />
+          </div>
+          {/* */}
+          </div>
+
+          {/* Column 2 */}
+          <div className="col-md-3 bg-light p-3 rounded">
+            {/* landlord_name*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord_name:</label>
+              <input
+                className="form-control"
+                placeholder="landlord_name"
+                value={newProperty.landlord_name}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_name: e.target.value })}
+                required
+              />
+            </div>
+            {/* landlord_email */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> landlord_email:</label>
+              <input
+                className="form-control"
+                placeholder=" landlord_email"
+                value={newProperty.landlord_email}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
+                required
+              />
+            </div>
+            {/* landlord_no */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord contact Number:</label>
+              <input
+                className="form-control"
+                placeholder="landlord_no"
+                value={newProperty.landlord_no}
+                onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
+                required
+              />
+            </div>
+            {/* rateablevalue_ratespayabl */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
+              <input
+                className="form-control"
+                placeholder="Landlord / Organisation"
+                value={newProperty. rateablevalue_ratespayabl}
+                onChange={(e) => setNewProperty({ ...newProperty, rateablevalue_ratespayabl: e.target.value })}
+                required
+              />
+            </div>
+            {/*  rates_for_each */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> rates_for_each:</label>
+              <input
+                className="form-control"
+                placeholder=" rates_for_each"
+                value={newProperty. rates_for_each}
+                onChange={(e) => setNewProperty({ ...newProperty,  rates_for_each: e.target.value })}
+                required
+              />
+            </div>
+            {/* point_of_company*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>point_of_company:</label>
+              <input
+                className="form-control"
+                placeholder="point_of_company"
+                value={newProperty.point_of_company}
+                onChange={(e) => setNewProperty({ ...newProperty, point_of_company: e.target.value })}
+                required
+              />
+            </div>
+            {/* rates_multiplier */}
+                        <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>rates_multiplier:</label>
+              <input
+                className="form-control"
+                placeholder="rates_multiplier"
+                value={newProperty.rates_multiplier}
+                onChange={(e) => setNewProperty({ ...newProperty, rates_multiplier: e.target.value })}
+                required
+              />
+            </div>
+            {/* strate_date_of_lease */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>strate_date_of_lease:</label>
+              <input
+                className="form-control"
+                placeholder="strate_date_of_lease"
+                value={newProperty.strate_date_of_lease}
+                onChange={(e) => setNewProperty({ ...newProperty, strate_date_of_lease: e.target.value })}
+                required
+              />
+            </div>
+            {/*  length_of_lease */}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}> length_of_lease:</label>
+              <input
+                className="form-control"
+                placeholder=" length_of_lease"
+                value={newProperty. length_of_lease}
+                onChange={(e) => setNewProperty({ ...newProperty,  length_of_lease: e.target.value })}
+                required
+              />
+            </div>
+            {/* end_date_of_lease */}
+            <div className="d-flex align-items-center mb-4">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>end_date_of_lease:</label>
+              <input
+                type="date"
+                className="form-control"
+                value={newProperty.end_date_of_lease ? newProperty.end_date_of_lease.toISOString().split('T')[0] : ''}
+                onChange={(e) =>
+                  setNewProperty({
+                    ...newProperty,
+                    donation_due: e.target.value ? new Date(e.target.value) : null,
+                  })
+                }
+              />
+            </div>
+            {/* lease_period*/}
+            <div className="d-flex align-items-center mb-3">
+              <label className="me-3 mb-0" style={{ width: '160px' }}>lease_period:</label>
+              <input
+                className="form-control"
+                placeholder="lease_period"
+                value={newProperty.lease_period}
+                onChange={(e) => setNewProperty({ ...newProperty,lease_period: e.target.value })}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Column 3 */}
+          <div className="col-md-3  p-3 rounded">
+        
+          </div>
+
+          {/* Column 4 */}
+          <div className="col-md-3 bg-light p-3 rounded">
+  
+          </div>
+          </div>
+          {/* Submit */}
+          <div className="text-end">
+            <button type="submit" className="btn btn-primary px-4 py-2">
+              Add Property
+            </button>
+          </div>
+        </form>
+      </div>
+      
+        
     </div>
   );
 }
