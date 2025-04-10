@@ -162,6 +162,23 @@ app.delete('/api/people/:id',  async (req, res) => {
 });
 
 
+// GET distinct roles from the people table
+app.get('/api/people/role', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT role
+      FROM people
+      WHERE role IS NOT NULL
+      ORDER BY role
+    `);
+    // result.rows might look like [{role: 'Est Ag'}, {role: 'Landlord'}, ...]
+    const roles = result.rows.map(row => row.role);
+    res.json(roles); // => ["Est Ag", "Landlord", "Ass Man", ...]
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ------------------------------
 // Propertiies
 // ------------------------------
@@ -404,7 +421,6 @@ app.delete('/api/propertiies/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // ------------------------------
 // Person-Properties (the join table)
