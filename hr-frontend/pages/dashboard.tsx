@@ -79,6 +79,9 @@ export default function Dashboard() {
   const [editingPersonIdForProperty, setEditingPersonIdForProperty] = useState<number | null>(null);
   const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
   const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
+  const defaultRoles = ["Est Agant", "Landlord", "Property Manager"];
+  const [allRoles, setAllRoles] = useState<string[]>([]);
 
   const handlePersonHeaderClickp = (person: Person) => {
     setOpenPersonPopups((prev) => {
