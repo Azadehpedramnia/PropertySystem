@@ -562,7 +562,7 @@ export default function Dashboard() {
       {/* If selectedPerson is set, show more details below */}
       {selectedPerson && (
         <div className="p-4 mt-4 border rounded">
-          <h2 className="text-xl font-semibold mb-2">Selected Person</h2>
+          <h2 className="text-xl font-semibold mb-2">Report For Selected Person</h2>
           {/* ✅ Place this inside the block, right after opening it: */}
           {(() => {
             const relatedProperties = personProperties
@@ -1036,7 +1036,7 @@ export default function Dashboard() {
     {/* If selectedProperty is set, show more details below */}
       {selectedPropety && (  
         <div className="p-4 mt-4 border rounded">
-          <h2 className="text-xl font-semibold mb-2">Selected Property</h2>
+          <h2 className="text-xl font-semibold mb-2">Report For Selected Property</h2>
 
           {editPropertyMode ? (
             <>
@@ -1434,7 +1434,7 @@ export default function Dashboard() {
 
      {/* Add Person Form */}
      <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Inquirer Details</h2>
+        <h2 className="text-lg font-semibold mb-4">Register Contact</h2>
         <form onSubmit={addPersoon} className="space-y-4">
   
           {/* */}
@@ -1547,7 +1547,7 @@ export default function Dashboard() {
 
        {/* Add Property Form */}
       <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Add Property</h2>
+        <h2 className="text-lg font-semibold mb-4">Register Peroperty</h2>
         <form onSubmit={addProperrty}>
 
             {/* */}
