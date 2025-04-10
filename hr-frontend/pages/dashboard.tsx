@@ -110,6 +110,35 @@ export default function Dashboard() {
      poc_leases:''
   });
 
+
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/people/role")
+    .then((res) => {
+      // If your server returns 404 or an error, res.ok might be false
+      if (!res.ok) {
+        console.error("Error fetching from /api/people/roles:", res.status);
+        return [];
+      }
+      return res.json();
+    })
+    .then((dbRoleArray: string[]) => {
+      // Merge with defaults, remove duplicates
+      const merged = [...new Set([...defaultRoles, ...(dbRoleArray || [])])];
+      setAllRoles(merged);
+    })
+    .catch((err) => console.error("Fetch error:", err));
+  }, [defaultRoles]);
+
+
+  // 3) On mount, fetch distinct roles
+  useEffect(() => {
+    fetch('http://localhost:5000/api/people/role')
+      .then((res) => res.json())
+      .then((data: string[]) => setRoles(data))
+      .catch((err) => console.error('Error fetching role:', err));
+  }, []);
+
   const [newProperty, setNewProperty] = useState<Omit<Property, 'id'>>({
     inquirer: '',
     city: '',
@@ -1483,14 +1512,16 @@ export default function Dashboard() {
                 <input
                   list="role-options"
                   className="form-control"
-                  placeholder="Select or type role"
+                  placeholder="Select or type a role"
                   value={newPerson.role}
-                  onChange={(e) => setNewPerson({ ...newPerson, role: e.target.value as Person['role'] })}
+                  onChange={(e) =>
+                    setNewPerson((prev) => ({ ...prev, role: e.target.value }))
+                  }
                 />
                 <datalist id="role-options">
-                  <option value="Est Ag" />
-                  <option value="Landlord" />
-                  <option value="Ass Man" />
+                  {allRoles.map((r) => (
+                    <option key={r} value={r} />
+                  ))}
                 </datalist>
               </div>
 
