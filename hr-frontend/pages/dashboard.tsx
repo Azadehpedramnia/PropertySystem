@@ -16,15 +16,7 @@ interface Person {
   email:string;
   contact_number:string;
   family : string;
-  your_curren_position:string,
   property_address_for_enquiry:string,
-  total_rateable_value_of_the_property:string,
-   estate_agents_name:string,
-   estate_agent_contact_number:string,
-   estate_agent_email:string,
-   poc_email:string,
-   poc_contact_numbe:string,
-   poc_leases:string;
 }
 
 interface Property {
@@ -42,21 +34,13 @@ interface Property {
   total_rate_payable: number | null;
   donation_due : Date | null;
   post_code : string;
-  landlord_name :string;
-              landlord_email:string;
-              landlord_no:string;
-              rateablevalue_ratespayabl:string;
-              rates_for_each:string;
-              point_of_company:string;
-              rates_multiplier:string;
-
-              strate_date_of_lease:Date| null;         
-              end_date_of_lease:Date | null;
-              length_of_lease:number;
-              //start_date_of_lease: string; // e.g., "2025-04-09"
-              //end_date_of_lease: string;   // e.g., "2030-04-09"
-              //length_of_lease?: number;   
-              lease_period:string;
+  landlord_Address :string;
+  landlord_email:string;
+  landlord_no:string;
+  rates_multiplier:string;
+  start_date_of_lease:Date| null;         
+  end_date_of_lease:Date | null;
+  length_of_lease:number;
 }
 
 interface PersonProperty {
@@ -102,15 +86,7 @@ export default function Dashboard() {
     email: '',
     contact_number: '',
     family:'',
-    your_curren_position:'',
-    property_address_for_enquiry:'',
-    total_rateable_value_of_the_property:'',
-     estate_agents_name:'',
-     estate_agent_contact_number:'',
-     estate_agent_email:'',
-     poc_email:'',
-     poc_contact_numbe:'',
-     poc_leases:''
+    property_address_for_enquiry:''
   });
 
 
@@ -156,19 +132,13 @@ export default function Dashboard() {
     total_rate_payable: null,
     donation_due:null,
     post_code : '',
-    landlord_name:'',
+    landlord_Address:'',
     landlord_email:'',
     landlord_no:'',
-    rateablevalue_ratespayabl:'',
-    rates_for_each:'',
-    point_of_company:'',
     rates_multiplier:'',
-    strate_date_of_lease:null,
+    start_date_of_lease:null,
     end_date_of_lease:null,
-    length_of_lease:0,
-    
-    lease_period:'',
-    
+    length_of_lease:0,   
   });
 
   // State for the join table
@@ -274,27 +244,17 @@ export default function Dashboard() {
       email: '',
       contact_number: '',
       family:'',
-      your_curren_position:'',
-      property_address_for_enquiry:'',
-      total_rateable_value_of_the_property:'',
-       estate_agents_name:'',
-       estate_agent_contact_number:'',
-       estate_agent_email:'',
-       poc_email:'',
-       poc_contact_numbe:'',
-       poc_leases:''
+      property_address_for_enquiry:''    
     });
     // Reload table
     fetchPeople();
   };
 
 
- 
-
  // Auto-calculate lease length when both start and end dates are set.
   useEffect(() => {
-    if (newProperty.strate_date_of_lease && newProperty.end_date_of_lease) {
-      const start = new Date(newProperty.strate_date_of_lease);
+    if (newProperty.start_date_of_lease && newProperty.end_date_of_lease) {
+      const start = new Date(newProperty.start_date_of_lease);
       const end = new Date(newProperty.end_date_of_lease);
       if (end >= start) {
         // getTime() returns the numeric timestamp
@@ -316,7 +276,7 @@ export default function Dashboard() {
         alert("End date must be on or after the start date.");
           }
     }
-  }, [newProperty.strate_date_of_lease, newProperty.end_date_of_lease]);
+  }, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
 
   
   const addProperty = async () => {
@@ -355,18 +315,13 @@ export default function Dashboard() {
         total_rate_payable:null,
         donation_due:null,
         post_code:'',
-        landlord_name:'',
+        landlord_Address:'',
         landlord_email:'',
-        landlord_no:'',
-        rateablevalue_ratespayabl:'',
-        rates_for_each:'',
-        point_of_company:'',
+        landlord_no:'',       
         rates_multiplier:'',
-        strate_date_of_lease:null,
+        start_date_of_lease:null,
         end_date_of_lease:null,
         length_of_lease:0,
-      
-        lease_period:'',
       });
       // Reload table
       fetchProperties();
@@ -662,85 +617,13 @@ export default function Dashboard() {
                         setSelectedPerson({ ...selectedPerson, contact_number: e.target.value })
                       }
                     /></p>
-                                        <p>
-                    <label><strong>your curren position::</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.your_curren_position}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson, your_curren_position: e.target.value })
-                      }
-                    /></p>
-                                        <p>
+                    <p>
                     <label><strong>property address for enquiry:</strong></label>
                     <input
                       className="border p-2 w-full my-1"
                       value={selectedPerson.property_address_for_enquiry}
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, property_address_for_enquiry: e.target.value })
-                      }
-                    /></p>
-                                        <p>
-                    <label><strong> total rateable value of the property:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.total_rateable_value_of_the_property}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,  total_rateable_value_of_the_property: e.target.value })
-                      }
-                    /></p>
-                                        <p>
-                    <label><strong> Estate agents name:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.estate_agents_name}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
-                      }
-                    /></p>
-                                                            <p>
-                    <label><strong> Estate agent contact number :</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.estate_agents_name}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
-                      }
-                    /></p>
-                                                            <p>
-                    <label><strong> Estate agents email:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.estate_agents_name}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,estate_agents_name: e.target.value })
-                      }
-                    /></p>
-                                        <p>
-                    <label><strong> Poc email:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.poc_email}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,  poc_email: e.target.value })
-                      }
-                    /></p>
-                                        <p>
-                    <label><strong> Poc contact number:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.poc_contact_numbe}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson,  poc_contact_numbe: e.target.value })
-                      }
-                    /></p>
-                                                            <p>
-                    <label><strong> Is there a management company who will be POC for leases/invoices etc?:</strong></label>
-                    <input
-                      className="border p-2 w-full my-1"
-                      value={selectedPerson.poc_leases}
-                      onChange={(e) =>
-                        setSelectedPerson({ ...selectedPerson, poc_leases: e.target.value })
                       }
                     /></p>
                   </>
@@ -752,16 +635,7 @@ export default function Dashboard() {
                     <p><strong>Role:</strong> {selectedPerson.role}</p>
                     <p><strong>Email:</strong> {selectedPerson.email}</p>
                     <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
-
-                    <p><strong>your curren position:</strong> {selectedPerson.your_curren_position}</p>
                     <p><strong>property address for enquiry:</strong> {selectedPerson.property_address_for_enquiry}</p>
-                    <p><strong>total rateable value of the property:</strong> {selectedPerson.total_rateable_value_of_the_property}</p>
-                    <p><strong>estate agents name:</strong> {selectedPerson.estate_agents_name}</p>
-                    <p><strong>estate agent contact number:</strong> {selectedPerson.estate_agent_contact_number}</p>
-                    <p><strong>estate agent email:</strong> {selectedPerson.estate_agent_email}</p>
-                    <p><strong>poc email:</strong> {selectedPerson.poc_email}</p>
-                    <p><strong>poc contact number:</strong> {selectedPerson.poc_contact_numbe}</p>
-                    <p><strong>Is there a management company who will be POC for leases/invoices etc? </strong> {selectedPerson.poc_leases}</p>
                   </>
                 )}
 
@@ -954,6 +828,38 @@ export default function Dashboard() {
                                 setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
                               }
                             /></p>
+                            <label><strong>Donation Due:</strong></label>
+                            <input
+                              className="border p-1 w-full my-1"
+                              type="date"
+                              value={
+                                editedProperty.donation_due
+                                  ? new Date(editedProperty.donation_due).toISOString().split('T')[0]
+                                  : property.donation_due
+                                  ? new Date(property.donation_due).toISOString().split('T')[0]
+                                  : ''
+                              }
+                              onChange={(e) =>
+                                setEditedProperty({
+                                  ...editedProperty,
+                                  donation_due: e.target.value === '' ? null : new Date(e.target.value),
+                                })
+                              }
+                            />
+                            <p> 
+                            <label><strong>Landloard Adress:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.landlord_Address ?? property.landlord_Address}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                            /></p>
+                            <p> 
+                            <label><strong>Landloard email:</strong></label>     
+                            <input
+                              className="border p-1 w-full my-1"
+                              value={editedProperty.landlord_email ?? property.landlord_email}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                            /></p>  
 
                             {/* Add other fields similarly... */}
                             <div className="flex gap-2 mt-2">
@@ -992,7 +898,7 @@ export default function Dashboard() {
                           <>
                             <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
                             <p><strong>City:</strong> {property.city}</p>
-                            <p><strong>Address:</strong> {property.address}</p>
+                            <p><strong>Address:</strong> {property.address}{property.post_code}</p>
                             <p><strong>Property Type:</strong> {property.property_type}</p>
                             <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
                             <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
@@ -1001,20 +907,25 @@ export default function Dashboard() {
                             <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
                             <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
                             <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                            <p><strong>Dontion:</strong>{property.donation_due
+                                  ? new Date(property.donation_due).toISOString().split('T')[0]
+                                  : 'N/A'}
+                            </p>
 
-                            <p><strong>Landlord name :</strong> {property.total_rate_payable}</p>
-                            <p><strong>Landlord email address :</strong> {property.total_rate_payable}</p>
-                            <p><strong>Landlord phone number :</strong> {property.total_rate_payable}</p>
-                            <p><strong>Rateable Value/ Rates Payable :</strong> {property.total_rate_payable}</p>
-                            <p><strong>Rateable Value/ Rates Payable for each property in case of multiple offices in the same building:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Name of point of contact for the property from Management Company.:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                            <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-
+                            <p><strong>Landlord name :</strong> {property.landlord_Address}</p>
+                            <p><strong>Landlord email address :</strong> {property.landlord_email}</p>
+                            <p><strong>Landlord phone number :</strong> {property.landlord_no}</p>
+                            <p><strong>Rateable Multiplier applicable for the property :</strong> {property.rates_multiplier}</p>            
+                            
+                            <p><strong>Agreed Start data of lease:</strong> {property.start_date_of_lease
+                                  ? new Date(property.start_date_of_lease).toISOString().split('T')[0]
+                                  : 'N/A'}
+                            </p>
+                            <p><strong>End data of lease:</strong> {property.end_date_of_lease
+                                  ? new Date(property.end_date_of_lease).toISOString().split('T')[0]
+                                  : 'N/A'}
+                            </p>
+                            <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
 
                       
                             {/* ACTION BUTTONS */}
@@ -1222,7 +1133,24 @@ export default function Dashboard() {
               <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
               <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
               <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
-              <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>
+              <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>         
+              <p><strong>Dontion:</strong> {selectedPropety.donation_due
+                    ? new Date(selectedPropety.donation_due).toISOString().split('T')[0]
+                    : 'N/A'}
+              </p>
+              <p><strong>Landlord name :</strong> {selectedPropety.landlord_Address}</p>
+              <p><strong>Landlord email address :</strong> {selectedPropety.landlord_email}</p>
+              <p><strong>Landlord phone number :</strong> {selectedPropety.landlord_no}</p>
+              <p><strong>Rateable Multiplier applicable for the property :</strong> {selectedPropety.rates_multiplier}</p>            
+              <p><strong>Agreed Start data of lease:</strong> {selectedPropety.start_date_of_lease
+                  ? new Date(selectedPropety.start_date_of_lease).toISOString().split('T')[0]
+                  : 'N/A'}                
+              </p>
+              <p><strong>End data of lease:</strong> {selectedPropety.end_date_of_lease
+                   ? new Date(selectedPropety.end_date_of_lease).toISOString().split('T')[0]
+                   : 'N/A'}
+              </p>
+              <p><strong>Length Of Lease:</strong> {selectedPropety.length_of_lease}</p>
             </>
           )}
 
@@ -1357,6 +1285,15 @@ export default function Dashboard() {
                                     value={editedPersonForProperty.contact_number ?? person.contact_number}
                                     onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, contact_number: e.target.value })}
                                   /></p>
+
+                                  <p>
+                                  <label><strong>Adress:</strong></label>
+                                  <input
+                                    className="border p-2 w-full my-1"
+                                    value={editedPersonForProperty.property_address_for_enquiry ?? person.property_address_for_enquiry}
+                                    onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, name: e.target.value })}
+                                  /></p>
+                                  
                                   <div className="flex gap-2 mt-2">
                                     <button
                                       className="bg-gray-300 px-4 py-2 rounded"
@@ -1395,6 +1332,7 @@ export default function Dashboard() {
                                   <p><strong>Role:</strong> {person.role}</p>
                                   <p><strong>Email:</strong> {person.email}</p>
                                   <p><strong>Contact Number:</strong> {person.contact_number}</p>
+                                  <p><strong>Address:</strong> {person.property_address_for_enquiry}</p>
 
                                   <div className="flex gap-2 mt-2">
                                     <button
@@ -1549,20 +1487,17 @@ export default function Dashboard() {
                   onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
                 />
               </div>
-            </div>
 
-            {/* Column 2 
-            <div className="col-md-3 bg-light p-3 rounded">
-            <div className="d-flex align-items-center mb-3">        
-            </div>
-
-            {/* Column 3 */}
-            <div className="col-md-3  p-3 rounded">
-      
-            </div>
-
-            {/* Column 4 */}
-            <div className="col-md-3  p-3 rounded">
+              {/* Row: Address*/}
+              <div className="d-flex align-items-center mb-3">
+                <label className="form-label me-2 mb-0 w-50">Address:</label>
+                <input
+                  className="form-control"
+                  placeholder="Address"
+                  value={newPerson.property_address_for_enquiry}
+                  onChange={(e) => setNewPerson({ ...newPerson, property_address_for_enquiry: e.target.value })}
+                />
+              </div>
             </div>
           </div>
           {/* Submit Button */}
@@ -1846,11 +1781,11 @@ export default function Dashboard() {
                 <input
                   type="date"
                   className="form-control"
-                  value={newProperty.strate_date_of_lease ? newProperty.strate_date_of_lease.toISOString().split('T')[0] : ''}
+                  value={newProperty.start_date_of_lease ? newProperty.start_date_of_lease.toISOString().split('T')[0] : ''}
                   onChange={(e) =>
                     setNewProperty({
                       ...newProperty,
-                      strate_date_of_lease : e.target.value ? new Date(e.target.value) : null,
+                      start_date_of_lease : e.target.value ? new Date(e.target.value) : null,
                     })
                   }
                 />
