@@ -414,6 +414,71 @@ app.delete('/api/person_property/:id',  async (req, res) => {
   }
 });
 
+
+// ------------------------------
+// Search people
+// ------------------------------
+
+// Search people by multiple fields like in propertiies
+app.get('/api/people/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q) {
+      return res.status(400).json({ error: 'Missing search query parameter "q"' });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT id, name, organisation, role, email, contact_number, family, property_address_for_enquiry
+      FROM people
+      WHERE 
+        name ILIKE $1 OR 
+        organisation ILIKE $1 OR 
+        role ILIKE $1 OR 
+        email ILIKE $1 OR 
+        family ILIKE $1 OR 
+        property_address_for_enquiry ILIKE $1
+      `,
+      [`%${q}%`]
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+// ------------------------------
+// Search propertiies
+// ------------------------------
+// Search propertiies by city, property type or address
+app.get('/api/propertiies/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q) {
+      return res.status(400).json({ error: 'Missing search query parameter "q"' });
+    }
+    const result = await pool.query(
+      `
+      SELECT id, inquirer, city, address, property_type, building_rateable_value, 
+             rates_payable_before_relief, has_car_park, car_park_rateable_value,
+             car_park_rates_payable_before_relief, total_rateable_value, total_rate_payable,
+             donation_due, post_code, landlord_address, landlord_email, landlord_no, rates_multiplier,
+             start_date_of_lease, length_of_lease, end_date_of_lease
+      FROM propertiies
+      WHERE city ILIKE $1 OR property_type ILIKE $1 OR address ILIKE $1
+      `,
+      [`%${q}%`]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 //
 
 // Start the Express server
