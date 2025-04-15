@@ -3,7 +3,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import RelationshipTable from '../components/Dashboard/RelationshipTable';
+import RegisterContact from "../components/Dashboard/RegisterContact";
+import RegisterProperty from "../components/Dashboard/RegisterProperty";
+import SearchComponent from "../components/Dashboard/search";
 
+import PersonReport from '../components/Dashboard/PersonReport';
+import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
 type Role = 'Est Ag' | 'Landlord' | 'Ass Man' | string;
@@ -52,6 +58,11 @@ interface PersonProperty {
   property_id: number;    // or propertyId
 }
 
+interface PropertiesTableProps {
+  properties: Property[];
+  people: Person[];
+  personProperties: PersonProperty[];
+}
 
 export default function Dashboard() {
   const [people, setPeople] = useState<Person[]>([]);
@@ -66,6 +77,28 @@ export default function Dashboard() {
   const [roles, setRoles] = useState<string[]>([]);
   const defaultRoles = ["Est Agant", "Landlord", "Property Manager"];
   const [allRoles, setAllRoles] = useState<string[]>([]);
+
+
+//
+const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/${searchType}/search?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      setResults(data);
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+  };
+//
+  
 
   const handlePersonHeaderClickp = (person: Person) => {
     setOpenPersonPopups((prev) => {
@@ -418,28 +451,119 @@ export default function Dashboard() {
       }
   }
 
-
+  ///////////////////
 
 
     //
-   
+
   return (
     <div className="mb-6 p-4 border rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-      {/* Logout Button */}
-      <button onClick={handleLogout} className="btn btn-secondary mb-3">
-        Sign Out
-      </button>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          {/* Logout Button on the left */}
+          <button onClick={handleLogout} className="btn btn-secondary">
+            Sign Out
+          </button>
+
+          {/* Search Component on the right */}
+          <SearchComponent />
+      </div>
+
+      {/* Table for Report Relationship
+      <div className="mb-6 p-4 border rounded-lg">
+        <h2 className="text-lg font-semibold mb-2">
+          Report Relationships
+        </h2>
+        <RelationshipTable
+          people={people}
+          properties={properties}
+          personProperties={personProperties}
+          handlePersonHeaderClick={handlePersonHeaderClick}
+          handlePropertyHeaderClick={handlePropertyHeaderClick}
+          handleToggle={handleToggle}
+        />
+      </div>*/}
+
+    
 
       {/* */}
-      {/* Table for Relationship*/}
+     
 
-      <div className="mb-6 p-4 border rounded-lg">
-      <h2 className="text-lg font-semibold mb-2">
-         Relationships
-      </h2>
-      
+      <div className="mb-6 p-4 border rounded-lg  position-relative" style={{ position: 'relative' }}>
+         <h2 className="text-lg font-semibold">Report</h2>
+
+       
+        
+        <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
+          <thead>
+            <tr className="bg-gray-200">
+              {/* New column for Landlord/Organization */}
+              <th className="border min-w-[150px] min-h-[50px] p-2 text-center">
+                Landlord \ Organization
+              </th>
+
+              {/* Existing column: "Property \ Person" */}
+              <th className="border min-w-[150px] min-h-[50px] p-2 text-center">
+                Property \ Person
+              </th>
+
+              {/* Columns for each person’s name */}
+              {people.map((person) => (
+                <th
+                  key={person.id}
+                  className="border min-w-[100px] min-h-[50px] p-2 text-center"
+                  onClick={() => handlePersonHeaderClick(person)}
+                >
+                  {person.name || 'Name'}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {properties.map((property) => (
+              <tr key={property.id} className="text-center">
+                {/*
+                  1. New TD to show landlord 
+                    (assuming property.inquirer 
+                    contains the landlord's data)
+                */}
+                <td className="border min-w-[150px] min-h-[50px] p-2 text-left">
+                  {property.inquirer || 'No Landlord'}
+                </td>
+
+                {/* 2. Existing "Address" column */}
+                <td
+                  className="border min-w-[150px] min-h-[50px] p-2 text-left"
+                  onClick={() => handlePropertyHeaderClick(property)}
+                >
+                  {property.address || 'Address'}
+                </td>
+
+                {/* 3. Continue your "checklist" columns for each person */}
+                {people.map((person) => {
+                  const relation = personProperties.find(
+                    (pp) =>
+                      pp.property_id === property.id && pp.person_id === person.id
+                  );
+                  const isRelated = relation?.is_related ?? false;
+
+                  return (
+                    <td
+                      key={person.id}
+                      className="border min-w-[100px] min-h-[50px] p-2 cursor-pointer text-center align-middle"
+                      onClick={() => handleToggle(person.id, property.id)}
+                    >
+                      {isRelated ? '✔️' : ''}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* 
         <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
           <thead>
             <tr className="bg-gray-200">
@@ -455,12 +579,12 @@ export default function Dashboard() {
           <tbody>
             {properties.map((property) => (
               <tr key={property.id} className="text-center" >  
-                {/* Left column = property address */}
+                {/* Left column = property address 
                 <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
                 {property.address || 'Address'}
                 </td>
 
-                {/* For each person, check if related */}
+                {/* For each person, check if related 
                 {people.map((person) => {
                   const relation = personProperties.find(
                     (pp) =>
@@ -482,7 +606,7 @@ export default function Dashboard() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>*/}
       
 
 
@@ -533,23 +657,21 @@ export default function Dashboard() {
             );
           })}
 
-        {/* */}
+        {/* 
 
 
-
-
-
-
-
-
-
-
-
-
+      <PersonReport
+        selectedPerson={selectedPerson}
+        setSelectedPerson={setSelectedPerson}
+        properties={properties}
+        personProperties={personProperties}
+        onUpdate={fetchPeople}
+      />*/}
+  
       {/* If selectedPerson is set, show more details below */}
       {selectedPerson && (
         <div className="p-4 mt-4 border rounded">
-          <h2 className="text-xl font-semibold mb-2">Report For Selected Person</h2>
+          <h2 className="text-xl font-semibold mb-2">Report For {selectedPerson.name}</h2>
           {/* ✅ Place this inside the block, right after opening it: */}
           {(() => {
             const relatedProperties = personProperties
@@ -962,8 +1084,7 @@ export default function Dashboard() {
                             </div>
                           </>
                         )}
-                      </li>
-                      
+                      </li>                      
                       ))}
                     </ul>
                   </div>
@@ -979,7 +1100,7 @@ export default function Dashboard() {
     {/* If selectedProperty is set, show more details below */}
       {selectedPropety && (  
         <div className="p-4 mt-4 border rounded">
-          <h2 className="text-xl font-semibold mb-2">Report For Selected Property</h2>
+          <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.address}</h2>
 
           {editPropertyMode ? (
             <>
@@ -1376,466 +1497,35 @@ export default function Dashboard() {
             </div>
           )}
       </div>  
-      {/* */}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     {/* Add Person Form */}
-     <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Register Contact</h2>
-        <form onSubmit={addPersoon} className="space-y-4">
-  
-          {/* */}
-          <div className="row g-3">
-
-            {/* Column 1 */}
-            <div className="col-md-3  p-3 rounded">
-
-              {/* Row: Name */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Name:</label>
-                <input
-                  className="form-control"
-                  placeholder="Name"
-                  value={newPerson.name}
-                  onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
-                  required
-                />
-              </div>
-              {/* Row: Last Name */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Last Name:</label>
-                <input
-                  className="form-control"
-                  placeholder="Last Name"
-                  value={newPerson.family}
-                  onChange={(e) => setNewPerson({ ...newPerson, family: e.target.value })}
-                  required
-                />
-              </div>
-
-              {/* Row: Organisation */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Organisation:</label>
-                <input
-                  className="form-control"
-                  placeholder="Organisation"
-                  value={newPerson.organisation}
-                  onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
-                />
-              </div>
-
-              {/* Row: Role */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Role:</label>
-                <input
-                  list="role-options"
-                  className="form-control"
-                  placeholder="Select or type a role"
-                  value={newPerson.role}
-                  onChange={(e) =>
-                    setNewPerson((prev) => ({ ...prev, role: e.target.value }))
-                  }
-                />
-                <datalist id="role-options">
-                  {allRoles.map((r) => (
-                    <option key={r} value={r} />
-                  ))}
-                </datalist>
-              </div>
-
-              {/* Row: Email */}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Email:</label>
-                <input
-                  className="form-control"
-                  placeholder="Email"
-                  value={newPerson.email}
-                  onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
-                />
-              </div>
-
-              {/* Row: Contact Number */}
-              <div className="d-flex align-items-center mb-4">
-                <label className="form-label me-2 mb-0 w-50">Contact No:</label>
-                <input
-                  className="form-control"
-                  placeholder="Contact Number"
-                  value={newPerson.contact_number}
-                  onChange={(e) => setNewPerson({ ...newPerson, contact_number: e.target.value })}
-                />
-              </div>
-
-              {/* Row: Address*/}
-              <div className="d-flex align-items-center mb-3">
-                <label className="form-label me-2 mb-0 w-50">Address:</label>
-                <input
-                  className="form-control"
-                  placeholder="Address"
-                  value={newPerson.property_address_for_enquiry}
-                  onChange={(e) => setNewPerson({ ...newPerson, property_address_for_enquiry: e.target.value })}
-                />
-              </div>
-            </div>
-          </div>
-          {/* Submit Button */}
-          <div className="text-end">
-            <button type="submit" className="btn btn-primary">
-              Add Details
-            </button>
-          </div>        
-        </form>
-      </div>
-
-      {/* */}
-
-
-
-
-       {/* Add Property Form */}
-      <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Register Peroperty</h2>
-        <form onSubmit={addProperrty}>
-
-            {/* */}
-            {/* */}
-          <div className="row g-3">
-
-          {/* Column 1 */}
-          <div className="col-md-3  p-3 rounded">
-           {/* */}
-          {/* Landlord / Organisation */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord / Organisation:</label>
-            <input
-              className="form-control"
-              placeholder="Landlord / Organisation"
-              value={newProperty.inquirer}
-              onChange={(e) => setNewProperty({ ...newProperty, inquirer: e.target.value })}
-              required
-            />
-          </div>
-
-          {/* City */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>City:</label>
-            <input
-              className="form-control"
-              placeholder="City"
-              value={newProperty.city}
-              onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Address:</label>
-            <input
-              className="form-control"
-              placeholder="Address"
-              value={newProperty.address}
-              onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
-            />
-          </div>
-
-           {/* Post Code */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>post Code:</label>
-            <input
-              className="form-control"
-              placeholder="post code"
-              value={newProperty.post_code}
-              onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
-            />
-          </div>
-
-          {/* Property Type */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Property Type:</label>
-            <input
-              list="property-type-options"
-              className="form-control"
-              placeholder="property type"
-              value={newProperty.property_type}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  property_type: e.target.value as Property['property_type'],
-                })
-              }
-            />
-            <datalist id="property-type-options">
-              <option value="Office" />
-              <option value="Retail" />
-              <option value="Warehouse" />
-            </datalist>
-          </div>
-
-          {/* Building Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Building Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Building Rateable Value"
-              value={newProperty.building_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Rates Payable Before Relief */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Payable Before Relief:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Rates payable before relief"
-              value={newProperty.rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Has Car Park */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Has Car Park?</label>
-            <input
-              type="checkbox"
-              checked={newProperty.has_car_park}
-              onChange={(e) =>
-                setNewProperty({ ...newProperty, has_car_park: e.target.checked })
-              }
-            />
-          </div>
-
-          {/* Car Park Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Car park rateable value"
-              value={newProperty.car_park_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Car Park Rates Payable Before Relief */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Car Park Rates Payable Before Relife:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Rates before relief"
-              value={newProperty.car_park_rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  car_park_rates_payable_before_relief:
-                    e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Total Rateable Value */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rateable Value:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Total rateable value"
-              value={newProperty.total_rateable_value ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  total_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Total Rate Payable */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Total Rate Payable:</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Total rate payable"
-              value={newProperty.total_rate_payable ?? ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  total_rate_payable: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          {/* Donation Due */}
-          <div className="d-flex align-items-center mb-4">
-            <label className="me-3 mb-0" style={{ width: '160px' }}>Donation Due:</label>
-            <input
-              type="date"
-              className="form-control"
-              value={newProperty.donation_due ? newProperty.donation_due.toISOString().split('T')[0] : ''}
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  donation_due: e.target.value ? new Date(e.target.value) : null,
-                })
-              }
-            />
-          </div>
-          {/* */}
-          </div>
-          
-
-          {/* Column 2 */}
-          <div className="col-md-3 bg-light p-3 rounded">
-
-
-            {/* landlord_name
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord_name:</label>
-              <input
-                className="form-control"
-                placeholder="landlord_name"
-                value={newProperty.landlord_name}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_name: e.target.value })}
-                required
-              />
-            </div>
-            {/* landlord_email 
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}> landlord_email:</label>
-              <input
-                className="form-control"
-                placeholder=" landlord_email"
-                value={newProperty.landlord_email}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
-                required
-              />
-            </div>
-            {/* landlord_no 
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>landlord contact Number:</label>
-              <input
-                className="form-control"
-                placeholder="landlord_no"
-                value={newProperty.landlord_no}
-                onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
-                required
-              />
-            </div>
-         
-            {/* rates_multiplier */}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>Rates Multiplier applicable for the property :</label>
-              <input
-                className="form-control"
-                placeholder="rates_multiplier"
-                value={newProperty.rates_multiplier}
-                onChange={(e) => setNewProperty({ ...newProperty, rates_multiplier: e.target.value })}
-              />
-            </div>
-            {/* starte_date_of_lease */}
-              <div className="d-flex align-items-center mb-4">
-                <label className="me-3 mb-0" style={{ width: '160px' }}>Agreed Start date of lease:</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  value={newProperty.start_date_of_lease ? newProperty.start_date_of_lease.toISOString().split('T')[0] : ''}
-                  onChange={(e) =>
-                    setNewProperty({
-                      ...newProperty,
-                      start_date_of_lease : e.target.value ? new Date(e.target.value) : null,
-                    })
-                  }
-                />
-              </div>
-
-            {/* end_date_of_lease */}
-            <div className="d-flex align-items-center mb-4">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>End date of lease::</label>
-              <input
-                type="date"
-                className="form-control"
-                value={newProperty.end_date_of_lease ? newProperty.end_date_of_lease.toISOString().split('T')[0] : ''}
-                onChange={(e) =>
-                  setNewProperty({
-                    ...newProperty,
-                    end_date_of_lease: e.target.value ? new Date(e.target.value) : null,
-                  })
-                }
-              />
-            </div>
-            {/*  length_of_lease Auto display*/}
-            <div className="d-flex align-items-center mb-3">
-              <label className="me-3 mb-0" style={{ width: '160px' }}>Length of Lease (days):</label>
-              <input
-                className="form-control"
-                value={newProperty.length_of_lease}
-                readOnly
-              />
-            </div>
-            <p>Length of Lease: {newProperty.length_of_lease} day(s)</p>      
-          </div>
-
-          {/* Column 3 */}
-          <div className="col-md-3  p-3 rounded">
-        
-          </div>
-
-          {/* Column 4 */}
-          <div className="col-md-3 bg-light p-3 rounded">
-  
-          </div>
-          </div>
-          {/* Submit */}
-          <div className="text-end">
-            <button type="submit" className="btn btn-primary px-4 py-2">
-              Add Property
-            </button>
-          </div>
-        </form>
-      </div>
+      {/* Registration*/}
+        <div className="row  mb-6 p-4 border rounded-lg">
+          <div className="container my-4">
+                <div className="row g-4">
+                      <div className="col-md-6">  
+                          {/* Registration contact*/}             
+                          <RegisterContact
+                            newPerson={newPerson}
+                            setNewPerson={setNewPerson}
+                            addPersoon={addPersoon}
+                            allRoles={allRoles}
+                          />
+                      </div>
+                      <div className="col-md-6"> 
+                        {/* Registration property*/}              
+                        <RegisterProperty
+                            newProperty={newProperty}
+                            setNewProperty={setNewProperty}
+                            addProperrty={addProperrty}
+                          />
+                      </div>
+                </div>
+          </div> 
+        </div>
     </div>
+    
   );
+
+
 }
