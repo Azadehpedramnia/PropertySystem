@@ -468,28 +468,35 @@ app.get('/api/people/search', async (req, res) => {
 // Search propertiies
 // ------------------------------
 // Search propertiies by city, property type or address
+// Search propertiies by a selected field
 app.get('/api/propertiies/search', async (req, res) => {
   try {
-    const { q } = req.query;
-    if (!q) {
-      return res.status(400).json({ error: 'Missing search query parameter "q"' });
+    const { q, field } = req.query;
+
+    if (!q || !field) {
+      return res.status(400).json({ error: 'Missing "q" or "field" query parameter' });
     }
+
+    const allowedFields = ['inquirer', 'address'];
+    if (!allowedFields.includes(field)) {
+      return res.status(400).json({ error: 'Invalid search field' });
+    }
+
+    // Construct safe SQL using parameterized values
     const result = await pool.query(
-      `
-      SELECT id, inquirer
-      FROM propertiies
-      WHERE inquirer ILIKE $1
-      `,
+      `SELECT id, inquirer, address FROM propertiies WHERE ${field} ILIKE $1`,
       [`%${q}%`]
     );
+
     res.json(result.rows);
   } catch (err) {
+    console.error('Database error:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
 
-//
+
 
 // Start the Express server
 const PORT = process.env.PORT || 5000;
