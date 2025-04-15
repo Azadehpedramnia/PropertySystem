@@ -1,19 +1,17 @@
-// components/Dashboard/Search.tsx
 import React, { useState } from "react";
+
 
 interface SearchResult {
   id: number;
-  // For people, we expect a "name" property
   name?: string;
- family?:string;
-
-  // For propertiies, we expect an "address" property
+  family?: string;
   address?: string;
   inquirer?: string;
 }
 
 const SearchComponent: React.FC = () => {
   const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
+  const [searchField, setSearchField] = useState<"name" | "inquirer" | "address">("name");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,21 +21,20 @@ const SearchComponent: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-     //const response = await fetch(`http://localhost:5000/api/propertiies/search?q=${encodeURIComponent(query)}`);
-     const response = await fetch(`${API_URL}/api/${searchType}/search?q=${encodeURIComponent(query)}`);
-      // Log the raw response text
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const url = `${API_URL}/api/${searchType}/search?q=${encodeURIComponent(query)}&field=${searchField}`;
+      const response = await fetch(url);
       const text = await response.text();
       console.log("Raw response text:", text);
-      // Attempt to parse JSON only if response.ok
+
       if (!response.ok) {
         setError("Error: " + text);
         return;
       }
+
       const data = JSON.parse(text);
-      console.log("Parsed data:", data);
       setResults(data);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -45,41 +42,73 @@ const SearchComponent: React.FC = () => {
     }
     setLoading(false);
   };
-  
 
   return (
     <div>
-      <form onSubmit={handleSearch}  className="flex space-x-2">
+      <form onSubmit={handleSearch} className="d-flex gap-2 align-items-center mb-3">
+        {/* Select table: people or properties */}
         <select
-          className="border rounded px-2 py-1"
+          className="form-select"
           value={searchType}
-          onChange={(e) => setSearchType(e.target.value as "people" | "propertiies")}
+          onChange={(e) => {
+            const selected = e.target.value as "people" | "propertiies";
+            setSearchType(selected);
+            setSearchField(selected === "people" ? "name" : "inquirer"); // Reset default field
+          }}
         >
-          <option value="people">Contact Name</option>
-          <option value="propertiies">landlord</option>
+          <option value="people">People</option>
+          <option value="propertiies">Properties</option>
         </select>
+
+        {/* Select field based on type */}
+        {searchType === "people" ? (
+          <select
+            className="form-select"
+            value={searchField}
+            onChange={(e) => setSearchField(e.target.value as "name")}
+          >
+            <option value="name">Name</option>
+          </select>
+        ) : (
+          <select
+            className="form-select"
+            value={searchField}
+            onChange={(e) => setSearchField(e.target.value as "inquirer" | "address"  )}
+          >
+            <option value="inquirer">Landlord</option>
+            <option value="address">Address</option>
+          </select>
+        )}
+
         <input
           type="text"
-          className="border rounded px-2 py-1" 
+          className="form-control"
           placeholder="Enter search text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button className="btn btn-primary" type="submit">Search</button>
+
+        <button className="btn btn-primary" type="submit">
+          Search
+        </button>
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && results.length === 0 && query.trim() !== "" && !error && (
         <p>No results found.</p>
       )}
 
       <div>
-        <h3>Results:</h3>
+        <h5>Results:</h5>
         <ul>
           {results.map((item) => (
             <li key={item.id}>
-              {searchType === "people" ? item.name : item.inquirer}
+              {searchField === "name"
+                ? item.name
+                : searchField === "inquirer"
+                ? item.inquirer
+                : item.address}
             </li>
           ))}
         </ul>
