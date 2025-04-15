@@ -342,6 +342,24 @@ app.delete('/api/propertiies/:id', async (req, res) => {
   }
 });
 
+
+// GET distinct roles from the people table
+app.get('/api/propertiies/property_type', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT property_type
+      FROM propertiies
+      WHERE property_type IS NOT NULL
+      ORDER BY property_type
+    `);
+    // result.rows might look like ['Office' | 'Retail' | 'Warehouse' ]
+    const property_types = result.rows.map(row => row.property_type);
+    res.json(property_types); // => ['Office' | 'Retail' | 'Warehouse' ]
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ------------------------------
 // Person-Properties (the join table)
 // ------------------------------
@@ -429,15 +447,11 @@ app.get('/api/people/search', async (req, res) => {
 
     const result = await pool.query(
       `
-      SELECT id, name, organisation, role, email, contact_number, family, property_address_for_enquiry
+      SELECT id, name, family
       FROM people
       WHERE 
         name ILIKE $1 OR 
-        organisation ILIKE $1 OR 
-        role ILIKE $1 OR 
-        email ILIKE $1 OR 
-        family ILIKE $1 OR 
-        property_address_for_enquiry ILIKE $1
+        family ILIKE $1 
       `,
       [`%${q}%`]
     );
@@ -462,13 +476,9 @@ app.get('/api/propertiies/search', async (req, res) => {
     }
     const result = await pool.query(
       `
-      SELECT id, inquirer, city, address, property_type, building_rateable_value, 
-             rates_payable_before_relief, has_car_park, car_park_rateable_value,
-             car_park_rates_payable_before_relief, total_rateable_value, total_rate_payable,
-             donation_due, post_code, landlord_address, landlord_email, landlord_no, rates_multiplier,
-             start_date_of_lease, length_of_lease, end_date_of_lease
+      SELECT id, inquirer
       FROM propertiies
-      WHERE city ILIKE $1 OR property_type ILIKE $1 OR address ILIKE $1
+      WHERE inquirer ILIKE $1
       `,
       [`%${q}%`]
     );
