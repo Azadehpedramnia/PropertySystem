@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 interface SearchResult {
@@ -17,6 +17,15 @@ const SearchComponent: React.FC = () => {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
+
+  useEffect(() => {
+    if (query.trim() === "") {
+      setResults([]);
+      setHasSearched(false); // Optional: hide "no results" message too
+    }
+  }, [query,searchField]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +43,7 @@ const SearchComponent: React.FC = () => {
             setError("Error: " + text);
             return;
         }
-        
+          
         //Limit for length of search
         //if (query.trim().length < 3) {
             //setError("Search term too short.");
@@ -112,7 +121,7 @@ const SearchComponent: React.FC = () => {
             <ul>
                 {results.map((item) => (
                     <li key={item.id}>
-                    {searchField === "name" && item.name}
+                    {searchField === "name" && `${item.name ?? ""} ${item.family ?? ""}`}
                     {searchField === "inquirer" && item.inquirer}
                     {searchField === "address" && (
                         item.address || item.post_code || "No address or post code"
@@ -122,6 +131,7 @@ const SearchComponent: React.FC = () => {
             </ul>
       </div>
     </div>
+    
   );
 };
 
