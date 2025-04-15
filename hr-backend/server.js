@@ -468,7 +468,6 @@ app.get('/api/people/search', async (req, res) => {
 // Search propertiies
 // ------------------------------
 // Search propertiies by city, property type or address
-// Search propertiies by a selected field
 app.get('/api/propertiies/search', async (req, res) => {
   try {
     const { q, field } = req.query;
@@ -476,18 +475,35 @@ app.get('/api/propertiies/search', async (req, res) => {
     if (!q || !field) {
       return res.status(400).json({ error: 'Missing "q" or "field" query parameter' });
     }
-
-    const allowedFields = ['inquirer', 'address'];
-    if (!allowedFields.includes(field)) {
+    const allowedFields = ['inquirer', 'address', 'post_code'];
+    const fieldStr = String(field); // 🔒 Always treat field as a string
+    if (!allowedFields.includes(fieldStr)) {
       return res.status(400).json({ error: 'Invalid search field' });
     }
 
-    // Construct safe SQL using parameterized values
-    const result = await pool.query(
-      `SELECT id, inquirer, address FROM propertiies WHERE ${field} ILIKE $1`,
-      [`%${q}%`]
-    );
+    let result;
 
+    if (fieldStr === "address") {
+      // Search both address and post_code
+      result = await pool.query(
+        `SELECT id, inquirer, address, post_code 
+        FROM propertiies 
+        WHERE address ILIKE $1 OR post_code ILIKE $1`,
+        [`%${q}%`]
+      );
+    } else {
+      // Single-field search
+      result = await pool.query(
+        `SELECT id, inquirer, address
+        FROM propertiies 
+        WHERE ${fieldStr} ILIKE $1`,
+        [`%${q}%`]
+      );
+    }
+    //const result = await pool.query(
+      //`SELECT id, inquirer, address, post_code FROM propertiies WHERE ${fieldStr} ILIKE $1`,
+     // [`%${q}%`]
+    //);
     res.json(result.rows);
   } catch (err) {
     console.error('Database error:', err);

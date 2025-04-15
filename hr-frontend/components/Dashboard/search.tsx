@@ -7,11 +7,12 @@ interface SearchResult {
   family?: string;
   address?: string;
   inquirer?: string;
+  post_code?:string;
 }
 
 const SearchComponent: React.FC = () => {
   const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
-  const [searchField, setSearchField] = useState<"name" | "inquirer" | "address">("name");
+  const [searchField, setSearchField] = useState<"name" | "inquirer" | "address" | "post_code">("name");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,24 +24,30 @@ const SearchComponent: React.FC = () => {
     setError(null);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const url = `${API_URL}/api/${searchType}/search?q=${encodeURIComponent(query)}&field=${searchField}`;
-      const response = await fetch(url);
-      const text = await response.text();
-      console.log("Raw response text:", text);
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const url = `${API_URL}/api/${searchType}/search?q=${encodeURIComponent(query)}&field=${searchField}`;
+        const response = await fetch(url);
+        const text = await response.text();
+        console.log("Raw response text:", text);
 
-      if (!response.ok) {
-        setError("Error: " + text);
-        return;
-      }
-
-      const data = JSON.parse(text);
-      setResults(data);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError("An error occurred. Please try again.");
-    }
-    setLoading(false);
+        if (!response.ok) {
+            setError("Error: " + text);
+            return;
+        }
+        
+        //Limit for length of search
+        //if (query.trim().length < 3) {
+            //setError("Search term too short.");
+            //return;
+        //}
+        
+        const data = JSON.parse(text);
+        setResults(data);
+        } catch (err) {
+        console.error("Fetch error:", err);
+        setError("An error occurred. Please try again.");
+        }
+        setLoading(false);
   };
 
   return (
@@ -56,7 +63,7 @@ const SearchComponent: React.FC = () => {
             setSearchField(selected === "people" ? "name" : "inquirer"); // Reset default field
           }}
         >
-          <option value="people">People</option>
+          <option value="people">Contacts</option>
           <option value="propertiies">Properties</option>
         </select>
 
@@ -64,7 +71,7 @@ const SearchComponent: React.FC = () => {
         {searchType === "people" ? (
           <select
             className="form-select"
-            value={searchField}
+            value={searchField}       
             onChange={(e) => setSearchField(e.target.value as "name")}
           >
             <option value="name">Name</option>
@@ -73,10 +80,10 @@ const SearchComponent: React.FC = () => {
           <select
             className="form-select"
             value={searchField}
-            onChange={(e) => setSearchField(e.target.value as "inquirer" | "address"  )}
+            onChange={(e) => setSearchField(e.target.value as "inquirer" | "address" | "post_code" )}
           >
             <option value="inquirer">Landlord</option>
-            <option value="address">Address</option>
+            <option value="address">Address or Post Code</option>
           </select>
         )}
 
@@ -96,22 +103,23 @@ const SearchComponent: React.FC = () => {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && results.length === 0 && query.trim() !== "" && !error && (
-        <p>No results found.</p>
+        <p>No results found "{query}" in {searchField}.</p>
+        
       )}
 
       <div>
         <h5>Results:</h5>
-        <ul>
-          {results.map((item) => (
-            <li key={item.id}>
-              {searchField === "name"
-                ? item.name
-                : searchField === "inquirer"
-                ? item.inquirer
-                : item.address}
-            </li>
-          ))}
-        </ul>
+            <ul>
+                {results.map((item) => (
+                    <li key={item.id}>
+                    {searchField === "name" && item.name}
+                    {searchField === "inquirer" && item.inquirer}
+                    {searchField === "address" && (
+                        item.address || item.post_code || "No address or post code"
+                    )}
+                    </li>
+                ))}
+            </ul>
       </div>
     </div>
   );
