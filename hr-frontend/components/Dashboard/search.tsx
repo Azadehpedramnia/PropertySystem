@@ -19,18 +19,17 @@ const SearchComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
+ useEffect(() => {
+    setResults([]);
+    setHasSearched(false); // hide "no results" message
+  }, [searchType, searchField]);
 
-  useEffect(() => {
-    if (query.trim() === "") {
-      setResults([]);
-      setHasSearched(false); // Optional: hide "no results" message too
-    }
-  }, [query,searchField]);
-
+  
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setHasSearched(true);
 
     try {
         const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -45,10 +44,10 @@ const SearchComponent: React.FC = () => {
         }
           
         //Limit for length of search
-        //if (query.trim().length < 3) {
-            //setError("Search term too short.");
-            //return;
-        //}
+        if (query.trim().length < 2) {
+            setError("Search term too short.");
+            return;
+        }
         
         const data = JSON.parse(text);
         setResults(data);
@@ -61,8 +60,59 @@ const SearchComponent: React.FC = () => {
 
   return (
     <div>
+
       <form onSubmit={handleSearch} className="d-flex gap-2 align-items-center mb-3">
         {/* Select table: people or properties */}
+        <select
+          className="form-select"
+          value={searchType}
+          onChange={(e) => {
+            const selected = e.target.value as "people" | "propertiies";
+            setSearchType(selected);
+            setSearchField(selected === "people" ? "name" : "inquirer"); // Default field for each
+          }}
+        >
+          <option value="people">Contacts</option>
+          <option value="propertiies">Properties</option>
+        </select>
+
+        {/* Show field selection ONLY for "propertiies" */}
+        {searchType === "propertiies" && (
+          <select
+            className="form-select"
+            value={searchField}
+            onChange={(e) =>
+              setSearchField(e.target.value as "inquirer" | "address" | "post_code")
+            }
+          >
+            <option value="inquirer">Landlord</option>
+            <option value="address">Address or Post Code</option>
+          </select>
+        )}
+
+        {/* Search input field */}
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter search text"
+          value={query}
+          onChange={(e) => {
+            const value = e.target.value;
+            setQuery(value);
+            setHasSearched(false);
+            if (value.trim() === "") {
+              setResults([]);
+            }
+          }}
+        />
+
+        <button className="btn btn-primary" type="submit">
+          Search
+        </button>
+      </form>
+
+       {/*<form onSubmit={handleSearch} className="d-flex gap-2 align-items-center mb-3">
+        Select table: people or properties 
         <select
           className="form-select"
           value={searchType}
@@ -76,7 +126,7 @@ const SearchComponent: React.FC = () => {
           <option value="propertiies">Properties</option>
         </select>
 
-        {/* Select field based on type */}
+        {/* Select field based on type 
         {searchType === "people" ? (
           <select
             className="form-select"
@@ -101,20 +151,30 @@ const SearchComponent: React.FC = () => {
           className="form-control"
           placeholder="Enter search text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+
+            const value = e.target.value;
+            setQuery(value);
+            setHasSearched(false);
+            if (value.trim() === "") {
+              setResults([]);
+            }
+          }}
         />
 
         <button className="btn btn-primary" type="submit">
           Search
         </button>
-      </form>
+      </form>*/}
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && results.length === 0 && query.trim() !== "" && !error && (
-        <p>No results found "{query}" in {searchField}.</p>
+      {hasSearched && !loading && results.length === 0 && query.trim() !== "" && !error && (
+         <p>No results found for "{query}".</p>
+       )}
+
         
-      )}
+
 
       <div>
         <h5>Results:</h5>
@@ -129,6 +189,8 @@ const SearchComponent: React.FC = () => {
                     </li>
                 ))}
             </ul>
+
+            
       </div>
     </div>
     
