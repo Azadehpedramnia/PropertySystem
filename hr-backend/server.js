@@ -49,7 +49,7 @@ app.get('/api/people', async (req, res) => {
               contact_number,
               family,          
               property_address_for_enquiry,
-               iqu_post_code_address
+              iqu_post_code_address
        FROM people`
     );
     res.json(result.rows);
@@ -75,8 +75,8 @@ app.put('/api/people/:id',  async (req, res) => {
            email = $4,
            contact_number = $5,
            family = $6,
-           property_address_for_enquiry = $7  
-            iqu_post_code_address = $8    
+           property_address_for_enquiry = $7,
+           iqu_post_code_address = $8    
        WHERE id = $9
        RETURNING *`,
       [name, organisation, role, email, contact_number,family,
@@ -297,7 +297,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
            rates_multiplier = $17,
            start_date_of_lease = $18,
            length_of_lease = $19,
-           end_date_of_lease = $20   
+           end_date_of_lease = $20,   
            landlord_post_code_address=$21     
        WHERE id = $22
        RETURNING *`,
