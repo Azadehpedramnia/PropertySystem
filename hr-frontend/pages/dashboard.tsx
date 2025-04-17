@@ -461,8 +461,6 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   ///////////////////
 
 
-    //
-
   return (
     <div className="mb-6 p-4 border rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
@@ -484,54 +482,54 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
          <h2 className="text-lg font-semibold">Report</h2>
 
         
-      {/*Relation report table */}
-      <ReportTable
-        people={people}
-        properties={properties}
-        personProperties={personProperties}
-        handlePersonHeaderClick={handlePersonHeaderClick}
-        handlePropertyHeaderClick={handlePropertyHeaderClick}
-        handleToggle={handleToggle}
-      />
-            
-        {/* */}
-        {selectedPerson && (
-          <PersonDetails
-            selectedPerson={selectedPerson}
+            {/*Relation report table */}
+            <ReportTable
+              people={people}
+              properties={properties}
+              personProperties={personProperties}
+              handlePersonHeaderClick={handlePersonHeaderClick}
+              handlePropertyHeaderClick={handlePropertyHeaderClick}
+              handleToggle={handleToggle}
+            />
+                
+            {/* */}
+            {selectedPerson && (
+              <PersonDetails
+                selectedPerson={selectedPerson}
+                personProperties={personProperties}
+                properties={properties}
+                editPersonMode={editPersonMode}
+                setSelectedPerson={setSelectedPerson}
+                setEditPersonMode={setEditPersonMode}
+                fetchPeople={fetchPeople}
+                fetchProperties={fetchProperties}
+                fetchPersonProperties={fetchPersonProperties}
+                editingPropertyId={editingPropertyId}
+                editedProperty={editedProperty}
+                setEditedProperty={setEditedProperty}
+                setEditingPropertyId={setEditingPropertyId}
+              />
+            )}
+
+            {/* */}
+            {selectedPropety && (
+            <PropertyDetails
+            selectedPropety={selectedPropety}
+            editPropertyMode={editPropertyMode}
             personProperties={personProperties}
-            properties={properties}
-            editPersonMode={editPersonMode}
-            setSelectedPerson={setSelectedPerson}
-            setEditPersonMode={setEditPersonMode}
+            people={people}
             fetchPeople={fetchPeople}
-            fetchProperties={fetchProperties}
             fetchPersonProperties={fetchPersonProperties}
-            editingPropertyId={editingPropertyId}
-            editedProperty={editedProperty}
-            setEditedProperty={setEditedProperty}
-            setEditingPropertyId={setEditingPropertyId}
+            fetchProperties={fetchProperties}
+            setSelectedProperty={setSelectedProperty}
+            setEditPropertyMode={setEditPropertyMode}
+            setSelectedPerson={setSelectedPerson}
+            setEditingPersonIdForProperty={setEditingPersonIdForProperty}
+            editingPersonIdForProperty={editingPersonIdForProperty}
+            editedPersonForProperty={editedPersonForProperty}
+            setEditedPersonForProperty={setEditedPersonForProperty}
           />
         )}
-
-        {/* */}
-        {selectedPropety && (
-        <PropertyDetails
-        selectedPropety={selectedPropety}
-        editPropertyMode={editPropertyMode}
-        personProperties={personProperties}
-        people={people}
-        fetchPeople={fetchPeople}
-        fetchPersonProperties={fetchPersonProperties}
-        fetchProperties={fetchProperties}
-        setSelectedProperty={setSelectedProperty}
-        setEditPropertyMode={setEditPropertyMode}
-        setSelectedPerson={setSelectedPerson}
-        setEditingPersonIdForProperty={setEditingPersonIdForProperty}
-        editingPersonIdForProperty={editingPersonIdForProperty}
-        editedPersonForProperty={editedPersonForProperty}
-        setEditedPersonForProperty={setEditedPersonForProperty}
-      />
-     )}
   
       </div>  
 
