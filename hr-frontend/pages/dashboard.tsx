@@ -3,12 +3,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-//import RelationshipTable from '../components/Dashboard/RelationshipTable';
 import RegisterContact from "../components/Dashboard/RegisterContact";
 import RegisterProperty from "../components/Dashboard/RegisterProperty";
 import SearchComponent from "../components/Dashboard/search";
 
-////import PersonReport from '../components/Dashboard/PersonReport';
 import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
@@ -1504,8 +1502,10 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
           )}
       </div>  
 
+      {/* */}
 
-      {/* Registration*/}
+      
+        {/* Registration*/}
         <div className="row  mb-6 p-4 border rounded-lg">
           <div className="container my-4">
                 <div className="row g-4">
