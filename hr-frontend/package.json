@@ -16,6 +16,7 @@
     "react-dom": "^19.0.0",
     "react-draggable": "^4.4.6"
   },
+  
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
