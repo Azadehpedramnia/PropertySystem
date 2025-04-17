@@ -22,6 +22,7 @@ interface Property {
   start_date_of_lease: Date | null;
   end_date_of_lease: Date | null;
   length_of_lease: number;
+  landlord_post_code_address:string;
 }
 
 interface RegisterPropertyProps {
@@ -66,20 +67,9 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         required
       />
     </div>,
-    <div key="city" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
-        City:
-      </label>
-      <input
-        className="form-control"
-        placeholder="City"
-        value={newProperty.city}
-        onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
-      />
-    </div>,
     <div key="address" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Address:
+        Property Address:
       </label>
       <input
         className="form-control"
@@ -99,6 +89,17 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
       />
     </div>,
+    <div key="city" className="d-flex align-items-center mb-3">
+        <label className="me-3 mb-0" style={{ width: "160px" }}>
+          City:
+        </label>
+        <input
+          className="form-control"
+          placeholder="City"
+          value={newProperty.city}
+          onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
+        />
+      </div>,
     <div key="property_type" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
         Property Type:
@@ -124,7 +125,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
   const secondFields = [
     <div key="building_rateable_value" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Building Rateable Value:
+        Property Rateable Value:
       </label>
       <input
         type="number"
@@ -142,7 +143,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
     </div>,
     <div key="rates_payable_before_relief" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Rates Payable Before Relief:
+        Rates Payable Before Relief per year:
       </label>
       <input
         type="number"
@@ -170,27 +171,30 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
        }
      />
    </div>,
-   <div className="d-flex align-items-center mb-3">
-   <label className="me-3 mb-0" style={{ width: "160px" }}>
-     Car Park Rateable Value:
-   </label>
-   <input
-     type="number"
-     className="form-control"
-     placeholder="Car park rateable value"
-     value={newProperty.car_park_rateable_value ?? ""}
-     onChange={(e) =>
-       setNewProperty({
-         ...newProperty,
-         car_park_rateable_value:
-           e.target.value === "" ? null : Number(e.target.value),
-       })
-     }
-   />
- </div>,
+ newProperty.has_car_park && (
+  <div key="car_park_rateable_value" className="d-flex align-items-center mb-3">
+    <label className="me-3 mb-0" style={{ width: "160px" }}>
+      Car Park Rateable Value:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder="Car park rateable value"
+      value={newProperty.car_park_rateable_value ?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          car_park_rateable_value:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>
+),
+newProperty.has_car_park && (
   <div className="d-flex align-items-center mb-3">
   <label className="me-3 mb-0" style={{ width: "160px" }}>
-    Car Park Rates Payable Before Relife:
+    Car Park Rates Payable Before Relief per year:
   </label>
   <input
     type="number"
@@ -205,7 +209,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
       })
     }
   />
-</div>,
+</div>),
  <div className="d-flex align-items-center mb-3">
  <label className="me-3 mb-0" style={{ width: "160px" }}>
    Total Rateable Value:
@@ -242,7 +246,28 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
    }
  />
 </div>,
-<div className="d-flex align-items-center mb-4">
+<div className="d-flex align-items-center mb-3">
+                <label className="me-3 mb-0" style={{ width: "160px" }}>
+                  Rates Multiplier applicable for the property :
+                </label>
+                <input
+                  className="form-control"
+                  placeholder=" Rates Multiplier applicable "
+                  value={newProperty.rates_multiplier}
+                  onChange={(e) =>
+                    setNewProperty({
+                      ...newProperty,
+                      rates_multiplier: e.target.value,
+                    })
+                  }
+                />
+  </div>
+
+  ];
+
+    // 3) New third group: "advancedFields"
+    const thirdFields = [
+      <div className="d-flex align-items-center mb-4">
             <label className="me-3 mb-0" style={{ width: "160px" }}>
               Donation Due:
             </label>
@@ -263,28 +288,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
                 })
               }
             />
-          </div>
-
-  ];
-
-    // 3) New third group: "advancedFields"
-    const thirdFields = [
-      <div className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Rates Multiplier applicable for the property :
-      </label>
-      <input
-        className="form-control"
-        placeholder="rates_multiplier"
-        value={newProperty.rates_multiplier}
-        onChange={(e) =>
-          setNewProperty({
-            ...newProperty,
-            rates_multiplier: e.target.value,
-          })
-        }
-      />
-    </div>,
+          </div>,
     <div className="d-flex align-items-center mb-4">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
         start date of lease::
@@ -346,16 +350,32 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
   const forthFields = [
       <div className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Landlord Adress:
+        Landlord register Adress:
       </label>
       <input
         className="form-control"
-        placeholder="Landlord Address"
+        placeholder="Landlord register Address"
         value={newProperty.landlord_Address}
         onChange={(e) =>
           setNewProperty({
             ...newProperty,
             landlord_Address: e.target.value,
+          })
+        }
+      />
+      </div>,
+      <div className="d-flex align-items-center mb-3">
+      <label className="me-3 mb-0" style={{ width: "160px" }}>
+        Landlord Postcode
+      </label>
+      <input
+        className="form-control"
+        placeholder="Landlord postcode"
+        value={newProperty.landlord_post_code_address}
+        onChange={(e) =>
+          setNewProperty({
+            ...newProperty,
+            landlord_post_code_address: e.target.value,
           })
         }
       />
@@ -367,7 +387,6 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         placeholder="Landlord Email"
         value={newProperty.landlord_email}
         onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
-        required
       />
     </div>,
     <div className="d-flex align-items-center mb-3">
@@ -377,7 +396,6 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
       placeholder="Landlord Contact Number"
       value={newProperty.landlord_no}
       onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
-      required
     />
     </div>
   ];

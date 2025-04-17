@@ -21,15 +21,15 @@ const pool = new Pool({
 app.post('/api/people', async (req, res) => {
   try {
     const { name, organisation, role, email, contact_number,family,  
-      property_address_for_enquiry,
+      property_address_for_enquiry, iqu_post_code_address
        } = req.body;
     const result = await pool.query(
       `INSERT INTO people (name, organisation, role, email, contact_number, family, 
-       property_address_for_enquiry  
+       property_address_for_enquiry  , iqu_post_code_address
         )
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
       [name, organisation, role, email, contact_number, family,
-        property_address_for_enquiry]
+        property_address_for_enquiry, iqu_post_code_address]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -48,7 +48,8 @@ app.get('/api/people', async (req, res) => {
               email,
               contact_number,
               family,          
-              property_address_for_enquiry
+              property_address_for_enquiry,
+               iqu_post_code_address
        FROM people`
     );
     res.json(result.rows);
@@ -63,7 +64,7 @@ app.put('/api/people/:id',  async (req, res) => {
   try {
     const { id } = req.params;
     const { name, organisation, role, email, contact_number, family,
-      property_address_for_enquiry       
+      property_address_for_enquiry, iqu_post_code_address       
      } = req.body;
 
     const result = await pool.query(
@@ -74,11 +75,12 @@ app.put('/api/people/:id',  async (req, res) => {
            email = $4,
            contact_number = $5,
            family = $6,
-           property_address_for_enquiry = $7      
-       WHERE id = $8
+           property_address_for_enquiry = $7  
+            iqu_post_code_address = $8    
+       WHERE id = $9
        RETURNING *`,
       [name, organisation, role, email, contact_number,family,
-        property_address_for_enquiry, id]
+        property_address_for_enquiry, iqu_post_code_address, id]
     );
 
     if (result.rows.length === 0) {
@@ -152,7 +154,8 @@ app.get('/api/propertiies', async (req, res) => {
               rates_multiplier,
               start_date_of_lease,
               length_of_lease,
-              end_date_of_lease
+              end_date_of_lease,
+              landlord_post_code_address
              
        FROM propertiies`
     );
@@ -185,6 +188,7 @@ app.post('/api/propertiies', async (req, res) => {
       start_date_of_lease,
       length_of_lease,
       end_date_of_lease,
+      landlord_post_code_address,
     } = req.body;
 
     const result = await pool.query(
@@ -208,10 +212,11 @@ app.post('/api/propertiies', async (req, res) => {
           rates_multiplier,
           start_date_of_lease,
           length_of_lease,
-          end_date_of_lease
+          end_date_of_lease,
+          landlord_post_code_address
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20)
+       $14, $15, $16, $17, $18, $19, $20, $21)
        RETURNING *`,
       [
         inquirer,
@@ -233,7 +238,8 @@ app.post('/api/propertiies', async (req, res) => {
         rates_multiplier,
         start_date_of_lease,
         length_of_lease,
-        end_date_of_lease
+        end_date_of_lease,
+        landlord_post_code_address
       ]
     );
     res.json(result.rows[0]);
@@ -266,6 +272,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
       start_date_of_lease,
       length_of_lease,
       end_date_of_lease,
+      landlord_post_code_address,
     
     } = req.body;
 
@@ -290,8 +297,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
            rates_multiplier = $17,
            start_date_of_lease = $18,
            length_of_lease = $19,
-           end_date_of_lease = $20        
-       WHERE id = $21
+           end_date_of_lease = $20   
+           landlord_post_code_address=$21     
+       WHERE id = $22
        RETURNING *`,
       [
         inquirer,
@@ -314,6 +322,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
         start_date_of_lease,
         length_of_lease,
         end_date_of_lease,
+        landlord_post_code_address,
         id
       ]
     );

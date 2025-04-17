@@ -1,6 +1,9 @@
 // components/Dashboard/RegisterContact.tsx
 import React from "react";
 
+
+
+
 interface Person {
   name: string;
   family: string;
@@ -9,6 +12,7 @@ interface Person {
   email: string;
   contact_number: string;
   property_address_for_enquiry: string;
+  iqu_post_code_address:string;
 }
 
 interface RegisterContactProps {
@@ -120,6 +124,20 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
                 setNewPerson({
                   ...newPerson,
                   property_address_for_enquiry: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div className="d-flex align-items-center mb-3">
+            <label className="form-label me-2 mb-0 w-50">postcode:</label>
+            <input
+              className="form-control"
+              placeholder="postcode"
+              value={newPerson.iqu_post_code_address}
+              onChange={(e) =>
+                setNewPerson({
+                  ...newPerson,
+                  iqu_post_code_address: e.target.value,
                 })
               }
             />

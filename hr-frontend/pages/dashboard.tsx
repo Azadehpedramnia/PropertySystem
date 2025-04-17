@@ -3,16 +3,16 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import RelationshipTable from '../components/Dashboard/RelationshipTable';
+//import RelationshipTable from '../components/Dashboard/RelationshipTable';
 import RegisterContact from "../components/Dashboard/RegisterContact";
 import RegisterProperty from "../components/Dashboard/RegisterProperty";
 import SearchComponent from "../components/Dashboard/search";
 
-import PersonReport from '../components/Dashboard/PersonReport';
+////import PersonReport from '../components/Dashboard/PersonReport';
 import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
-type Role = 'Est Ag' | 'Landlord' | 'Ass Man' | string;
+type Role = 'Est Agent' | 'Landlord' | 'Property Manager' | string;
 
 interface Person {
   id: number;
@@ -22,7 +22,8 @@ interface Person {
   email:string;
   contact_number:string;
   family : string;
-  property_address_for_enquiry:string,
+  property_address_for_enquiry:string;
+  iqu_post_code_address:string;
 }
 
 interface Property {
@@ -47,6 +48,7 @@ interface Property {
   start_date_of_lease:Date| null;         
   end_date_of_lease:Date | null;
   length_of_lease:number;
+  landlord_post_code_address:string;
 }
 
 interface PersonProperty {
@@ -75,7 +77,7 @@ export default function Dashboard() {
   const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
   const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
-  const defaultRoles = ["Est Agant", "Landlord", "Property Manager"];
+  const defaultRoles = ["Est Agent", "Landlord", "Property Manager"];
   const [allRoles, setAllRoles] = useState<string[]>([]);
 
 
@@ -119,7 +121,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     email: '',
     contact_number: '',
     family:'',
-    property_address_for_enquiry:''
+    property_address_for_enquiry:'',
+    iqu_post_code_address:''
   });
 
 
@@ -171,7 +174,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     rates_multiplier:'',
     start_date_of_lease:null,
     end_date_of_lease:null,
-    length_of_lease:0,   
+    length_of_lease:0,
+    landlord_post_code_address:'',   
   });
 
   // State for the join table
@@ -277,7 +281,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       email: '',
       contact_number: '',
       family:'',
-      property_address_for_enquiry:''    
+      property_address_for_enquiry:'',
+      iqu_post_code_address:''    
     });
     // Reload table
     fetchPeople();
@@ -355,6 +360,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         start_date_of_lease:null,
         end_date_of_lease:null,
         length_of_lease:0,
+        landlord_post_code_address:'',
       });
       // Reload table
       fetchProperties();
@@ -1100,7 +1106,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     {/* If selectedProperty is set, show more details below */}
       {selectedPropety && (  
         <div className="p-4 mt-4 border rounded">
-          <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.address}</h2>
+          <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.address}_{selectedPropety.post_code}</h2>
 
           {editPropertyMode ? (
             <>
