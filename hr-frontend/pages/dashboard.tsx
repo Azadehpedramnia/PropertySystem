@@ -6,13 +6,16 @@ import { useRouter } from 'next/router';
 import RegisterContact from "../components/Dashboard/RegisterContact";
 import RegisterProperty from "../components/Dashboard/RegisterProperty";
 import SearchComponent from "../components/Dashboard/search";
+import PersonDetails from "../components/Dashboard/PersonDetails";
+import PropertyDetails from '../components/Dashboard/PropertyDetails';
+import ReportTable from '../components/Dashboard/ReportTable';
 
 import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
 type Role = 'Est Agent' | 'Landlord' | 'Property Manager' | string;
 
-interface Person {
+export interface Person {
   id: number;
   name: string;
   organisation :string;
@@ -24,7 +27,7 @@ interface Person {
   iqu_post_code_address:string;
 }
 
-interface Property {
+export interface Property {
   id: number;
   inquirer: string;
   city: string;
@@ -49,7 +52,7 @@ interface Property {
   landlord_post_code_address:string;
 }
 
-interface PersonProperty {
+export interface PersonProperty {
   id: number;
   is_related: boolean;
   person_name: string;
@@ -58,7 +61,7 @@ interface PersonProperty {
   property_id: number;    // or propertyId
 }
 
-interface PropertiesTableProps {
+export interface PropertiesTableProps {
   properties: Property[];
   people: Person[];
   personProperties: PersonProperty[];
@@ -78,7 +81,15 @@ export default function Dashboard() {
   const defaultRoles = ["Est Agent", "Landlord", "Property Manager"];
   const [allRoles, setAllRoles] = useState<string[]>([]);
 
-
+  // State for the join table
+  const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
+  
+  // NEW: Store the currently clicked/selected person and property from the header
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+  const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
+  const [editingPropertyId, setEditingPropertyId] = useState<number | null>(null);
+  const [editedProperty, setEditedProperty] = useState<Partial<Property>>({});
 //
 const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
   const [query, setQuery] = useState("");
@@ -176,15 +187,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     landlord_post_code_address:'',   
   });
 
-  // State for the join table
-  const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
-  
-  // NEW: Store the currently clicked/selected person and property from the header
-  const [showModal, setShowModal] = useState(false);
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
-  const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
-  const [editingPropertyId, setEditingPropertyId] = useState<number | null>(null);
-  const [editedProperty, setEditedProperty] = useState<Partial<Property>>({});
+
   
   // For your join table form:
   const [newPersonProperty, setNewPersonProperty] = useState({
@@ -472,24 +475,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
 
           {/* Search Component on the right */}
           <SearchComponent />
-      </div>
-
-      {/* Table for Report Relationship
-      <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold mb-2">
-          Report Relationships
-        </h2>
-        <RelationshipTable
-          people={people}
-          properties={properties}
-          personProperties={personProperties}
-          handlePersonHeaderClick={handlePersonHeaderClick}
-          handlePropertyHeaderClick={handlePropertyHeaderClick}
-          handleToggle={handleToggle}
-        />
-      </div>*/}
-
-    
+      </div>   
 
       {/* */}
      
@@ -498,21 +484,21 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
          <h2 className="text-lg font-semibold">Report</h2>
 
        
-        
+        {/* 
         <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
           <thead>
             <tr className="bg-gray-200">
-              {/* New column for Landlord/Organization */}
+              {/* New column for Landlord/Organization 
               <th className="border min-w-[150px] min-h-[50px] p-2 text-center">
                 Landlord \ Organization
               </th>
 
-              {/* Existing column: "Property \ Person" */}
+              {/* Existing column: "Property \ Person" 
               <th className="border min-w-[150px] min-h-[50px] p-2 text-center">
                 Property \ Person
               </th>
 
-              {/* Columns for each person’s name */}
+              {/* Columns for each person’s name 
               {people.map((person) => (
                 <th
                   key={person.id}
@@ -532,12 +518,12 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                   1. New TD to show landlord 
                     (assuming property.inquirer 
                     contains the landlord's data)
-                */}
+                
                 <td className="border min-w-[150px] min-h-[50px] p-2 text-left">
                   {property.inquirer || 'No Landlord'}
                 </td>
 
-                {/* 2. Existing "Address" column */}
+                {/* 2. Existing "Address" column 
                 <td
                   className="border min-w-[150px] min-h-[50px] p-2 text-left"
                   onClick={() => handlePropertyHeaderClick(property)}
@@ -545,7 +531,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                   {property.address || 'Address'}
                 </td>
 
-                {/* 3. Continue your "checklist" columns for each person */}
+                {/* 3. Continue your "checklist" columns for each person 
                 {people.map((person) => {
                   const relation = personProperties.find(
                     (pp) =>
@@ -567,116 +553,62 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             ))}
           </tbody>
         </table>
-        {/* 
-        <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border min-w-[150px] min-h-[50px] p-2 text-center">Property \ Person</th>
-              {people.map((person) => (
-                <th key={person.id} className="border min-w-[100px] min-h-[50px] p-2 text-center "
-                  onClick={() => handlePersonHeaderClick(person)}>           
-                  {person.name || 'Name'}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {properties.map((property) => (
-              <tr key={property.id} className="text-center" >  
-                {/* Left column = property address 
-                <td className="border min-w-[150px] min-h-[50px] p-2 text-left" onClick={() => handlePropertyHeaderClick(property)}>
-                {property.address || 'Address'}
-                </td>
-
-                {/* For each person, check if related 
-                {people.map((person) => {
-                  const relation = personProperties.find(
-                    (pp) =>
-                      pp.property_id === property.id &&
-                      pp.person_id === person.id
-                  );
-                  const isRelated = relation?.is_related ?? false;
-
-                  return (
-                    <td
-                      key={person.id}
-                      className="border min-w-[100px] min-h-[50px] p-2 cursor-pointer text-center align-middle"
-                      onClick={() => handleToggle(person.id, property.id)}
-                    >
-                      {isRelated ? '✔️' : ''}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>*/}
-      
-
-
-
-
         {/* */}
-        {openPersonPopups.map((person) => {
-            const relatedProperties = personProperties
-              .filter((pp) => pp.person_id === person.id && pp.is_related)
-              .map((pp) => properties.find((prop) => prop.id === pp.property_id))
-              .filter((p): p is Property => !!p);
-
-            return (
-              <div
-                key={person.id}
-                className="fixed top-20 right-5 bg-white border shadow-lg rounded-lg p-4 z-50 w-[300px] max-h-[80vh] overflow-auto"
-                style={{ marginBottom: '1rem' }}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-bold">{person.name}</h3>
-                  <button
-                    onClick={() => closePersonPopup(person.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    ✖
-                  </button>
-                </div>
-                <p><strong>Organisation:</strong> {person.organisation}</p>
-                <p><strong>Role:</strong> {person.role}</p>
-                <p><strong>Email:</strong> {person.email}</p>
-                <p><strong>Contact:</strong> {person.contact_number}</p>
-
-                <div className="mt-4">
-                  <h4 className="font-semibold">Related Properties</h4>
-                  <ul className="list-disc list-inside text-sm">
-                    {relatedProperties.length > 0 ? (
-                      relatedProperties.map((property) => (
-                        <li key={property.id}>
-                          {property.address} ({property.city})
-                        </li>
-                      ))
-                    ) : (
-                      <li>No related properties</li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-            );
-          })}
-
-        {/* 
-
-
-      <PersonReport
-        selectedPerson={selectedPerson}
-        setSelectedPerson={setSelectedPerson}
+        
+      {/*Relation report table */}
+      <ReportTable
+        people={people}
         properties={properties}
         personProperties={personProperties}
-        onUpdate={fetchPeople}
-      />*/}
+        handlePersonHeaderClick={handlePersonHeaderClick}
+        handlePropertyHeaderClick={handlePropertyHeaderClick}
+        handleToggle={handleToggle}
+      />
+            
+        {/* */}
+        {selectedPerson && (
+          <PersonDetails
+            selectedPerson={selectedPerson}
+            personProperties={personProperties}
+            properties={properties}
+            editPersonMode={editPersonMode}
+            setSelectedPerson={setSelectedPerson}
+            setEditPersonMode={setEditPersonMode}
+            fetchPeople={fetchPeople}
+            fetchProperties={fetchProperties}
+            fetchPersonProperties={fetchPersonProperties}
+            editingPropertyId={editingPropertyId}
+            editedProperty={editedProperty}
+            setEditedProperty={setEditedProperty}
+            setEditingPropertyId={setEditingPropertyId}
+          />
+        )}
+
+        {/* */}
+        {selectedPropety && (
+        <PropertyDetails
+        selectedPropety={selectedPropety}
+        editPropertyMode={editPropertyMode}
+        personProperties={personProperties}
+        people={people}
+        fetchPeople={fetchPeople}
+        fetchPersonProperties={fetchPersonProperties}
+        fetchProperties={fetchProperties}
+        setSelectedProperty={setSelectedProperty}
+        setEditPropertyMode={setEditPropertyMode}
+        setSelectedPerson={setSelectedPerson}
+        setEditingPersonIdForProperty={setEditingPersonIdForProperty}
+        editingPersonIdForProperty={editingPersonIdForProperty}
+        editedPersonForProperty={editedPersonForProperty}
+        setEditedPersonForProperty={setEditedPersonForProperty}
+      />
+     )}
   
-      {/* If selectedPerson is set, show more details below */}
+      {/* If selectedPerson is set, show more details below 
       {selectedPerson && (
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Report For {selectedPerson.name}</h2>
-          {/* ✅ Place this inside the block, right after opening it: */}
+          {/* ✅ Place this inside the block, right after opening it: 
           {(() => {
             const relatedProperties = personProperties
               .filter((pp) => pp.person_id === selectedPerson.id && pp.is_related)
@@ -685,8 +617,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
 
             return (
               <>
-                {/* Person Details + Edit Mode UI (already in your code) */}
-                {/* Your existing form/view for person goes here... */}
+                {/* Person Details + Edit Mode UI (already in your code) 
                   
                 {editPersonMode ? (
                   <>
@@ -707,7 +638,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                       onChange={(e) =>
                         setSelectedPerson({ ...selectedPerson, organisation: e.target.value })
                       }
-                    /></p>
+                    /></p>                  
                       <p>
                       <label><strong>Role:</strong></label>
                       <select
@@ -722,7 +653,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                       >
                         <option value="Est Ag">Est Ag</option>
                         <option value="Landlord">Landlord</option>
-                        <option value="Ass Man">Ass Man</option>
+                        <option value="property Manager">property Man</option>
                       </select>
                     </p>
                     <p>
@@ -765,10 +696,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                   </>
                 )}
 
-                {/* ACTION BUTTONS - your existing Save/Edit/Delete/Close logic */}
-                {/* ... */}
-
-                {/* ACTION BUTTONS */}
+                {/* ACTION BUTTONS 
                 <div className="mt-4 space-x-2">
                   {editPersonMode ? (
                     <>
@@ -834,7 +762,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                     Close
                   </button>
                 </div>     
-                {/* ✅ Now insert related properties here */}
+                {/* ✅ Now insert related properties here
                 {relatedProperties.length > 0 && (
                   <div className="mt-6 border-t pt-4">
                     <h3 className="text-lg font-semibold mb-2">Related Properties</h3>
@@ -977,17 +905,17 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.landlord_Address ?? property.landlord_Address}
-                              onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
                             /></p>
                             <p> 
                             <label><strong>Landloard email:</strong></label>     
                             <input
                               className="border p-1 w-full my-1"
                               value={editedProperty.landlord_email ?? property.landlord_email}
-                              onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                              onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
                             /></p>  
 
-                            {/* Add other fields similarly... */}
+                            {/* Add other fields similarly... 
                             <div className="flex gap-2 mt-2">
                               <button
                                 className="bg-gray-300 px-4 py-2 rounded"
@@ -1038,7 +966,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                                   : 'N/A'}
                             </p>
 
-                            <p><strong>Landlord name :</strong> {property.landlord_Address}</p>
+                            {/*<p><strong>Landlord name :</strong> {property}</p>
                             <p><strong>Landlord email address :</strong> {property.landlord_email}</p>
                             <p><strong>Landlord phone number :</strong> {property.landlord_no}</p>
                             <p><strong>Rateable Multiplier applicable for the property :</strong> {property.rates_multiplier}</p>            
@@ -1054,7 +982,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                             <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
 
                       
-                            {/* ACTION BUTTONS */}
+                            {/* ACTION BUTTONS 
                             <div className="flex gap-2 mt-2">
                               <button
                                 className="bg-gray-300 px-4 py-2 rounded"
@@ -1099,10 +1027,12 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         </div>
       )}
 
-    {/**/}
+    */}
 
-    {/* If selectedProperty is set, show more details below */}
+    {/* If selectedProperty is set, show more details below 
       {selectedPropety && (  
+        
+        
         <div className="p-4 mt-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.address}_{selectedPropety.post_code}</h2>
 
@@ -1244,7 +1174,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                   })
                 }
               /></p>
-              {/* Repeat for other fields */}
+              {/* Repeat for other fields *
             </>
           ) : (
             <>
@@ -1279,7 +1209,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             </>
           )}
 
-          {/* ACTION BUTTONS */}
+          {/* ACTION BUTTONS *
             <div className="mt-4 space-x-2">
               {editPropertyMode ? (
                 <>
@@ -1499,7 +1429,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                 })()
               )}
             </div>
-          )}
+          )}*/}
       </div>  
 
       {/* */}
