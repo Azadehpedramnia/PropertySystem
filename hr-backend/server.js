@@ -164,6 +164,55 @@ app.get('/api/people/role', async (req, res) => {
 // Propertiies
 // ------------------------------
 
+
+
+
+
+// GET one property by ID
+app.get('/api/propertiies/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid property id' })
+  }
+  try {
+    const result = await pool.query(
+      `SELECT id,
+              inquirer,
+              city,
+              address,
+              property_type,
+              building_rateable_value,
+              rates_payable_before_relief,
+              has_car_park,
+              car_park_rateable_value,
+              car_park_rates_payable_before_relief,
+              total_rateable_value,
+              total_rate_payable,
+              donation_due,
+              post_code,
+              landlord_address,
+              landlord_email,
+              landlord_no, 
+              rates_multiplier,
+              start_date_of_lease,
+              length_of_lease,
+              end_date_of_lease,
+              landlord_post_code_address
+       FROM propertiies
+       WHERE id = $1`,
+      [id]
+    )
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Property not found' })
+    }
+    res.json(result.rows[0])
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+
 app.get('/api/propertiies', async (req, res) => {
   try {
     const result = await pool.query(
