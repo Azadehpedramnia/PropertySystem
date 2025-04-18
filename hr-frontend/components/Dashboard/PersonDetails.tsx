@@ -140,8 +140,15 @@ interface Props {
                                     body: JSON.stringify(selectedPerson),
                                   });
                                   if (res.ok) {
+
+                              
                                     setEditPersonMode(false);
                                     fetchPeople();
+
+                                    const bc = new BroadcastChannel('dashboard-updates');
+                                    bc.postMessage('person-updated');
+                                    bc.close();
+                             
                                   } else {
                                     alert('Failed to update person');
                                   }

@@ -239,7 +239,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   // NEW: Handler for clicking on a Person name  and property address in the header
   // --------------------------
   const handlePersonHeaderClick = (person: Person) => {
-    setSelectedPerson(person);
+    window.open(`/contact/${person.id}`, '_blank')
+    //setSelectedPerson(person);
   };
 
   const handlePropertyHeaderClick = (property: Property) => {
@@ -254,6 +255,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   function closeModal() {
     setShowModal(false);
   }
+
+
 
 
   const addPerson = async () => {
@@ -458,7 +461,29 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       }
   }
 
-  ///////////////////
+
+
+    
+  // In Dashboard.tsx updating table data after save  editing data
+  useEffect(() => {
+    const bc = new BroadcastChannel('dashboard-updates');
+
+    bc.onmessage = (event) => {
+      if (event.data === 'person-updated') {
+        fetchPeople();
+        fetchPersonProperties();
+      }
+      if (event.data === 'property-updated') {
+        fetchProperties();
+        fetchPersonProperties();
+      }
+    };
+
+    return () => {
+      bc.close();
+    };
+  }, [fetchPeople, fetchProperties, fetchPersonProperties]);
+    ///////////////////
 
 
   return (
@@ -492,7 +517,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
               handleToggle={handleToggle}
             />
                 
-            {/* */}
+            {/* contact report*/}
             {selectedPerson && (
               <PersonDetails
                 selectedPerson={selectedPerson}
@@ -511,7 +536,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
               />
             )}
 
-            {/* */}
+            {/*property report */}
             {selectedPropety && (
             <PropertyDetails
             selectedPropety={selectedPropety}
