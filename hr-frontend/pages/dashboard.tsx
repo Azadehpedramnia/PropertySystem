@@ -244,7 +244,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   };
 
   const handlePropertyHeaderClick = (property: Property) => {
-    setSelectedProperty(property);
+    window.open(`/property/${property.id}`, '_blank')
+    //setSelectedProperty(property);
   };
 
   function openModal(person: Person) {
