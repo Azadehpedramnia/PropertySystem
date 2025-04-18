@@ -1,5 +1,10 @@
 import React from 'react';
 import type { Property, Person, PersonProperty } from '../../pages/dashboard';
+import Link from 'next/link';
+
+
+
+
 
 interface ReportTableProps {
     people: Person[];
@@ -36,7 +41,9 @@ interface ReportTableProps {
                 <th
                   key={person.id}
                   className="border min-w-[100px] min-h-[50px] p-2 text-center"
-                  onClick={() => handlePersonHeaderClick(person)}
+                  onClick={() =>handlePersonHeaderClick(person) }
+                  //
+                  // window.open(`/contact/${person.id}`, '_blank'
                 >
                   {person.name || 'Name'}
                 </th>
