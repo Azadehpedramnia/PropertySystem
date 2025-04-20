@@ -296,7 +296,7 @@ interface Props {
                   relatedPeople.length > 0 && (
                     <div className="mt-6 border-t pt-4">
                       <h3 className="text-lg font-semibold mb-2">People Related to This Property</h3>
-                      <ul className="space-y-2">
+                      <ol className="space-y-2">
                         {relatedPeople.map((person) => (
                           <li key={person.id} className="border p-3 rounded bg-gray-50">
                             {editingPersonIdForProperty === person.id ? (
@@ -437,7 +437,7 @@ interface Props {
                             )}
                           </li>
                         ))}
-                      </ul>
+                      </ol>
                     </div>
                   )
                 );
