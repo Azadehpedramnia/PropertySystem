@@ -462,7 +462,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       }
   }
 
-//listenner for update property and contact person
+//listenner for update property and contact person i need both becuse 
+// nested to each oth abd break afer implement one
 // In Dashboard.tsx updating table data after save  editing data
 
  useEffect(() => {
