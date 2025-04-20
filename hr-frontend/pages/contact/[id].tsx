@@ -21,7 +21,7 @@ export default function PersonPage() {
   const [editPersonMode, setEditPersonMode] = useState(false)
   const [editingPropertyId, setEditingPropertyId] = useState<number | null>(null)
   const [editedProperty, setEditedProperty] = useState<Partial<Property>>({})
-  
+  const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
   
 
   useEffect(() => {
@@ -53,11 +53,13 @@ export default function PersonPage() {
   return (
     <PersonDetails
       selectedPerson={selectedPerson}
+      selectedPropety={selectedPropety}
       properties={properties}
       personProperties={personProperties}
       editPersonMode={editPersonMode}
       setSelectedPerson={setSelectedPerson}
       setEditPersonMode={setEditPersonMode}
+      setSelectedProperty={setSelectedProperty}
 
       // supply fetchers so “Save” buttons re‑reload the right bits
       fetchPeople={() => {}}

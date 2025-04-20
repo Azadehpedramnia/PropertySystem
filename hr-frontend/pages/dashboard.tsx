@@ -80,6 +80,7 @@ export default function Dashboard() {
   const [roles, setRoles] = useState<string[]>([]);
   const defaultRoles = ["Est Agent", "Landlord", "Property Manager"];
   const [allRoles, setAllRoles] = useState<string[]>([]);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
 
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
@@ -538,6 +539,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             {selectedPerson && (
               <PersonDetails
                 selectedPerson={selectedPerson}
+                setSelectedProperty={setSelectedProperty}
                 personProperties={personProperties}
                 properties={properties}
                 editPersonMode={editPersonMode}
