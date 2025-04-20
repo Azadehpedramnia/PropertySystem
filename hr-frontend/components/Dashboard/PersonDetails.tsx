@@ -144,7 +144,8 @@ interface Props {
                               
                                     setEditPersonMode(false);
                                     fetchPeople();
-
+                                    
+                                    //updata dashboard tabs
                                     const bc = new BroadcastChannel('dashboard-updates');
                                     bc.postMessage('person-updated');
                                     bc.close();
@@ -365,6 +366,10 @@ interface Props {
                                             body: JSON.stringify({ ...property, ...editedProperty }),
                                           });
                                           if (res.ok) {
+                                            // tell all dashboard tabs to refresh
+                                            const bc = new BroadcastChannel('dashboard‑updates')
+                                            bc.postMessage('property‑updated')
+                                            bc.close()
                                             setEditingPropertyId(null);
                                             setEditedProperty({});
                                             fetchProperties();

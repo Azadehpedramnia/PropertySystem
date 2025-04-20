@@ -462,8 +462,23 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       }
   }
 
+//listenner for update property and contact person
+// In Dashboard.tsx updating table data after save  editing data
 
-
+ useEffect(() => {
+  const bc = new BroadcastChannel('dashboard‑updates')
+  bc.onmessage = (ev) => {
+    if (ev.data === 'property‑updated') {
+      fetchProperties()
+      fetchPersonProperties()
+    }
+    if (ev.data === 'person‑updated') {
+      fetchPeople()
+      fetchPersonProperties()
+    }
+  }
+  return () => bc.close()
+}, [fetchProperties, fetchPersonProperties, fetchPeople])
     
   // In Dashboard.tsx updating table data after save  editing data
   useEffect(() => {

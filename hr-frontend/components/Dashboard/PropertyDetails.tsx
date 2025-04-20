@@ -225,6 +225,13 @@ interface Props {
                       body: JSON.stringify(selectedPropety),
                     });
                     if (res.ok) {
+
+                      // tell all dashboard tabs to refresh
+                      const bc = new BroadcastChannel('dashboard‑updates')
+                      bc.postMessage('property‑updated')
+                      bc.close()
+
+
                       setEditPropertyMode(false);
                       fetchProperties();
                     } else {
@@ -362,6 +369,11 @@ interface Props {
                                         body: JSON.stringify({ ...person, ...editedPersonForProperty }),
                                       });
                                       if (res.ok) {
+                                        //updata dashboard tabs
+                                        const bc = new BroadcastChannel('dashboard-updates');
+                                        bc.postMessage('person-updated');
+                                        bc.close();
+
                                         setEditingPersonIdForProperty(null);
                                         setEditedPersonForProperty({});
                                         fetchPeople();
