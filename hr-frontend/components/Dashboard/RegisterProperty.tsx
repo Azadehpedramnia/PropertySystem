@@ -23,6 +23,10 @@ interface Property {
   end_date_of_lease: Date | null;
   length_of_lease: number;
   landlord_post_code_address:string;
+  property_first_line_address:string;
+  property_second_line_address:string;
+  property_floor:string;
+  property_solely_occupied:boolean;
 }
 
 interface RegisterPropertyProps {
@@ -67,16 +71,64 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         required
       />
     </div>,
-    <div key="address" className="d-flex align-items-center mb-3">
+
+    <div className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Property Address:
+        Is the property solely occupied?
       </label>
       <input
-        className="form-control"
-        placeholder="Address"
-        value={newProperty.address}
-        onChange={(e) => setNewProperty({ ...newProperty, address: e.target.value })}
+        type="checkbox"
+        checked={newProperty.property_solely_occupied}
+        onChange={(e) =>
+          setNewProperty({ ...newProperty, property_solely_occupied: e.target.checked })
+        }
       />
+    </div>,
+    newProperty.property_solely_occupied && (
+      <div key="property_floor" className="d-flex align-items-center mb-3">
+          <label className="me-3 mb-0" style={{ width: "160px" }}>
+            Floor Number:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Floor Number"
+            value={newProperty.property_floor}
+            onChange={(e) => setNewProperty({ ...newProperty, property_floor: e.target.value })}
+          />
+      </div>
+    ),
+    <div key="property_first_line_address" className="d-flex align-items-center mb-3">
+          <label className="me-3 mb-0" style={{ width: "160px" }}>
+            Property Fisrt Line Address:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Fisrt Line Address"
+            value={newProperty.property_first_line_address}
+            onChange={(e) => setNewProperty({ ...newProperty, property_first_line_address: e.target.value })}
+          />
+    </div>,
+    <div key="property_second_line_address" className="d-flex align-items-center mb-3">
+            <label className="me-3 mb-0" style={{ width: "160px" }}>
+              Property Second Line Address:
+            </label>
+            <input
+              className="form-control"
+              placeholder="Second Line Address"
+              value={newProperty.property_second_line_address}
+              onChange={(e) => setNewProperty({ ...newProperty, property_second_line_address: e.target.value })}
+            />
+    </div>,
+    <div key="city" className="d-flex align-items-center mb-3">
+        <label className="me-3 mb-0" style={{ width: "160px" }}>
+          City:
+        </label>
+        <input
+          className="form-control"
+          placeholder="City"
+          value={newProperty.city}
+          onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
+        />
     </div>,
     <div key="post_code" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
@@ -89,17 +141,6 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
       />
     </div>,
-    <div key="city" className="d-flex align-items-center mb-3">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
-          City:
-        </label>
-        <input
-          className="form-control"
-          placeholder="City"
-          value={newProperty.city}
-          onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
-        />
-      </div>,
     <div key="property_type" className="d-flex align-items-center mb-3">
       <label className="me-3 mb-0" style={{ width: "160px" }}>
         Property Type:

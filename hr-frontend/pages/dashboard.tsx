@@ -50,6 +50,10 @@ export interface Property {
   end_date_of_lease:Date | null;
   length_of_lease:number;
   landlord_post_code_address:string;
+  property_first_line_address:string;
+  property_second_line_address:string;
+  property_floor:string;
+  property_solely_occupied:boolean;
 }
 
 export interface PersonProperty {
@@ -186,6 +190,10 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     end_date_of_lease:null,
     length_of_lease:0,
     landlord_post_code_address:'',   
+    property_first_line_address:'',
+    property_second_line_address:'',
+    property_floor:'',
+    property_solely_occupied:false,
   });
 
 
@@ -367,6 +375,10 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         end_date_of_lease:null,
         length_of_lease:0,
         landlord_post_code_address:'',
+        property_first_line_address:'',
+        property_second_line_address:'',
+        property_floor:'',
+        property_solely_occupied:false,
       });
       // Reload table
       fetchProperties();
