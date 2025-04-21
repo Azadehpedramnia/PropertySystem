@@ -192,12 +192,260 @@ interface Props {
                               {property.address}, {property.post_code}
                             </div>
                             {isExpanded && (
-                              <div className="mt-2">
-                                <p><strong>Type:</strong> {property.property_type}</p>
-                                <p><strong>City:</strong> {property.city}</p>
-                                <p><strong>Rates Payable:</strong> {property.rates_payable_before_relief}</p>
-                                <p><strong>Has Car Park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
-                                {/* Add more details or buttons here as needed */}
+                              <div className="mt-3">
+                                
+                                          {editingPropertyId === property.id ? (
+                                            <>
+                                              <p>
+                                              <label><strong>Landlord/Organisation:</strong></label>                         
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                value={editedProperty.inquirer ?? property.inquirer}
+                                                onChange={(e) => setEditedProperty({ ...editedProperty, inquirer: e.target.value })}
+                                              /></p> 
+                                              <p> 
+                                              <label><strong>City:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                value={editedProperty.city ?? property.city}
+                                                onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                                              /></p> 
+                                              <p> 
+                                              <label><strong>Address:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                value={editedProperty.address ?? property.address}
+                                                onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
+                                              /></p> 
+                                              <p> 
+                                                <label><strong>Property Type:</strong></label>     
+                                                <select
+                                                  className="border p-1 w-full my-1"
+                                                  value={editedProperty.property_type ?? property.property_type}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({
+                                                      ...editedProperty,
+                                                      property_type: e.target.value as Property['property_type'],
+                                                    })
+                                                  }
+                                                >
+                                                  <option value="Office">Office</option>
+                                                  <option value="Retail">Retail</option>
+                                                  <option value="Warehouse">Warehouse</option>
+                                                </select>
+                                              </p>
+                  
+                                              <p>
+                                              <label><strong>Building rateable value:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.building_rateable_value ?? property.building_rateable_value ?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty, building_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <p>
+                                              <label><strong>Rates payable before relief:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.rates_payable_before_relief?? property.rates_payable_before_relief?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty, rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <p>
+                                                <label className="inline-flex items-center space-x-2 my-1">
+                                                  <input
+                                                    type="checkbox"
+                                                    checked={editedProperty.has_car_park ?? property.has_car_park}
+                                                    onChange={(e) =>
+                                                      setEditedProperty({ ...editedProperty, has_car_park: e.target.checked })
+                                                    }
+                                                  />
+                                                  <span><strong>Has Car Park?</strong></span>
+                                                </label>
+                                              </p>
+                                              <p>
+                                              <label><strong>Car park rateable value:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.car_park_rateable_value ?? property.car_park_rateable_value ?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty, car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <p>
+                                              <label><strong>Car park rates payable before relief:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.car_park_rates_payable_before_relief ?? property.car_park_rates_payable_before_relief ?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty,car_park_rates_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <p>
+                                              <label><strong>Total rateable value:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.total_rateable_value ?? property.total_rateable_value?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty, total_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <p>
+                                              <label><strong>Total rate payable:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="number"
+                                                value={editedProperty.total_rate_payable ?? property.total_rate_payable ?? ''}
+                                                onChange={(e) =>
+                                                  setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
+                                                }
+                                              /></p>
+                                              <label><strong>Donation Due:</strong></label>
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                type="date"
+                                                value={
+                                                  editedProperty.donation_due
+                                                    ? new Date(editedProperty.donation_due).toISOString().split('T')[0]
+                                                    : property.donation_due
+                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
+                                                    : ''
+                                                }
+                                                onChange={(e) =>
+                                                  setEditedProperty({
+                                                    ...editedProperty,
+                                                    donation_due: e.target.value === '' ? null : new Date(e.target.value),
+                                                  })
+                                                }
+                                              />
+                                              <p> 
+                                              <label><strong>Landloard Adress:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                value={editedProperty.landlord_Address ?? property.landlord_Address}
+                                                onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
+                                              /></p>
+                                              <p> 
+                                              <label><strong>Landloard email:</strong></label>     
+                                              <input
+                                                className="border p-1 w-full my-1"
+                                                value={editedProperty.landlord_email ?? property.landlord_email}
+                                                onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
+                                              /></p>  
+                  
+                                              {/* Add other fields similarly... */}
+                                              <div className="flex gap-2 mt-2">
+                                                <button
+                                                 className="btn btn-danger"
+                                                  onClick={async () => {
+                                                    const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                                      method: 'PUT',
+                                                      headers: { 'Content-Type': 'application/json' },
+                                                      body: JSON.stringify({ ...property, ...editedProperty }),
+                                                    });
+                                                    if (res.ok) {
+                                                      // tell all dashboard tabs to refresh
+                                                      const bc = new BroadcastChannel('dashboard‑updates')
+                                                      bc.postMessage('property‑updated')
+                                                      bc.close()
+                                                      setEditingPropertyId(null);
+                                                      setEditedProperty({});
+                                                      fetchProperties();
+                                                      fetchPersonProperties();
+                                                    } else {
+                                                      alert('Update failed');
+                                                    }
+                                                  }}
+                                                >
+                                                  Save
+                                                </button>
+                                                <button
+                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  onClick={() => {
+                                                    setEditingPropertyId(null);
+                                                    setEditedProperty({});
+                                                  }}
+                                                >
+                                                  Cancel
+                                                </button>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
+                                              <p><strong>City:</strong> {property.city}</p>
+                                              <p><strong>Address:</strong> {property.address}{property.post_code}</p>
+                                              <p><strong>Property Type:</strong> {property.property_type}</p>
+                                              <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
+                                              <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
+                                              <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
+                                              <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
+                                              <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
+                                              <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
+                                              <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
+                                              <p><strong>Dontion:</strong>{property.donation_due
+                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
+                                                    : 'N/A'}
+                                              </p>
+                  
+                                              {/*<p><strong>Landlord name :</strong> {property}</p>*/}
+                                              <p><strong>Landlord email address :</strong> {property.landlord_email}</p>
+                                              <p><strong>Landlord phone number :</strong> {property.landlord_no}</p>
+                                              <p><strong>Rateable Multiplier applicable for the property :</strong> {property.rates_multiplier}</p>            
+                                              
+                                              <p><strong>Agreed Start data of lease:</strong> {property.start_date_of_lease
+                                                    ? new Date(property.start_date_of_lease).toISOString().split('T')[0]
+                                                    : 'N/A'}
+                                              </p>
+                                              <p><strong>End data of lease:</strong> {property.end_date_of_lease
+                                                    ? new Date(property.end_date_of_lease).toISOString().split('T')[0]
+                                                    : 'N/A'}
+                                              </p>
+                                              <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
+                  
+                                        
+                                              {/* ACTION BUTTONS */}
+                                              <div className="flex gap-2 mt-2">
+                                                <button
+                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  onClick={() => {
+                                                    setEditingPropertyId(property.id);
+                                                    setEditedProperty(property); // preload existing
+                                                  }}
+                                                >
+                                                  Edit
+                                                </button>
+                                                <button
+                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  onClick={async () => {
+                                                    const confirmDelete = confirm('Are you sure you want to delete this property?');
+                                                    if (!confirmDelete) return;
+                                        
+                                                    const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                                      method: 'DELETE',
+                                                    });
+                                        
+                                                    if (res.ok) {
+                                                      fetchProperties();
+                                                      fetchPersonProperties();
+                                                    } else {
+                                                      alert('Failed to delete property');
+                                                    }
+                                                  }}
+                                                >
+                                                  Delete
+                                                </button>
+                                              </div>
+                                            </>
+                                          )}
+                                   
                               </div>
                             )}
                           </li>
