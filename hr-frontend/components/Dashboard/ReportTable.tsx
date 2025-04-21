@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Property, Person, PersonProperty } from '../../pages/dashboard';
-import Link from 'next/link';
 
 
 
@@ -13,6 +12,7 @@ interface ReportTableProps {
     handlePersonHeaderClick: (person: Person) => void;
     handlePropertyHeaderClick: (property: Property) => void;
     handleToggle: (personId: number, propertyId: number) => void;
+    onAddProperty: (property: Property, type: 'floor'|'neighbor'|'template') => void;
   }
   
   const ReportTable: React.FC<ReportTableProps> = ({
@@ -22,6 +22,7 @@ interface ReportTableProps {
     handlePersonHeaderClick,
     handlePropertyHeaderClick,
     handleToggle,
+    onAddProperty,
   }) => (
     <table className="min-w-full border-collapse border border-gray-300 cursor-pointer">
           <thead>
@@ -36,6 +37,12 @@ interface ReportTableProps {
                 Property
               </th>
 
+              {/* ← new header */}
+              <th className="border p-2 text-center min-w-[120px]">
+                add new property
+              </th>
+              
+
               {/* Columns for each person’s name */}
               {people.map((person) => (
                 <th
@@ -48,6 +55,7 @@ interface ReportTableProps {
                   {person.name || 'Name'}
                 </th>
               ))}
+
             </tr>
           </thead>
 
@@ -69,6 +77,20 @@ interface ReportTableProps {
                   onClick={() => handlePropertyHeaderClick(property)}
                 >
                   {property.address || 'Address'}
+                </td>
+
+                <td className="border p-2">
+                  <div className="flex space-x-2 justify-center">
+                    {(['floor','neighbor','template'] as const).map(type => (
+                      <button
+                        key={type}
+                        className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        onClick={() => onAddProperty(property, type)}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
                 </td>
 
                 {/* 3. Continue your "checklist" columns for each person */}

@@ -343,8 +343,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
 
   
     // Add Property
-    const addProperrty = async (e: React.FormEvent) => {
-      e.preventDefault(); // Prevent full page reload
+    const addProperrty = async (e?: React.FormEvent) => {
+      e?.preventDefault(); // Prevent full page reload
       await fetch('http://localhost:5000/api/propertiies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -381,6 +381,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         property_solely_occupied:false,
       });
       // Reload table
+      setIsAddModalOpen(false);
       fetchProperties();
     };
 
@@ -513,8 +514,36 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       bc.close();
     };
   }, [fetchPeople, fetchProperties, fetchPersonProperties]);
-    ///////////////////
+  ///////////////////
 
+  //Add property in report table//
+
+  // controls modal visibility
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // which button was clicked
+  const [addModalType,   setAddModalType]   = useState<'floor'|'neighbor'|'template'|null>(null);
+  // store the clicked row’s property
+  const [selectedPropertyForAdd, setSelectedPropertyForAdd] = useState<Property|null>(null);
+
+
+
+  function handleAddProperty(property: Property, type: 'floor'|'neighbor'|'template') {
+    console.log('🏷️ button clicked:', property.id, type);
+    // 1) Copy *all* fields into your form state so it’s prefilled
+    setNewProperty({
+      ...property,               // TS will warn if extra keys — spread explicit fields if needed
+      // if `property.id` clashes, just omit it or map fields one-by-one
+    });
+    // 2) Remember which mode
+    setAddModalType(type);
+    // 3) Show the modal
+    setIsAddModalOpen(true);
+  }
+  
+
+
+
+  /////////////////
 
   return (
     <div className="mb-6 p-4 border rounded-lg">
@@ -545,8 +574,40 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
               handlePersonHeaderClick={handlePersonHeaderClick}
               handlePropertyHeaderClick={handlePropertyHeaderClick}
               handleToggle={handleToggle}
+              onAddProperty={handleAddProperty}
             />
-                
+            
+
+            {isAddModalOpen && selectedPropertyForAdd && addModalType && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-6 rounded-lg max-w-xl w-full">
+                  <h3 className="text-xl font-semibold mb-4">
+                    Add {addModalType} to {selectedPropertyForAdd.address}
+                  </h3>
+
+                  <RegisterProperty
+                    newProperty={newProperty}
+                    setNewProperty={setNewProperty}
+                    addProperrty={async () => {
+                      // call your existing addProperrty POST
+                      await addProperrty(/* you may need to adjust this to use newProperty */);
+                      await fetchProperties();       // refresh the table
+                      setIsAddModalOpen(false);      // close modal
+                    }}
+                    // optionally pass `mode={addModalType}` so the form can show/hide fields
+                  />
+
+                  <button
+                    className="mt-4 text-sm text-gray-500 hover:underline"
+                    onClick={() => setIsAddModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+
             {/* contact report*/}
             {selectedPerson && (
               <PersonDetails

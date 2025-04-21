@@ -32,7 +32,7 @@ interface Property {
 interface RegisterPropertyProps {
   newProperty: Property;
   setNewProperty: React.Dispatch<React.SetStateAction<Property>>;
-  addProperrty: (e: React.FormEvent<HTMLFormElement>) => void;
+  addProperrty: (e?: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const RegisterProperty: React.FC<RegisterPropertyProps> = ({
@@ -84,7 +84,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         }
       />
     </div>,
-    newProperty.property_solely_occupied && (
+    !newProperty.property_solely_occupied && (
       <div key="property_floor" className="d-flex align-items-center mb-3">
           <label className="me-3 mb-0" style={{ width: "160px" }}>
             Floor Number:
@@ -308,73 +308,73 @@ newProperty.has_car_park && (
 
     // 3) New third group: "advancedFields"
     const thirdFields = [
-      <div className="d-flex align-items-center mb-4">
-            <label className="me-3 mb-0" style={{ width: "160px" }}>
-              Donation Due:
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              value={
-                newProperty.donation_due
-                  ? newProperty.donation_due.toISOString().split("T")[0]
-                  : ""
-              }
-              onChange={(e) =>
-                setNewProperty({
-                  ...newProperty,
-                  donation_due: e.target.value
-                    ? new Date(e.target.value)
-                    : null,
-                })
-              }
-            />
-          </div>,
-    <div className="d-flex align-items-center mb-4">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
-        start date of lease::
-      </label>
-      <input
-        type="date"
-        className="form-control"
-        value={
-          newProperty.start_date_of_lease
-            ? newProperty.start_date_of_lease.toISOString().split("T")[0]
-            : ""
-        }
-        onChange={(e) =>
-          setNewProperty({
-            ...newProperty,
-            start_date_of_lease: e.target.value
-              ? new Date(e.target.value)
-              : null,
-          })
-        }
-      />
-    </div>,
-    <div className="d-flex align-items-center mb-4">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
-        End date of lease::
-      </label>
-      <input
-        type="date"
-        className="form-control"
-        value={
-          newProperty.end_date_of_lease
-            ? newProperty.end_date_of_lease.toISOString().split("T")[0]
-            : ""
-        }
-        onChange={(e) =>
-          setNewProperty({
-            ...newProperty,
-            end_date_of_lease: e.target.value
-              ? new Date(e.target.value)
-              : null,
-          })
-        }
-      />
-    </div>,
-    <div className="d-flex align-items-center mb-3">
+      <div className="d-flex align-items-center mb-4" key="donation_due">
+        <label className="me-3 mb-0" style={{ width: "160px" }}>
+          Donation Due:
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          value={
+            newProperty.donation_due &&
+            !isNaN(new Date(newProperty.donation_due as any).getTime())
+              ? new Date(newProperty.donation_due as any).toISOString().split("T")[0]
+              : ""
+          }
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              donation_due: e.target.value ? new Date(e.target.value) : null,
+            })
+          }
+        />
+      </div>,
+    
+      <div className="d-flex align-items-center mb-4" key="start_date_of_lease">
+        <label className="me-3 mb-0" style={{ width: "160px" }}>
+          Start Date of Lease:
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          value={
+            newProperty.start_date_of_lease &&
+            !isNaN(new Date(newProperty.start_date_of_lease as any).getTime())
+              ? new Date(newProperty.start_date_of_lease as any).toISOString().split("T")[0]
+              : ""
+          }
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              start_date_of_lease: e.target.value ? new Date(e.target.value) : null,
+            })
+          }
+        />
+      </div>,
+    
+      <div className="d-flex align-items-center mb-4" key="end_date_of_lease">
+        <label className="me-3 mb-0" style={{ width: "160px" }}>
+          End Date of Lease:
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          value={
+            newProperty.end_date_of_lease &&
+            !isNaN(new Date(newProperty.end_date_of_lease as any).getTime())
+              ? new Date(newProperty.end_date_of_lease as any).toISOString().split("T")[0]
+              : ""
+          }
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              end_date_of_lease: e.target.value ? new Date(e.target.value) : null,
+            })
+          }
+        />
+      </div>,
+    
+      <div className="d-flex align-items-center mb-3" key="length_of_lease">
         <label className="me-3 mb-0" style={{ width: "160px" }}>
           Length of Lease (days):
         </label>
@@ -383,10 +383,9 @@ newProperty.has_car_park && (
           value={newProperty.length_of_lease}
           readOnly
         />
-    </div>
-   
+      </div>,
     ];
-
+    
   // 4) New third group: "advancedFields"
   const forthFields = [
       <div className="d-flex align-items-center mb-3">
