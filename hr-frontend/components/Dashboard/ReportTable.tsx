@@ -33,7 +33,7 @@ interface ReportTableProps {
 
               {/* Existing column: "Property \ Person" */}
               <th className="border min-w-[150px] min-h-[50px] p-2 text-center">
-                Property \ Person
+                Property
               </th>
 
               {/* Columns for each person’s name */}
