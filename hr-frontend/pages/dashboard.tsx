@@ -539,6 +539,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             {selectedPerson && (
               <PersonDetails
                 selectedPerson={selectedPerson}
+                selectedPropety={selectedPropety}
                 setSelectedProperty={setSelectedProperty}
                 personProperties={personProperties}
                 properties={properties}

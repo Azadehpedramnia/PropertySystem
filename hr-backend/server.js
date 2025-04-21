@@ -197,7 +197,11 @@ app.get('/api/propertiies/:id', async (req, res) => {
               start_date_of_lease,
               length_of_lease,
               end_date_of_lease,
-              landlord_post_code_address
+              landlord_post_code_address,
+              property_first_line_address,
+              property_second_line_address,
+              property_floor,
+              property_solely_occupied
        FROM propertiies
        WHERE id = $1`,
       [id]
@@ -237,7 +241,11 @@ app.get('/api/propertiies', async (req, res) => {
               start_date_of_lease,
               length_of_lease,
               end_date_of_lease,
-              landlord_post_code_address
+              landlord_post_code_address,
+              property_first_line_address,
+              property_second_line_address,
+              property_floor,
+              property_solely_occupied
              
        FROM propertiies`
     );
@@ -271,6 +279,10 @@ app.post('/api/propertiies', async (req, res) => {
       length_of_lease,
       end_date_of_lease,
       landlord_post_code_address,
+      property_first_line_address,
+      property_second_line_address,
+      property_floor,
+      property_solely_occupied,
     } = req.body;
 
     const result = await pool.query(
@@ -295,10 +307,14 @@ app.post('/api/propertiies', async (req, res) => {
           start_date_of_lease,
           length_of_lease,
           end_date_of_lease,
-          landlord_post_code_address
+          landlord_post_code_address,
+          property_first_line_address,
+          property_second_line_address,
+          property_floor,
+          property_solely_occupied
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
        RETURNING *`,
       [
         inquirer,
@@ -321,7 +337,11 @@ app.post('/api/propertiies', async (req, res) => {
         start_date_of_lease,
         length_of_lease,
         end_date_of_lease,
-        landlord_post_code_address
+        landlord_post_code_address,
+        property_first_line_address,
+        property_second_line_address,
+        property_floor,
+        property_solely_occupied
       ]
     );
     res.json(result.rows[0]);
@@ -355,6 +375,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
       length_of_lease,
       end_date_of_lease,
       landlord_post_code_address,
+      property_first_line_address,
+      property_second_line_address,
+      property_floor,
+      property_solely_occupied
     
     } = req.body;
 
@@ -380,8 +404,12 @@ app.put('/api/propertiies/:id', async (req, res) => {
            start_date_of_lease = $18,
            length_of_lease = $19,
            end_date_of_lease = $20,   
-           landlord_post_code_address=$21     
-       WHERE id = $22
+           landlord_post_code_address=$21,   
+           property_first_line_address=$22,
+           property_second_line_address=$23,
+           property_floor=$24,
+           property_solely_occupied =$25 
+       WHERE id = $26
        RETURNING *`,
       [
         inquirer,
@@ -405,6 +433,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
         length_of_lease,
         end_date_of_lease,
         landlord_post_code_address,
+        property_first_line_address,
+        property_second_line_address,
+        property_floor,
+        property_solely_occupied,
         id
       ]
     );
