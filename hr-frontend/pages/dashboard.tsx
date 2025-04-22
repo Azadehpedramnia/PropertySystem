@@ -654,7 +654,52 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       {/* */}
 
       
-        {/* Registration*/}
+  {/* Registration*/}
+  <div className="container my-5">
+    <div className="row">
+      {/* Registration Heading */}
+      <div className="col-12">
+        <h2 className="mb-4 text-left">Registration</h2>
+      </div>
+
+        {/* Contact Registration Card */}
+            <div className="col-md-6 mb-4">
+              <div className="card shadow-sm border-2">
+                <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom" 
+                style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
+                  Register Contact
+                </div>
+                <div className="card-body">
+                  <RegisterContact
+                    newPerson={newPerson}
+                    setNewPerson={setNewPerson}
+                    addPersoon={addPersoon}
+                    allRoles={allRoles}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Property Registration Card */}
+            <div className="col-md-6 mb-4">
+              <div className="card shadow-sm border-2">
+                <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom"
+                 style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
+                  Register Property
+                </div>
+                <div className="card-body">
+                  <RegisterProperty
+                    newProperty={newProperty}
+                    setNewProperty={setNewProperty}
+                    addProperrty={addProperrty}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <div className="row  mb-6 p-4 border rounded-lg">
           <div className="container my-4">
                 <div className="row g-4">
