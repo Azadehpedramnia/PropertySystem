@@ -194,165 +194,194 @@ interface Props {
                         const isExpanded = selectedPropety?.id === property.id;
                         return (
                           <li key={property.id} className="list-group-item">
-                            <div
+                            <span
+                              style={{ cursor: 'pointer' }}
                               className="text-primary fw-bold cursor-pointer"
                               onClick={() => setSelectedProperty(isExpanded ? null : property)}
                             >
                               {property.address}, {property.post_code}
-                            </div>
+                            </span>
                             {isExpanded && (
                               <div className="mt-3">
                                 
                                           {editingPropertyId === property.id ? (
                                             <>
-                                              <p>
-                                              <label><strong>Landlord/Organisation:</strong></label>                         
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                value={editedProperty.inquirer ?? property.inquirer}
-                                                onChange={(e) => setEditedProperty({ ...editedProperty, inquirer: e.target.value })}
-                                              /></p> 
-                                              <p> 
-                                              <label><strong>City:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                value={editedProperty.city ?? property.city}
-                                                onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
-                                              /></p> 
-                                              <p> 
-                                              <label><strong>Address:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                value={editedProperty.address ?? property.address}
-                                                onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
-                                              /></p> 
-                                              <p> 
-                                                <label><strong>Property Type:</strong></label>     
-                                                <select
-                                                  className="border p-1 w-full my-1"
-                                                  value={editedProperty.property_type ?? property.property_type}
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord/Organisation:</strong></label>                         
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.inquirer ?? property.inquirer}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, inquirer: e.target.value })}
+                                                />
+                                              </div>
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>City:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.city ?? property.city}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
+                                                />
+                                              </div>
+                                             
+                                         
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Address:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.address ?? property.address}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, address: e.target.value })}
+                                                />
+                                              </div>
+                                        
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Property Type:</strong></label>     
+                                                  <select
+                                                    className="form-control"
+                                                    value={editedProperty.property_type ?? property.property_type}
+                                                    onChange={(e) =>
+                                                      setEditedProperty({
+                                                        ...editedProperty,
+                                                        property_type: e.target.value as Property['property_type'],
+                                                      })
+                                                    }
+                                                  >
+                                                    <option value="Office">Office</option>
+                                                    <option value="Retail">Retail</option>
+                                                    <option value="Warehouse">Warehouse</option>
+                                                  </select>
+                                              </div>
+  
+                  
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Building rateable value:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.building_rateable_value ?? property.building_rateable_value ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, building_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                           
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Rates payable before relief:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.rates_payable_before_relief?? property.rates_payable_before_relief?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                            
+                                              <div className="mb-3">
+                                                <label className="form-label">
+                                                    <input
+                                                      type="checkbox"
+                                                      className="form-check-label"
+                                                      checked={editedProperty.has_car_park ?? property.has_car_park}
+                                                      onChange={(e) =>
+                                                        setEditedProperty({ ...editedProperty, has_car_park: e.target.checked })
+                                                      }
+                                                    />
+                                                    <span><strong>Has Car Park?</strong></span>
+                                                  </label>
+                                              </div>
+                                     
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Car park rateable value:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.car_park_rateable_value ?? property.car_park_rateable_value ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                        
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Car park rates payable before relief:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.car_park_rates_payable_before_relief ?? property.car_park_rates_payable_before_relief ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty,car_park_rates_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                    
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Total rateable value:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.total_rateable_value ?? property.total_rateable_value?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, total_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                   
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Total rate payable:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.total_rate_payable ?? property.total_rate_payable ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                              
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Donation Due:</strong></label>
+                                                <input
+                                                  className="form-control"
+                                                  type="date"
+                                                  value={
+                                                    editedProperty.donation_due
+                                                      ? new Date(editedProperty.donation_due).toISOString().split('T')[0]
+                                                      : property.donation_due
+                                                      ? new Date(property.donation_due).toISOString().split('T')[0]
+                                                      : ''
+                                                  }
                                                   onChange={(e) =>
                                                     setEditedProperty({
                                                       ...editedProperty,
-                                                      property_type: e.target.value as Property['property_type'],
+                                                      donation_due: e.target.value === '' ? null : new Date(e.target.value),
                                                     })
                                                   }
-                                                >
-                                                  <option value="Office">Office</option>
-                                                  <option value="Retail">Retail</option>
-                                                  <option value="Warehouse">Warehouse</option>
-                                                </select>
-                                              </p>
-                  
-                                              <p>
-                                              <label><strong>Building rateable value:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.building_rateable_value ?? property.building_rateable_value ?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty, building_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <p>
-                                              <label><strong>Rates payable before relief:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.rates_payable_before_relief?? property.rates_payable_before_relief?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty, rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <p>
-                                                <label className="inline-flex items-center space-x-2 my-1">
-                                                  <input
-                                                    type="checkbox"
-                                                    checked={editedProperty.has_car_park ?? property.has_car_park}
-                                                    onChange={(e) =>
-                                                      setEditedProperty({ ...editedProperty, has_car_park: e.target.checked })
-                                                    }
-                                                  />
-                                                  <span><strong>Has Car Park?</strong></span>
-                                                </label>
-                                              </p>
-                                              <p>
-                                              <label><strong>Car park rateable value:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.car_park_rateable_value ?? property.car_park_rateable_value ?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty, car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <p>
-                                              <label><strong>Car park rates payable before relief:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.car_park_rates_payable_before_relief ?? property.car_park_rates_payable_before_relief ?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty,car_park_rates_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <p>
-                                              <label><strong>Total rateable value:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.total_rateable_value ?? property.total_rateable_value?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty, total_rateable_value: e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <p>
-                                              <label><strong>Total rate payable:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="number"
-                                                value={editedProperty.total_rate_payable ?? property.total_rate_payable ?? ''}
-                                                onChange={(e) =>
-                                                  setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
-                                                }
-                                              /></p>
-                                              <label><strong>Donation Due:</strong></label>
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                type="date"
-                                                value={
-                                                  editedProperty.donation_due
-                                                    ? new Date(editedProperty.donation_due).toISOString().split('T')[0]
-                                                    : property.donation_due
-                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
-                                                    : ''
-                                                }
-                                                onChange={(e) =>
-                                                  setEditedProperty({
-                                                    ...editedProperty,
-                                                    donation_due: e.target.value === '' ? null : new Date(e.target.value),
-                                                  })
-                                                }
-                                              />
-                                              <p> 
-                                              <label><strong>Landloard Adress:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                value={editedProperty.landlord_Address ?? property.landlord_Address}
-                                                onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
-                                              /></p>
-                                              <p> 
-                                              <label><strong>Landloard email:</strong></label>     
-                                              <input
-                                                className="border p-1 w-full my-1"
-                                                value={editedProperty.landlord_email ?? property.landlord_email}
-                                                onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
-                                              /></p>  
+                                                />
+                                              </div>
+                                              
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landloard Adress:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_Address ?? property.landlord_Address}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
+                                                />
+                                              </div>
+                                             
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landloard email:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_email ?? property.landlord_email}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
+                                                />
+                                              </div>
+                                        
                   
                                               {/* Add other fields similarly... */}
                                               <div className="flex gap-2 mt-2">
                                                 <button
-                                                 className="btn btn-danger"
+                                                 className="btn btn-success me-2" 
                                                   onClick={async () => {
                                                     const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
                                                       method: 'PUT',
@@ -376,7 +405,7 @@ interface Props {
                                                   Save
                                                 </button>
                                                 <button
-                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  className="btn btn-secondary"
                                                   onClick={() => {
                                                     setEditingPropertyId(null);
                                                     setEditedProperty({});
@@ -419,11 +448,11 @@ interface Props {
                                               </p>
                                               <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
                   
-                                        
+                                              
                                               {/* ACTION BUTTONS */}
                                               <div className="flex gap-2 mt-2">
                                                 <button
-                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  className="btn btn-primary me-2"
                                                   onClick={() => {
                                                     setEditingPropertyId(property.id);
                                                     setEditedProperty(property); // preload existing
@@ -432,7 +461,7 @@ interface Props {
                                                   Edit
                                                 </button>
                                                 <button
-                                                  className="bg-gray-300 px-4 py-2 rounded"
+                                                  className="btn btn-danger me-2"
                                                   onClick={async () => {
                                                     const confirmDelete = confirm('Are you sure you want to delete this property?');
                                                     if (!confirmDelete) return;
@@ -453,8 +482,7 @@ interface Props {
                                                 </button>
                                               </div>
                                             </>
-                                          )}
-                                   
+                                          )}                     
                               </div>
                             )}
                           </li>
