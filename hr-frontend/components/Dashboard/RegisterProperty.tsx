@@ -59,8 +59,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
 
   // 1) Basic fields (always visible)
   const basicFields = [
-    <div key="inquirer" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="inquirer" className="col-12">
+      <label  className="form-label">
         Landlord / Organisation:
       </label>
       <input
@@ -71,22 +71,26 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         required
       />
     </div>,
-
-    <div className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
-        Is the property solely occupied?
-      </label>
-      <input
-        type="checkbox"
-        checked={newProperty.property_solely_occupied}
-        onChange={(e) =>
-          setNewProperty({ ...newProperty, property_solely_occupied: e.target.checked })
-        }
-      />
-    </div>,
+    <div className="col-12">
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="solelyOccupied"
+          checked={newProperty.property_solely_occupied}
+          onChange={(e) =>
+            setNewProperty({ ...newProperty, property_solely_occupied: e.target.checked })
+          }
+        />
+        <label className="form-check-label" htmlFor="solelyOccupied">
+            Is the property solely occupied?
+        </label>
+      </div>
+    </div>
+    ,
     !newProperty.property_solely_occupied && (
-      <div key="property_floor" className="d-flex align-items-center mb-3">
-          <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div key="property_floor"className="col-12">
+          <label  className="form-label">
             Floor Number:
           </label>
           <input
@@ -97,8 +101,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           />
       </div>
     ),
-    <div key="property_first_line_address" className="d-flex align-items-center mb-3">
-          <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="property_first_line_address" className="col-12">
+          <label  className="form-label">
             Property Fisrt Line Address:
           </label>
           <input
@@ -108,8 +112,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
             onChange={(e) => setNewProperty({ ...newProperty, property_first_line_address: e.target.value })}
           />
     </div>,
-    <div key="property_second_line_address" className="d-flex align-items-center mb-3">
-            <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="property_second_line_address" className="col-12">
+            <label className="form-label">
               Property Second Line Address:
             </label>
             <input
@@ -119,8 +123,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
               onChange={(e) => setNewProperty({ ...newProperty, property_second_line_address: e.target.value })}
             />
     </div>,
-    <div key="city" className="d-flex align-items-center mb-3">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="city" className="col-12">
+        <label  className="form-label">
           City:
         </label>
         <input
@@ -130,8 +134,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
         />
     </div>,
-    <div key="post_code" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="post_code" className="col-12">
+      <label  className="form-label">
         Post Code:
       </label>
       <input
@@ -141,8 +145,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         onChange={(e) => setNewProperty({ ...newProperty, post_code: e.target.value })}
       />
     </div>,
-    <div key="property_type" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="property_type" className="col-12">
+      <label  className="form-label">
         Property Type:
       </label>
       <input
@@ -164,8 +168,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
 
   // 2) Extra fields (shown/hidden by showExtraFields)
   const secondFields = [
-    <div key="building_rateable_value" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="building_rateable_value" className="col-12">
+      <label  className="form-label">
         Property Rateable Value:
       </label>
       <input
@@ -182,8 +186,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         }
       />
     </div>,
-    <div key="rates_payable_before_relief" className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div key="rates_payable_before_relief" className="col-12">
+      <label  className="form-label">
         Rates Payable Before Relief per year:
       </label>
       <input
@@ -200,8 +204,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         }
       />
     </div>,
-     <div className="d-flex align-items-center mb-3">
-     <label className="me-3 mb-0" style={{ width: "160px" }}>
+    <div className="col-12">
+     <label className="form-label">
        Has Car Park?
      </label>
      <input
@@ -212,83 +216,83 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
        }
      />
    </div>,
- newProperty.has_car_park && (
-  <div key="car_park_rateable_value" className="d-flex align-items-center mb-3">
-    <label className="me-3 mb-0" style={{ width: "160px" }}>
-      Car Park Rateable Value:
+  newProperty.has_car_park && (
+    <div key="car_park_rateable_value" className="col-12">
+      <label  className="form-label">
+        Car Park Rateable Value:
+      </label>
+      <input
+        type="number"
+        className="form-control"
+        placeholder="Car park rateable value"
+        value={newProperty.car_park_rateable_value ?? ""}
+        onChange={(e) =>
+          setNewProperty({
+            ...newProperty,
+            car_park_rateable_value:
+              e.target.value === "" ? null : Number(e.target.value),
+          })
+        }
+      />
+    </div>
+),
+newProperty.has_car_park && (
+  <div className="col-12">
+    <label  className="form-label">
+      Car Park Rates Payable Before Relief per year:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder="Car park rateable value"
-      value={newProperty.car_park_rateable_value ?? ""}
+      placeholder="Rates before relief"
+      value={newProperty.car_park_rates_payable_before_relief ?? ""}
       onChange={(e) =>
         setNewProperty({
           ...newProperty,
-          car_park_rateable_value:
+          car_park_rates_payable_before_relief:
             e.target.value === "" ? null : Number(e.target.value),
         })
       }
     />
-  </div>
-),
-newProperty.has_car_park && (
-  <div className="d-flex align-items-center mb-3">
-  <label className="me-3 mb-0" style={{ width: "160px" }}>
-    Car Park Rates Payable Before Relief per year:
-  </label>
-  <input
-    type="number"
-    className="form-control"
-    placeholder="Rates before relief"
-    value={newProperty.car_park_rates_payable_before_relief ?? ""}
-    onChange={(e) =>
-      setNewProperty({
-        ...newProperty,
-        car_park_rates_payable_before_relief:
-          e.target.value === "" ? null : Number(e.target.value),
-      })
-    }
-  />
-</div>),
- <div className="d-flex align-items-center mb-3">
- <label className="me-3 mb-0" style={{ width: "160px" }}>
-   Total Rateable Value:
- </label>
- <input
-   type="number"
-   className="form-control"
-   placeholder="Total rateable value"
-   value={newProperty.total_rateable_value ?? ""}
-   onChange={(e) =>
-     setNewProperty({
-       ...newProperty,
-       total_rateable_value:
-         e.target.value === "" ? null : Number(e.target.value),
-     })
-   }
- />
-</div>,
- <div className="d-flex align-items-center mb-3">
- <label className="me-3 mb-0" style={{ width: "160px" }}>
-   Total Rate Payable:
- </label>
- <input
-   type="number"
-   className="form-control"
-   placeholder="Total Rate Payable"
-   value={newProperty.total_rate_payable ?? ""}
-   onChange={(e) =>
-     setNewProperty({
-       ...newProperty,
-       total_rate_payable:
-         e.target.value === "" ? null : Number(e.target.value),
-     })
-   }
- />
-</div>,
-<div className="d-flex align-items-center mb-3">
-                <label className="me-3 mb-0" style={{ width: "160px" }}>
+  </div>),
+  <div className="col-12">
+    <label  className="form-label">
+      Total Rateable Value:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder="Total rateable value"
+      value={newProperty.total_rateable_value ?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          total_rateable_value:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>,
+  <div className="col-12">
+    <label  className="form-label">
+      Total Rate Payable:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder="Total Rate Payable"
+      value={newProperty.total_rate_payable ?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          total_rate_payable:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>,
+  <div className="col-12">
+                <label  className="form-label">
                   Rates Multiplier applicable for the property :
                 </label>
                 <input
@@ -308,8 +312,8 @@ newProperty.has_car_park && (
 
     // 3) New third group: "advancedFields"
     const thirdFields = [
-      <div className="d-flex align-items-center mb-4" key="donation_due">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12" key="donation_due">
+        <label  className="form-label">
           Donation Due:
         </label>
         <input
@@ -330,8 +334,8 @@ newProperty.has_car_park && (
         />
       </div>,
     
-      <div className="d-flex align-items-center mb-4" key="start_date_of_lease">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12" key="start_date_of_lease">
+        <label  className="form-label">
           Start Date of Lease:
         </label>
         <input
@@ -352,8 +356,8 @@ newProperty.has_car_park && (
         />
       </div>,
     
-      <div className="d-flex align-items-center mb-4" key="end_date_of_lease">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12" key="end_date_of_lease">
+        <label  className="form-label">
           End Date of Lease:
         </label>
         <input
@@ -374,8 +378,8 @@ newProperty.has_car_park && (
         />
       </div>,
     
-      <div className="d-flex align-items-center mb-3" key="length_of_lease">
-        <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12" key="length_of_lease">
+        <label  className="form-label">
           Length of Lease (days):
         </label>
         <input
@@ -388,8 +392,8 @@ newProperty.has_car_park && (
     
   // 4) New third group: "advancedFields"
   const forthFields = [
-      <div className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12">
+      <label  className="form-label">
         Landlord register Adress:
       </label>
       <input
@@ -404,8 +408,8 @@ newProperty.has_car_park && (
         }
       />
       </div>,
-      <div className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: "160px" }}>
+      <div className="col-12">
+      <label  className="form-label">
         Landlord Postcode
       </label>
       <input
@@ -420,8 +424,8 @@ newProperty.has_car_park && (
         }
       />
       </div>,
-      <div className="d-flex align-items-center mb-3">
-      <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord Email:</label>
+      <div className="col-12">
+      <label  className="form-label">Landlord Email:</label>
       <input
         className="form-control"
         placeholder="Landlord Email"
@@ -429,8 +433,8 @@ newProperty.has_car_park && (
         onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
       />
     </div>,
-    <div className="d-flex align-items-center mb-3">
-    <label className="me-3 mb-0" style={{ width: '160px' }}>Landlord Contact Number:</label>
+    <div className="col-12">
+    <label  className="form-label">Landlord Contact Number:</label>
     <input
       className="form-control"
       placeholder="Landlord Contact Number"
@@ -441,10 +445,9 @@ newProperty.has_car_park && (
   ];
 
   return (
-    <div className="col-md-6 p-4 border rounded-lg">
-      <h2 className="text-lg font-semibold mb-4">Register Property</h2>
+ 
       <form onSubmit={handleFormSubmit}>
-        <div className="g-3">
+        <div className="row g-3">
           {/* 1) Always visible basic fields */}
           {basicFields}
 
@@ -502,13 +505,13 @@ newProperty.has_car_park && (
 
 
         {/* Submit Button */}
-        <div className="text-end">
+        <div className="col-12 text-end">
           <button type="submit" className="btn btn-primary px-4 py-2">
             Add Property
           </button>
         </div>
       </form>
-    </div>
+
   );
 };
 

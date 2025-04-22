@@ -2,8 +2,6 @@
 import React from "react";
 
 
-
-
 interface Person {
   name: string;
   family: string;
@@ -29,12 +27,10 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
   allRoles,
 }) => {
   return (
-    <div className="col-md-6 p-4 border rounded-lg">
-      <h2 className="text-lg font-semibold mb-4">Register Contact</h2>
       <form onSubmit={addPersoon} className="space-y-4">
-        
+        <div className="row g-3">
           {/* Row: Name */}
-          <div className="d-flex align-items-center mb-3">
+          <div className="col-12">
             <label className="form-label me-2 mb-0 w-50">Name:</label>
             <input
               className="form-control"
@@ -47,8 +43,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
           {/* Row: Last Name */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">Last Name:</label>
+          <div className="col-12">
+            <label className="form-label">Last Name:</label>
             <input
               className="form-control"
               placeholder="Last Name"
@@ -60,8 +56,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
           {/* Row: Organisation */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">Organisation:</label>
+          <div className="col-12">
+            <label className="form-label">Organisation:</label>
             <input
               className="form-control"
               placeholder="Organisation"
@@ -72,8 +68,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
           {/* Row: Role */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">Role:</label>
+          <div className="col-12">
+            <label className="form-label">Role:</label>
             <input
               list="role-options"
               className="form-control"
@@ -90,8 +86,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             </datalist>
           </div>
           {/* Row: Email */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">Email:</label>
+          <div className="col-12">
+            <label className="form-label">Email:</label>
             <input
               className="form-control"
               placeholder="Email"
@@ -102,8 +98,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
           {/* Row: Contact Number */}
-          <div className="d-flex align-items-center mb-4">
-            <label className="form-label me-2 mb-0 w-50">Contact No:</label>
+          <div className="col-12">
+            <label  className="form-label">Contact No:</label>
             <input
               className="form-control"
               placeholder="Contact Number"
@@ -114,8 +110,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
           {/* Row: Address */}
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">Address:</label>
+          <div className="col-12">
+            <label  className="form-label">Address:</label>
             <input
               className="form-control"
               placeholder="Address"
@@ -128,8 +124,8 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               }
             />
           </div>
-          <div className="d-flex align-items-center mb-3">
-            <label className="form-label me-2 mb-0 w-50">postcode:</label>
+          <div className="col-12">
+            <label  className="form-label">postcode:</label>
             <input
               className="form-control"
               placeholder="postcode"
@@ -142,15 +138,16 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               }
             />
           </div>
-       
-        {/* Submit Button */}
-        <div className="text-end">
-          <button type="submit" className="btn btn-primary">
-            Add Details
-          </button>
+        
+          {/* Submit Button */}
+          <div className="col-12 text-end">
+            <button type="submit" className="btn btn-primary">
+              Add Details
+            </button>
+          </div>
         </div>
       </form>
-    </div>
+    
   );
 };
 
