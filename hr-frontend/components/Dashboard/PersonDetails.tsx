@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Person, Property, PersonProperty } from '../../pages/dashboard';
-
+import { useRouter } from 'next/router';
 
 
 interface Props {
@@ -20,7 +20,9 @@ interface Props {
     setEditedProperty: (p: Partial<Property>) => void;
     setEditingPropertyId: (id: number | null) => void;
   }
-  
+
+  //
+
   const PersonDetails: React.FC<Props> = ({
     selectedPerson,
     selectedPropety,
@@ -38,6 +40,7 @@ interface Props {
     setEditedProperty,
     setEditingPropertyId,
   }) => {
+    const router = useRouter();
     const relatedProperties = personProperties
       .filter(pp => pp.person_id === selectedPerson.id && pp.is_related)
       .map(pp => properties.find(prop => prop.id === pp.property_id))
@@ -167,7 +170,13 @@ interface Props {
                               alert('Failed to delete person');
                             }
                           }}>Delete</button>
-                          <button className="btn btn-secondary" onClick={() => setSelectedPerson(null)}>Close</button>
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => router.push('/dashboard')}
+                          >
+                            Back to Dashboard
+                          </button>
+                          {/*<button className="btn btn-secondary" onClick={() => setSelectedPerson(null)}>Close</button>*/}
                         </>
                       )}
                     </div>
