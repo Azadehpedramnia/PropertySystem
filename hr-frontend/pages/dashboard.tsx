@@ -698,34 +698,6 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             </div>
           </div>
         </div>
-
-
-        <div className="row  mb-6 p-4 border rounded-lg">
-          <div className="container my-4">
-                <div className="row g-4">
-                      <div className="col-md-6">  
-                          {/* Registration contact*/}             
-                          <RegisterContact
-                            newPerson={newPerson}
-                            setNewPerson={setNewPerson}
-                            addPersoon={addPersoon}
-                            allRoles={allRoles}
-                          />
-                      </div>
-                      <div className="col-md-6"> 
-                        {/* Registration property*/}              
-                        <RegisterProperty
-                            newProperty={newProperty}
-                            setNewProperty={setNewProperty}
-                            addProperrty={addProperrty}
-                          />
-                      </div>
-                </div>
-          </div> 
-        </div>
-    </div>
-    
+    </div>  
   );
-
-
 }
