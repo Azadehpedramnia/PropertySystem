@@ -552,24 +552,40 @@ interface Props {
                                           ) : (
                                             <>
                                               <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
+                                              <p><strong>Is the property solely occupied? :</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
+                                              <p><strong>Floor Number:</strong> {property.city}</p>
+                                              <p><strong>Property Fisrt Line Address:</strong> {property.city}</p>
+                                              <p><strong>Property Second Line Address:</strong> {property.city}</p>
                                               <p><strong>City:</strong> {property.city}</p>
-                                              <p><strong>Address:</strong> {property.address}{property.post_code}</p>
+                                              <p><strong>Post Code:</strong> {property.city}</p>
                                               <p><strong>Property Type:</strong> {property.property_type}</p>
-                                              <p><strong>Building rateable value:</strong> {property.building_rateable_value}</p>
-                                              <p><strong>Rates payable before relief:</strong> {property.rates_payable_before_relief}</p>
+                                              <p><strong>Property rateable value:</strong> {property.building_rateable_value}</p>
+                                              <p><strong>Rates payable before relief per year:</strong> {property.rates_payable_before_relief}</p>
                                               <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
                                               <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
-                                              <p><strong>Car park rates payable before relief:</strong> {property.car_park_rates_payable_before_relief}</p>
+                                              <p><strong>Car park rates payable before relief per year:</strong> {property.car_park_rates_payable_before_relief}</p>
                                               <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
-                                              <p><strong>Total rate payable:</strong> {property.total_rate_payable}</p>
-                                              <p><strong>Dontion:</strong>{property.donation_due
+                                            
+                                              <p><strong>Total Rate Payable:</strong> {property.total_rateable_value}</p>
+                                              <p><strong> Rates Multiplier applicable for the property :</strong> {property.total_rateable_value}</p>
+                                             
+                                           
+                                              <p><strong>Donation Due:</strong>{property.donation_due
                                                     ? new Date(property.donation_due).toISOString().split('T')[0]
                                                     : 'N/A'}
                                               </p>
-                  
-                                              {/*<p><strong>Landlord name :</strong> {property}</p>*/}
-                                              <p><strong>Landlord email address :</strong> {property.landlord_email}</p>
-                                              <p><strong>Landlord phone number :</strong> {property.landlord_no}</p>
+                                              
+                                              <p><strong>Donation Due:</strong>{property.donation_due
+                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
+                                                    : 'N/A'}
+                                              </p>
+
+                                              <p><strong>Donation Due:</strong>{property.donation_due
+                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
+                                                    : 'N/A'}
+                                              </p>
+                                              
+
                                               <p><strong>Rateable Multiplier applicable for the property :</strong> {property.rates_multiplier}</p>            
                                               
                                               <p><strong>Agreed Start data of lease:</strong> {property.start_date_of_lease
@@ -581,7 +597,14 @@ interface Props {
                                                     : 'N/A'}
                                               </p>
                                               <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
-                  
+                                
+                                             
+                                              <p><strong>Landlord Register address :</strong> {property.landlord_email}</p>
+                                              <p><strong>Landlord Postcode :</strong> {property.landlord_email}</p>
+
+                                              <p><strong>Landlord email :</strong> {property.landlord_email}</p>
+                                              <p><strong>Landlord Contact number :</strong> {property.landlord_no}</p>
+                                            
                                               
                                               {/* ACTION BUTTONS */}
                                               <div className="flex gap-2 mt-2">
