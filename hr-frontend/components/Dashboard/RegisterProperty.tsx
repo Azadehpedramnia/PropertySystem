@@ -33,12 +33,14 @@ interface RegisterPropertyProps {
   newProperty: Property;
   setNewProperty: React.Dispatch<React.SetStateAction<Property>>;
   addProperrty: (e?: React.FormEvent<HTMLFormElement>) => void;
+  onSuccessAdd: () => void;
 }
 
 const RegisterProperty: React.FC<RegisterPropertyProps> = ({
   newProperty,
   setNewProperty,
   addProperrty,
+  onSuccessAdd ,
 }) => {
   // State for toggling the second group (existing "extraFields")
   const [showSecondFields, setShowSecondFields] = useState(false);
@@ -51,6 +53,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addProperrty(e);
+    onSuccessAdd();  
     // Reset the expansions on submit (optional)
     setShowSecondFields(false);
     setShowThirdFields(false);

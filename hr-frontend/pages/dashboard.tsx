@@ -89,12 +89,11 @@ export default function Dashboard() {
   //scrooling smooth after click on floor and neighbour and template
   const registerPropertyRef = useRef<HTMLDivElement>(null);
   const [highlight, setHighlight] = useState(false);
+  
   const scrollToRegisterProperty = () => {
     registerPropertyRef.current?.scrollIntoView({ behavior: 'smooth' });
     
     setHighlight(true);                 // Set highlight to true immediately
-    
-    setTimeout(() => setHighlight(false), 2000);  // Automatically remove highlight after 2 seconds
   };
   
 
@@ -603,6 +602,12 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                   <RegisterProperty
                     newProperty={newProperty}
                     setNewProperty={setNewProperty}
+                    onSuccessAdd={() => {
+                      setHighlight(false);         // 👈 turn off border here
+                      setAddModalType(null);
+                      setIsAddModalOpen(false);
+                      setSelectedPropertyForAdd(null);
+                    }}
                     addProperrty={async () => {
                       // call your existing addProperrty POST
                       await addProperrty(/* you may need to adjust this to use newProperty */);
@@ -707,7 +712,57 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
                     newProperty={newProperty}
                     setNewProperty={setNewProperty}
                     addProperrty={addProperrty}
+                    onSuccessAdd={() => {
+                      setHighlight(false);         // 👈 turn off border here
+                      setAddModalType(null);
+                      setIsAddModalOpen(false);
+                      setSelectedPropertyForAdd(null);
+                    }}
                   />
+
+                {/* added cancel button is click on add property button */}
+                {isAddModalOpen && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger mt-2"
+                        onClick={() => {
+                          setIsAddModalOpen(false);
+                          setHighlight(false);
+                          setAddModalType(null);
+                          setSelectedPropertyForAdd(null);                        
+                          setNewProperty({ 
+                            inquirer: '',
+                            city: '',
+                            address: '',
+                            property_type: '',
+                            building_rateable_value: null,
+                            rates_payable_before_relief: null,
+                            has_car_park: false,
+                            car_park_rateable_value: null,
+                            car_park_rates_payable_before_relief: null,
+                            total_rateable_value: null,
+                            total_rate_payable: null,
+                            donation_due: null,
+                            post_code: '',
+                            landlord_Address: '',
+                            landlord_email: '',
+                            landlord_no: '',
+                            rates_multiplier: '',
+                            start_date_of_lease: null,
+                            end_date_of_lease: null,
+                            length_of_lease: 0,
+                            landlord_post_code_address:'',
+                            property_first_line_address:'',
+                            property_second_line_address:'',
+                            property_floor:'',
+                            property_solely_occupied:false,
+                          });
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
+
                 </div>
               </div>
             </div>
