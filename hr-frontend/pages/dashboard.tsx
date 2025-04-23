@@ -1,7 +1,7 @@
 // A full-featured dashboard for people, properties, and relationships
 // React + Next.js + Tailwind + Typescript compatible
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef  } from 'react';
 import { useRouter } from 'next/router';
 import RegisterContact from "../components/Dashboard/RegisterContact";
 import RegisterProperty from "../components/Dashboard/RegisterProperty";
@@ -85,6 +85,18 @@ export default function Dashboard() {
   const defaultRoles = ["Est Agent", "Landlord", "Property Manager"];
   const [allRoles, setAllRoles] = useState<string[]>([]);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+
+  //scrooling smooth after click on floor and neighbour and template
+  const registerPropertyRef = useRef<HTMLDivElement>(null);
+  const [highlight, setHighlight] = useState(false);
+  const scrollToRegisterProperty = () => {
+    registerPropertyRef.current?.scrollIntoView({ behavior: 'smooth' });
+    
+    setHighlight(true);                 // Set highlight to true immediately
+    
+    setTimeout(() => setHighlight(false), 2000);  // Automatically remove highlight after 2 seconds
+  };
+  
 
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
@@ -574,7 +586,10 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
               handlePersonHeaderClick={handlePersonHeaderClick}
               handlePropertyHeaderClick={handlePropertyHeaderClick}
               handleToggle={handleToggle}
-              onAddProperty={handleAddProperty}
+              onAddProperty={(property, type) => {
+                handleAddProperty(property, type);
+                scrollToRegisterProperty();  // <- Add scrolling here
+              }}
             />
             
 
@@ -663,7 +678,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       </div>
 
         {/* Contact Registration Card */}
-            <div className="col-md-6 mb-4">
+            <div className="col-md-6 mb-4" >
               <div className="card shadow-sm border-2">
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom" 
                 style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
@@ -681,8 +696,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
             </div>
 
             {/* Property Registration Card */}
-            <div className="col-md-6 mb-4">
-              <div className="card shadow-sm border-2">
+            <div className="col-md-6 mb-4"  ref={registerPropertyRef}>
+              <div className={`card shadow-sm border-2 ${highlight ? 'highlighted-card' : ''}`}>
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom"
                  style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
                   Register Property

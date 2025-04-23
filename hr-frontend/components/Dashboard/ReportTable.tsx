@@ -81,7 +81,8 @@ interface ReportTableProps {
                   >
                     {property.address || 'Address'}
                   </td>
-
+                  
+                   {/* 3. column for adding more property */}
                   <td className="px-3 py-2">
                     <div className="d-flex gap-2 justify-content-center">
                       {(['floor','neighbor','template'] as const).map(type => (
@@ -96,7 +97,7 @@ interface ReportTableProps {
                     </div>
                   </td>
 
-                  {/* 3. Continue your "checklist" columns for each person */}
+                  {/* 4. Continue your "checklist" columns for each person */}
                   {people.map((person) => {
                     const relation = personProperties.find(
                       (pp) =>

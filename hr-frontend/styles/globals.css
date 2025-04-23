@@ -40,3 +40,21 @@ a {
     color-scheme: dark;
   }
 }
+
+
+@keyframes highlightBorder {
+  0% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.8); /* Blue glow */
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.8);
+  }
+}
+
+.highlighted-card {
+  animation: highlightBorder 1.5s ease-in-out;
+  border-color: #3b82f6 !important; /* Tailwind Blue 500 */
+}
