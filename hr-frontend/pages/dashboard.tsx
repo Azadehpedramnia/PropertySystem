@@ -1,7 +1,7 @@
 // A full-featured dashboard for people, properties, and relationships
 // React + Next.js + Tailwind + Typescript compatible
 
-import { useEffect, useState, useRef  } from 'react';
+import { useEffect, useState, useRef ,useCallback  } from 'react';
 import { useRouter } from 'next/router';
 import RegisterContact from "../components/Dashboard/RegisterContact";
 import RegisterProperty from "../components/Dashboard/RegisterProperty";
@@ -10,7 +10,7 @@ import PersonDetails from "../components/Dashboard/PersonDetails";
 import PropertyDetails from '../components/Dashboard/PropertyDetails';
 import ReportTable from '../components/Dashboard/ReportTable';
 
-import { usePeople } from '../hooks/usePeople';
+//import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
 type Role = 'Est Agent' | 'Landlord' | 'Property Manager' | string;
@@ -76,15 +76,15 @@ export default function Dashboard() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [editPropertyMode, setEditPropertyMode] = useState(false);
   const [editPersonMode, setEditPersonMode] = useState(false);
-  const [newPersonName, setNewPersonName] = useState('');
-  const [newPropertyAddress, setNewPropertyAddress] = useState('');
+  //const [newPersonName, setNewPersonName] = useState('');
+ // const [newPropertyAddress, setNewPropertyAddress] = useState('');
   const [editingPersonIdForProperty, setEditingPersonIdForProperty] = useState<number | null>(null);
   const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
-  const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
-  const [roles, setRoles] = useState<string[]>([]);
-  const defaultRoles = ["Est Agent", "Landlord", "Property Manager"];
+  //const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
+  //const [roles, setRoles] = useState<string[]>([]);
+
   const [allRoles, setAllRoles] = useState<string[]>([]);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+  //const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
 
   //scrooling smooth after click on floor and neighbour and template
   const registerPropertyRef = useRef<HTMLDivElement>(null);
@@ -101,15 +101,17 @@ export default function Dashboard() {
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
   
   // NEW: Store the currently clicked/selected person and property from the header
-  const [showModal, setShowModal] = useState(false);
+  //const [showModal, setShowModal] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [selectedPropety, setSelectedProperty] = useState<Property | null>(null);
   const [editingPropertyId, setEditingPropertyId] = useState<number | null>(null);
   const [editedProperty, setEditedProperty] = useState<Partial<Property>>({});
 //
+
+/////SEARCH PART//////
 const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Person | Property[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -124,10 +126,11 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     }
     setLoading(false);
   };
-//
-  
 
-  const handlePersonHeaderClickp = (person: Person) => {
+///////////
+  
+{/*
+    const handlePersonHeaderClickp = (person: Person) => {
     setOpenPersonPopups((prev) => {
       // Avoid duplicates
       if (prev.find((p) => p.id === person.id)) return prev;
@@ -138,7 +141,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   const closePersonPopup = (id: number) => {
     setOpenPersonPopups((prev) => prev.filter((p) => p.id !== id));
   };
-  
+   */}
   const [newPerson, setNewPerson] = useState<Omit<Person, 'id'>>({
     name: '',
     organisation: '',
@@ -150,27 +153,12 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     iqu_post_code_address:''
   });
 
+  
+ 
+
 
 // it makes lots of error i dont know why i have to check
-{/*
-  useEffect(() => {
-    fetch("http://localhost:5000/api/people/role")
-    .then((res) => {
-      // If your server returns 404 or an error, res.ok might be false
-      if (!res.ok) {
-        console.error("Error fetching from /api/people/role:", res.status);
-        return [];
-      }
-      return res.json();
-    })
-    .then((dbRoleArray: string[]) => {
-      // Merge with defaults, remove duplicates
-      const merged = [...new Set([...defaultRoles, ...(dbRoleArray || [])])];
-      setAllRoles(merged);
-    })
-    .catch((err) => console.error("Fetch error:", err));
-  }, [defaultRoles]);
-*/}
+
 
 //fetching role 
   useEffect(() => {
@@ -183,7 +171,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         return res.json();
       })
       .then((dbRoles: string[]) => {
-        //const defaultRoles = ["Admin", "Viewer", "Owner"]; // Move it here to avoid dependency issues
+        const defaultRoles = ["Est Agent", "Landlord", "Property Manager"]; // Move it here to avoid dependency issues      
         const merged = [...new Set([...defaultRoles, ...(dbRoles || [])])];
         setAllRoles(merged); // this will show in the UI
       })
@@ -221,7 +209,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   });
 
 
-  
+  {/*
   // For your join table form:
   const [newPersonProperty, setNewPersonProperty] = useState({
     person_id: 0,
@@ -229,7 +217,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     person_name: '',
     property_address:'',
     is_related: false,
-  });
+  });*/}
   
   const router = useRouter();
 
@@ -238,17 +226,15 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     router.push('/login');
   };
 
-  useEffect(() => {
-    fetchPeople();
-    fetchProperties();
-    fetchPersonProperties();
-  }, []);
+{/*
 
   const fetchPeople = async () => {
     const res = await fetch('http://localhost:5000/api/people');
     const data = await res.json();
     setPeople(data);
   };
+  
+ 
 
   const fetchProperties = async () => {
     const res = await fetch('http://localhost:5000/api/propertiies');
@@ -268,6 +254,42 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   };
 
 
+  useEffect(() => {
+    fetchPeople();
+    fetchProperties();
+    fetchPersonProperties();
+  }, []);*/}
+
+
+  const fetchPeople = useCallback(async () => {
+    const res = await fetch('http://localhost:5000/api/people');
+    const data = await res.json();
+    setPeople(data);
+  }, []);
+
+  const fetchProperties = useCallback(async () => {
+    const res = await fetch('http://localhost:5000/api/propertiies');
+    const data = await res.json();
+    setProperties(data);
+  }, []);
+
+  const fetchPersonProperties = useCallback(async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/person_property');
+      const data = await res.json();
+      setPersonProperties(data);
+    } catch (error) {
+      console.error('Error fetching person_property', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPeople();
+    fetchProperties();
+    fetchPersonProperties();
+  }, [fetchPeople, fetchProperties, fetchPersonProperties]);
+
+
   // --------------------------
   // NEW: Handler for clicking on a Person name  and property address in the header
   // --------------------------
@@ -281,7 +303,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     //setSelectedProperty(property);
   };
 
-  function openModal(person: Person) {
+  {/*
+      function openModal(person: Person) {
     setSelectedPerson(person);
     setShowModal(true);
   }
@@ -289,6 +312,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   function closeModal() {
     setShowModal(false);
   }
+
+  
 
 
 
@@ -302,7 +327,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     setNewPersonName('');
     fetchPeople();
   };
-
+  
+  */}
   // Add Person
   const addPersoon = async () => {  
     await fetch('http://localhost:5000/api/people', {
@@ -354,8 +380,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     }
   }, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
 
-  
-  const addProperty = async () => {
+  {/*
+      const addProperty = async () => {
     await fetch('http://localhost:5000/api/propertiies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -363,7 +389,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     });
     setNewPropertyAddress('');
     fetchProperties();
-  };
+  };*/}
+
 
   
     // Add Property
@@ -410,7 +437,8 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     };
 
 
-    const addPersonProperty = async () => {
+    {/*
+      const addPersonProperty = async () => {
       //e.preventDefault(); // prevent page reload  e:React.FormEvent
       
       // Make sure you have valid IDs before sending:
@@ -453,6 +481,9 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
         alert('Failed to add person_property relationship');
       }
     };
+      
+      */}
+    
 
     //
 
