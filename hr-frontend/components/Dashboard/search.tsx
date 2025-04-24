@@ -172,11 +172,8 @@ const SearchComponent: React.FC = () => {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {hasSearched && !loading && results.length === 0 && query.trim() !== "" && !error && (
-         <p>No results found for "{query}".</p>
+         <p>No results found for &quot;{query}&quot;.</p>
        )}
-
-        
-
 
       <div>
         <h5>Results:</h5>
