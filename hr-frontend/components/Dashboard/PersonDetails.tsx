@@ -198,8 +198,15 @@ interface Props {
                               style={{ cursor: 'pointer' }}
                               className="text-primary fw-bold cursor-pointer"
                               onClick={() => setSelectedProperty(isExpanded ? null : property)}
-                            >
-                              {property.address}, {property.post_code}
+                            >            
+                                {[
+                                    property.property_floor,
+                                    property.property_first_line_address,
+                                    property.property_second_line_address,
+                                    property.post_code,
+                                  ]
+                                    .filter(Boolean) // Removes any empty, null, or undefined values
+                                    .join(' _ ')}
                             </span>
                             {isExpanded && (
                               <div className="mt-3">                            
