@@ -109,6 +109,22 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               }
             />
           </div>
+          {/* Row: Postcode*/}
+          <div className="col-12">
+            <label  className="form-label">postcode:</label>
+            <input
+              className="form-control"
+              placeholder="postcode"
+              value={newPerson.iqu_post_code_address}
+              onChange={(e) =>
+                setNewPerson({
+                  ...newPerson,
+                  iqu_post_code_address: e.target.value,
+                })
+              }
+            />
+          </div>
+
           {/* Row: Address */}
           <div className="col-12">
             <label  className="form-label">Address:</label>
@@ -124,20 +140,7 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               }
             />
           </div>
-          <div className="col-12">
-            <label  className="form-label">postcode:</label>
-            <input
-              className="form-control"
-              placeholder="postcode"
-              value={newPerson.iqu_post_code_address}
-              onChange={(e) =>
-                setNewPerson({
-                  ...newPerson,
-                  iqu_post_code_address: e.target.value,
-                })
-              }
-            />
-          </div>
+
         
           {/* Submit Button */}
           <div className="col-12 text-end">
