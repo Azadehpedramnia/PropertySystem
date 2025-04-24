@@ -37,6 +37,46 @@ app.post('/api/people', async (req, res) => {
   }
 });
 
+
+
+// GET distinct roles from the people table
+app.get('/api/people/role', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT role
+      FROM people
+      WHERE role IS NOT NULL
+      ORDER BY role
+    `);
+    // result.rows might look like [{role: 'Est Ag'}, {role: 'Landlord'}, ...]
+    const roles = result.rows.map(row => row.role);
+    res.json(roles); // => ["Est Ag", "Landlord", "Ass Man", ...]
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+//Get
+app.get('/api/people', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id,
+              name,
+              organisation,
+              role,
+              email,
+              contact_number,
+              family,          
+              property_address_for_enquiry,
+              iqu_post_code_address
+       FROM people`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET one person by ID
 app.get('/api/people/:id', async (req, res) => {
   const id = Number(req.params.id);
@@ -68,29 +108,6 @@ app.get('/api/people/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-//Get
-app.get('/api/people', async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT id,
-              name,
-              organisation,
-              role,
-              email,
-              contact_number,
-              family,          
-              property_address_for_enquiry,
-              iqu_post_code_address
-       FROM people`
-    );
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 
 // EDIT (PUT) - Update a single person by ID
 app.put('/api/people/:id',  async (req, res) => {
@@ -143,22 +160,7 @@ app.delete('/api/people/:id',  async (req, res) => {
 });
 
 
-// GET distinct roles from the people table
-app.get('/api/people/role', async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT DISTINCT role
-      FROM people
-      WHERE role IS NOT NULL
-      ORDER BY role
-    `);
-    // result.rows might look like [{role: 'Est Ag'}, {role: 'Landlord'}, ...]
-    const roles = result.rows.map(row => row.role);
-    res.json(roles); // => ["Est Ag", "Landlord", "Ass Man", ...]
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+
 
 // ------------------------------
 // Propertiies
