@@ -109,11 +109,11 @@ export default function Dashboard() {
 //
 
 /////SEARCH PART//////
-const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Person | Property[]>([]);
-  const [loading, setLoading] = useState(false);
-
+//const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
+//  const [query, setQuery] = useState("");
+ // const [results, setResults] = useState<Person | Property[]>([]);
+  //const [loading, setLoading] = useState(false);
+{/*
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -125,7 +125,7 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
       console.error(err);
     }
     setLoading(false);
-  };
+  };*/}
 
 ///////////
   
