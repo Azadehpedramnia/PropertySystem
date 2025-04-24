@@ -74,7 +74,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         required
       />
     </div>,
-    <div className="col-12">
+    <div key="property_solely_occupied" className="col-12">
       <div className="form-check">
         <input
           className="form-check-input"
@@ -92,7 +92,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
     </div>
     ,
     !newProperty.property_solely_occupied && (
-      <div key="property_floor"className="col-12">
+      <div key="property_floor" className="col-12">
           <label  className="form-label">
             Floor Number:
           </label>
@@ -207,7 +207,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
         }
       />
     </div>,
-    <div className="col-12">
+    <div key="has_car_park" className="col-12">
      <label className="form-label">
        Has Car Park?
      </label>
@@ -240,7 +240,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
     </div>
 ),
 newProperty.has_car_park && (
-  <div className="col-12">
+  <div key="car_park_rates_payable_before_relief"  className="col-12">
     <label  className="form-label">
       Car Park Rates Payable Before Relief per year:
     </label>
@@ -258,7 +258,7 @@ newProperty.has_car_park && (
       }
     />
   </div>),
-  <div className="col-12">
+  <div key="total_rateable_value " className="col-12">
     <label  className="form-label">
       Total Rateable Value:
     </label>
@@ -276,7 +276,7 @@ newProperty.has_car_park && (
       }
     />
   </div>,
-  <div className="col-12">
+  <div key="total_rate_payable " className="col-12">
     <label  className="form-label">
       Total Rate Payable:
     </label>
@@ -294,7 +294,7 @@ newProperty.has_car_park && (
       }
     />
   </div>,
-  <div className="col-12">
+  <div key="rates_multiplier" className="col-12">
                 <label  className="form-label">
                   Rates Multiplier applicable for the property :
                 </label>
@@ -395,56 +395,56 @@ newProperty.has_car_park && (
     
   // 4) New third group: "advancedFields"
   const forthFields = [
-      <div className="col-12">
-      <label  className="form-label">
-        Landlord register Adress:
-      </label>
-      <input
-        className="form-control"
-        placeholder="Landlord register Address"
-        value={newProperty.landlord_Address}
-        onChange={(e) =>
-          setNewProperty({
-            ...newProperty,
-            landlord_Address: e.target.value,
-          })
-        }
-      />
+      <div key="landlord_Address"  className="col-12">
+        <label  className="form-label">
+          Landlord register Adress:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord register Address"
+          value={newProperty.landlord_Address}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_Address: e.target.value,
+            })
+          }
+        />
       </div>,
-      <div className="col-12">
-      <label  className="form-label">
-        Landlord Postcode
-      </label>
-      <input
-        className="form-control"
-        placeholder="Landlord postcode"
-        value={newProperty.landlord_post_code_address}
-        onChange={(e) =>
-          setNewProperty({
-            ...newProperty,
-            landlord_post_code_address: e.target.value,
-          })
-        }
-      />
+      <div key="landlord_post_code_address" className="col-12">
+        <label  className="form-label">
+          Landlord Postcode
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord postcode"
+          value={newProperty.landlord_post_code_address}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_post_code_address: e.target.value,
+            })
+          }
+        />
       </div>,
-      <div className="col-12">
-      <label  className="form-label">Landlord Email:</label>
-      <input
-        className="form-control"
-        placeholder="Landlord Email"
-        value={newProperty.landlord_email}
-        onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
-      />
-    </div>,
-    <div className="col-12">
-    <label  className="form-label">Landlord Contact Number:</label>
-    <input
-      className="form-control"
-      placeholder="Landlord Contact Number"
-      value={newProperty.landlord_no}
-      onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
-    />
-    </div>
+      <div key="landlord_email" className="col-12">
+        <label  className="form-label">Landlord Email:</label>
+        <input
+          className="form-control"
+          placeholder="Landlord Email"
+          value={newProperty.landlord_email}
+          onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
+        />
+      </div>,
+      <div key="landlord_no" className="col-12">
+        <label  className="form-label">Landlord Contact Number:</label>
+        <input
+          className="form-control"
+          placeholder="Landlord Contact Number"
+          value={newProperty.landlord_no}
+          onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
+        />
+      </div>
   ];
 
   return (
