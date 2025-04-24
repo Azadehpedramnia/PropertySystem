@@ -5,7 +5,9 @@ interface SearchResult {
   id: number;
   name?: string;
   family?: string;
-  address?: string;
+  property_first_line_address?: string;
+  property_second_line_address?: string;
+  property_floor?:string;
   inquirer?: string;
   post_code?:string;
 }
@@ -183,8 +185,13 @@ const SearchComponent: React.FC = () => {
                     <li key={item.id}>
                     {searchField === "name" && `${item.name ?? ""} ${item.family ?? ""}`}
                     {searchField === "inquirer" && item.inquirer}
-                    {searchField === "address" && (
-                        item.address || item.post_code || "No address or post code"
+                    {searchField === "address" && (                     
+                        <>       
+                         {item.property_floor && <>{item.property_floor} _ </>}             
+                        {item.property_first_line_address} {item.property_second_line_address}
+                        {item.property_second_line_address}
+                        {item.post_code && <> _ {item.post_code}</>}
+                      </>
                     )}
                     </li>
                 ))}

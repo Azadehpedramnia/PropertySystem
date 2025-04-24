@@ -212,24 +212,33 @@ app.get('/api/propertiies/search', async (req, res) => {
     if (fieldStr === "address") {
       // Search both address and post_code
       result = await pool.query(
-        `SELECT id, inquirer, address, post_code 
+        `SELECT id,
+         inquirer,
+         property_floor,
+         property_first_line_address,
+         property_second_line_address, 
+         post_code 
         FROM propertiies 
-        WHERE address ILIKE $1 OR post_code ILIKE $1`,
+        WHERE 
+        property_floor ILIKE $1 OR
+        property_first_line_address ILIKE $1 OR 
+        property_second_line_address ILIKE $1 OR 
+        post_code ILIKE $1`,
         [`%${q}%`]
       );
     } else {
       // Single-field search
       result = await pool.query(
-        `SELECT id, inquirer, address
+        `SELECT id, inquirer,
+                property_floor, 
+                property_first_line_address, 
+                property_second_line_address, 
+                post_code 
         FROM propertiies 
         WHERE ${fieldStr} ILIKE $1`,
         [`%${q}%`]
       );
     }
-    //const result = await pool.query(
-      //`SELECT id, inquirer, address, post_code FROM propertiies WHERE ${fieldStr} ILIKE $1`,
-     // [`%${q}%`]
-    //);
     res.json(result.rows);
   } catch (err) {
     console.error('Database error:', err);
