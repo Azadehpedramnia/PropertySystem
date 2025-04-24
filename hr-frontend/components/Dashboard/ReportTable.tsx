@@ -79,9 +79,13 @@ interface ReportTableProps {
                     style={{ cursor: 'pointer' }}
                     onClick={() => handlePropertyHeaderClick(property)}
                   >
-                    {property.address || 'Address'}
+                                    {(property.property_first_line_address || 'Address') + 
+                                    (property.property_floor ? ` _ ${property.property_floor}` : '')}
                   </td>
                   
+  
+
+
                    {/* 3. column for adding more property */}
                   <td className="px-3 py-2">
                     <div className="d-flex gap-2 justify-content-center">

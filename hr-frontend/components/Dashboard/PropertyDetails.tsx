@@ -37,7 +37,7 @@ interface Props {
     return (
         
         <div className="p-4 mt-4 border rounded">
-        <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.address}_{selectedPropety.post_code}</h2>
+        <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.property_first_line_address}_{selectedPropety.property_floor}_{selectedPropety.post_code}</h2>
 
         {editPropertyMode ? (
           <>
