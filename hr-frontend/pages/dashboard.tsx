@@ -151,13 +151,14 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
   });
 
 
-
+// it makes lots of error i dont know why i have to check
+{/*
   useEffect(() => {
     fetch("http://localhost:5000/api/people/role")
     .then((res) => {
       // If your server returns 404 or an error, res.ok might be false
       if (!res.ok) {
-        console.error("Error fetching from /api/people/roles:", res.status);
+        console.error("Error fetching from /api/people/role:", res.status);
         return [];
       }
       return res.json();
@@ -169,15 +170,27 @@ const [searchType, setSearchType] = useState<"people" | "propertiies">("people")
     })
     .catch((err) => console.error("Fetch error:", err));
   }, [defaultRoles]);
+*/}
 
-
-  // 3) On mount, fetch distinct roles
+//fetching role 
   useEffect(() => {
-    fetch('http://localhost:5000/api/people/role')
-      .then((res) => res.json())
-      .then((data: string[]) => setRoles(data))
-      .catch((err) => console.error('Error fetching role:', err));
+    fetch("http://localhost:5000/api/people/role")
+      .then((res) => {
+        if (!res.ok) {
+          console.error("Error fetching from /api/people/role:", res.status);
+          return [];
+        }
+        return res.json();
+      })
+      .then((dbRoles: string[]) => {
+        //const defaultRoles = ["Admin", "Viewer", "Owner"]; // Move it here to avoid dependency issues
+        const merged = [...new Set([...defaultRoles, ...(dbRoles || [])])];
+        setAllRoles(merged); // this will show in the UI
+      })
+      .catch((err) => console.error("Fetch error:", err));
   }, []);
+  
+
 
   const [newProperty, setNewProperty] = useState<Omit<Property, 'id'>>({
     inquirer: '',
