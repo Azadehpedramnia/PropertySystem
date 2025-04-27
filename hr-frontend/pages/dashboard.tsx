@@ -353,32 +353,34 @@ export default function Dashboard() {
   };
 
 
- // Auto-calculate lease length when both start and end dates are set.
-  useEffect(() => {
-    if (newProperty.start_date_of_lease && newProperty.end_date_of_lease) {
-      const start = new Date(newProperty.start_date_of_lease);
-      const end = new Date(newProperty.end_date_of_lease);
-      if (end >= start) {
-        // getTime() returns the numeric timestamp
-        const diffTime = end.getTime() - start.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-        setNewProperty(prev => ({
-          ...prev,
-          length_of_lease: diffDays
-        }));
-      } else {
-        // Option A: Reset length to 0 (or remove it)
-        setNewProperty(prev => ({
-          ...prev,
-          length_of_lease: 0
-        }));
-
-        // Optionally, show a warning
-        alert("End date must be on or after the start date.");
-          }
+// Auto-calculate lease length when both start and end dates are set.
+useEffect(() => {
+  if (newProperty.start_date_of_lease && newProperty.end_date_of_lease) {
+    const start = new Date(newProperty.start_date_of_lease);
+    const end = new Date(newProperty.end_date_of_lease);
+    if (end >= start) {
+      const diffTime = end.getTime() - start.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+      setNewProperty(prev => ({
+        ...prev,
+        length_of_lease: diffDays,
+      }));
+    } else {
+      setNewProperty(prev => ({
+        ...prev,
+        length_of_lease: 0,
+      }));
     }
-  }, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
+  } else {
+    //When start or end is missing, reset the lease length too
+    setNewProperty(prev => ({
+      ...prev,
+      length_of_lease: 0,
+    }));
+  }
+}, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
+
 
   {/*
       const addProperty = async () => {
