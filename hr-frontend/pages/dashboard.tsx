@@ -705,7 +705,7 @@ export default function Dashboard() {
             fetchProperties={fetchProperties}
             setSelectedProperty={setSelectedProperty}
             setEditPropertyMode={setEditPropertyMode}
-            setSelectedPerson={setSelectedPerson}
+            //setSelectedPerson={setSelectedPerson}
             setEditingPersonIdForProperty={setEditingPersonIdForProperty}
             editingPersonIdForProperty={editingPersonIdForProperty}
             editedPersonForProperty={editedPersonForProperty}

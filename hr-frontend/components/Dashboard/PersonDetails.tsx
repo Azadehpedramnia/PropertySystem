@@ -40,6 +40,7 @@ interface Props {
     setEditedProperty,
     setEditingPropertyId,
   }) => {
+
     const router = useRouter();
     const relatedProperties = personProperties
       .filter(pp => pp.person_id === selectedPerson.id && pp.is_related)
@@ -427,9 +428,10 @@ interface Props {
                                                     className="form-control"
                                                     value={
                                                       editedProperty.start_date_of_lease &&
-                                                      !isNaN(new Date(editedProperty.start_date_of_lease as any).getTime())
-                                                        ? new Date(editedProperty.start_date_of_lease as any).toISOString().split("T")[0]
+                                                      !isNaN(new Date(editedProperty.start_date_of_lease as unknown as string).getTime())
+                                                        ? new Date(editedProperty.start_date_of_lease as unknown as string).toISOString().split("T")[0]
                                                         : ""
+
                                                     }
                                                     onChange={(e) =>
                                                       setEditedProperty({
@@ -447,9 +449,10 @@ interface Props {
                                                     className="form-control"
                                                     value={
                                                       editedProperty.end_date_of_lease &&
-                                                      !isNaN(new Date(editedProperty.end_date_of_lease as any).getTime())
-                                                        ? new Date(editedProperty.end_date_of_lease as any).toISOString().split("T")[0]
-                                                        : ""
+                                                      !isNaN(new Date(editedProperty.end_date_of_lease as unknown as string).getTime())
+                                                      ? new Date(editedProperty.end_date_of_lease as unknown as string).toISOString().split("T")[0]
+                                                      : ""
+                                                    
                                                     }
                                                     onChange={(e) =>
                                                       setEditedProperty({

@@ -315,17 +315,19 @@ newProperty.has_car_park && (
 
     // 3) New third group: "advancedFields"
     const thirdFields = [
+      
       <div className="col-12" key="donation_due">
         <label  className="form-label">
           Donation Due:
         </label>
+
         <input
           type="date"
           className="form-control"
           value={
             newProperty.donation_due &&
-            !isNaN(new Date(newProperty.donation_due as any).getTime())
-              ? new Date(newProperty.donation_due as any).toISOString().split("T")[0]
+              !isNaN(new Date(newProperty.donation_due).getTime())
+              ? newProperty.donation_due.toISOString().split('T')[0]//new Date(newProperty.donation_due as any).toISOString().split("T")[0]
               : ""
           }
           onChange={(e) =>
@@ -346,8 +348,8 @@ newProperty.has_car_park && (
           className="form-control"
           value={
             newProperty.start_date_of_lease &&
-            !isNaN(new Date(newProperty.start_date_of_lease as any).getTime())
-              ? new Date(newProperty.start_date_of_lease as any).toISOString().split("T")[0]
+              !isNaN(new Date(newProperty.start_date_of_lease).getTime())
+              ? newProperty.start_date_of_lease.toISOString().split('T')[0] //new Date(newProperty.start_date_of_lease as any).toISOString().split("T")[0]
               : ""
           }
           onChange={(e) =>
@@ -368,8 +370,8 @@ newProperty.has_car_park && (
           className="form-control"
           value={
             newProperty.end_date_of_lease &&
-            !isNaN(new Date(newProperty.end_date_of_lease as any).getTime())
-              ? new Date(newProperty.end_date_of_lease as any).toISOString().split("T")[0]
+              !isNaN(new Date(newProperty.end_date_of_lease).getTime())
+              ? newProperty.end_date_of_lease.toISOString().split('T')[0] //new Date(newProperty.end_date_of_lease as any).toISOString().split("T")[0]
               : ""
           }
           onChange={(e) =>

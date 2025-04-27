@@ -11,7 +11,7 @@ interface Props {
     fetchPersonProperties: () => void;  
     setSelectedProperty: (p: Property | null) => void;
     setEditPropertyMode: (mode: boolean) => void;
-    setSelectedPerson: (p: Person | null) => void;
+    //setSelectedPerson: (p: Person | null) => void;
     setEditingPersonIdForProperty: (id: number | null) => void;
     editingPersonIdForProperty: number | null;
     editedPersonForProperty: Partial<Person>;
@@ -28,7 +28,7 @@ interface Props {
     fetchPersonProperties,
     setSelectedProperty,
     setEditPropertyMode,
-    setSelectedPerson,
+    //setSelectedPerson,
     setEditingPersonIdForProperty,
     editingPersonIdForProperty,
     editedPersonForProperty,

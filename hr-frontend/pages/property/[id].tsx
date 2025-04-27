@@ -54,7 +54,7 @@ export default function PropertyPage() {
         fetchProperties={() =>
           fetch('http://localhost:5000/api/propertiies')
             .then(r => r.json())
-            .then((plist) => {/* you can update a list if needed */})
+           // .then((plist) => {/* you can update a list if needed */})
         }
         fetchPersonProperties={() =>
           fetch('http://localhost:5000/api/person_property')
@@ -63,9 +63,10 @@ export default function PropertyPage() {
         }
         setSelectedProperty={setSelectedProperty}
         setEditPropertyMode={setEditPropertyMode}
-        setSelectedPerson={(p) => {
+        //setSelectedPerson={(p) => {
           /* if inside PropertyDetails you click a person, you can handle it here */
-        }}
+          //console.log("Selected person", p);
+        //}}
         setEditingPersonIdForProperty={setEditingPersonIdForProperty}
         editingPersonIdForProperty={editingPersonIdForProperty}
         editedPersonForProperty={editedPersonForProperty}
