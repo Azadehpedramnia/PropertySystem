@@ -22,6 +22,7 @@ interface Property {
   start_date_of_lease: Date | null;
   end_date_of_lease: Date | null;
   length_of_lease: number;
+  lease_duration_text : string;
   landlord_post_code_address:string;
   property_first_line_address:string;
   property_second_line_address:string;
@@ -327,7 +328,7 @@ newProperty.has_car_park && (
           value={
             newProperty.donation_due &&
               !isNaN(new Date(newProperty.donation_due).getTime())
-              ? newProperty.donation_due.toISOString().split('T')[0]
+              ? new Date(newProperty.donation_due).toISOString().split('T')[0]
               : ""
           }
           onChange={(e) =>
@@ -339,74 +340,79 @@ newProperty.has_car_park && (
         />
       </div>,
     
-    <div className="col-12" key="start_date_of_lease">
-    <label className="form-label">Start Date of Lease:</label>
-    <input
-      type="date"
-      className="form-control"
-      value={
-        newProperty.start_date_of_lease
-          ? newProperty.start_date_of_lease.toISOString().split('T')[0]
-          : ""
-      }
-      onChange={(e) => {
-        const selectedStartDate = e.target.value ? new Date(e.target.value) : null;
-        
-        setNewProperty(prev => ({
-          ...prev,
-          start_date_of_lease: selectedStartDate,
-          // If user changes start date AFTER setting end date, clear end date if invalid
-          end_date_of_lease:
-            selectedStartDate && prev.end_date_of_lease && prev.end_date_of_lease < selectedStartDate
-              ? null
-              : prev.end_date_of_lease,
-        }));
-      }}
-    />
-  </div>
-  ,
+      <div className="col-12" key="start_date_of_lease">
+        <label className="form-label">Start Date of Lease:</label>
+        <input
+          type="date"
+          className="form-control"
+          value={
+            newProperty.start_date_of_lease &&
+            !isNaN(new Date(newProperty.start_date_of_lease).getTime())
+            ? new Date(newProperty.start_date_of_lease).toISOString().split('T')[0]
+            : ""
+          }
+          onChange={(e) => {
+            const selectedStartDate = e.target.value ? new Date(e.target.value) : null;
+            
+            setNewProperty(prev => ({
+              ...prev,
+              start_date_of_lease: selectedStartDate,
+              // If user changes start date AFTER setting end date, clear end date if invalid
+              end_date_of_lease:
+                selectedStartDate && prev.end_date_of_lease && prev.end_date_of_lease < selectedStartDate
+                  ? null
+                  : prev.end_date_of_lease,
+            }));
+          }}
+        />
+      </div>,
     
-  <div className="col-12" key="end_date_of_lease">
-  <label className="form-label">End Date of Lease:</label>
-  <input
-    type="date"
-    className="form-control"
-    min={newProperty.start_date_of_lease ? newProperty.start_date_of_lease.toISOString().split('T')[0] : undefined}
-    value={
-      newProperty.end_date_of_lease
-        ? newProperty.end_date_of_lease.toISOString().split('T')[0]
-        : ""
-    }
-    onChange={(e) => {
-      const selectedEndDate = e.target.value ? new Date(e.target.value) : null;
+ 
+    <div className="col-12" key="end_date_of_lease">
+      <label className="form-label">End Date of Lease:</label>
+      <input
+        type="date"
+        className="form-control"
+        min={
+          newProperty.start_date_of_lease &&
+          !isNaN(new Date(newProperty.start_date_of_lease).getTime())
+            ? new Date(newProperty.start_date_of_lease).toISOString().split('T')[0]
+            : undefined
+        }
+        value={
+          newProperty.end_date_of_lease &&
+          !isNaN(new Date(newProperty.end_date_of_lease).getTime())
+            ? new Date(newProperty.end_date_of_lease).toISOString().split('T')[0]
+            : ""
+        }
+        onChange={(e) => {
+          const selectedEndDate = e.target.value ? new Date(e.target.value) : null;
+          // Validate: End date should not be before start date
+          if (
+            selectedEndDate &&
+            newProperty.start_date_of_lease &&
+            selectedEndDate < newProperty.start_date_of_lease
+          ) {
+            alert("Clear your current date before update! Start with year if you update manually.");
+            return;
+          }
+          setNewProperty(prev => ({
+            ...prev,
+            end_date_of_lease: selectedEndDate,
+          }));
+        }}
+      />
+    </div>,
       
-      {/*error for date if it iwas before start*/}
-      if (
-        selectedEndDate &&
-        newProperty.start_date_of_lease &&
-        selectedEndDate < newProperty.start_date_of_lease
-      ) {
-        alert("Clear your current date before update! start with year if you update manually");
-        return;
-      }
-
-     
-      setNewProperty(prev => ({
-        ...prev,
-        end_date_of_lease: selectedEndDate,
-      }));
-    }}
-  />
-</div>
-,
     
       <div className="col-12" key="length_of_lease">
         <label  className="form-label">
-          Length of Lease (days):
-        </label>
+          Length of Lease:
+        </label> 
         <input
           className="form-control"
-          value={newProperty.length_of_lease}
+          value={newProperty.lease_duration_text}
+          //value={newProperty.length_of_lease} (days)
           readOnly
         />
       </div>,

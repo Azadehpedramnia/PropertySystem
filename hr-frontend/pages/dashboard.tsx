@@ -49,6 +49,7 @@ export interface Property {
   start_date_of_lease:Date| null;         
   end_date_of_lease:Date | null;
   length_of_lease:number;
+  lease_duration_text: string;
   landlord_post_code_address:string;
   property_first_line_address:string;
   property_second_line_address:string;
@@ -201,6 +202,7 @@ export default function Dashboard() {
     start_date_of_lease:null,
     end_date_of_lease:null,
     length_of_lease:0,
+    lease_duration_text: '',
     landlord_post_code_address:'',   
     property_first_line_address:'',
     property_second_line_address:'',
@@ -360,23 +362,53 @@ useEffect(() => {
     const end = new Date(newProperty.end_date_of_lease);
     if (end >= start) {
       const diffTime = end.getTime() - start.getTime();
+      
+      // Calculate total days difference
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
+
+      // ✅ Now let's calculate years, months, days separately
+      const startYear = start.getFullYear();
+      const startMonth = start.getMonth();
+      const startDate = start.getDate();
+
+      const endYear = end.getFullYear();
+      const endMonth = end.getMonth();
+      const endDate = end.getDate();
+
+      let years = endYear - startYear;
+      let months = endMonth - startMonth;
+      let days = endDate - startDate;
+
+      if (days < 0) {
+        months -= 1;
+        // Adjust days by adding days of previous month
+        const previousMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+        days += previousMonth.getDate();
+      }
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      // 👇 Save the info you want inside newProperty
       setNewProperty(prev => ({
         ...prev,
-        length_of_lease: diffDays,
+        length_of_lease: diffDays, // keep total days
+        lease_duration_text: `${years} years, ${months} months, ${days} days`
       }));
+
     } else {
       setNewProperty(prev => ({
         ...prev,
         length_of_lease: 0,
+        lease_duration_text: "",
       }));
     }
   } else {
-    //When start or end is missing, reset the lease length too
     setNewProperty(prev => ({
       ...prev,
       length_of_lease: 0,
+      lease_duration_text: "",
     }));
   }
 }, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
@@ -427,6 +459,7 @@ useEffect(() => {
         start_date_of_lease:null,
         end_date_of_lease:null,
         length_of_lease:0,
+        lease_duration_text: '',
         landlord_post_code_address:'',
         property_first_line_address:'',
         property_second_line_address:'',
@@ -797,6 +830,7 @@ useEffect(() => {
                             start_date_of_lease: null,
                             end_date_of_lease: null,
                             length_of_lease: 0,
+                            lease_duration_text: '',
                             landlord_post_code_address:'',
                             property_first_line_address:'',
                             property_second_line_address:'',
