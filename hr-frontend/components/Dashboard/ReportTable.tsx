@@ -14,6 +14,9 @@ interface ReportTableProps {
     handleToggle: (personId: number, propertyId: number) => void;
     onAddProperty: (property: Property, type: 'floor'|'neighbor'|'template') => void;
   }
+
+
+  
   
   const ReportTable: React.FC<ReportTableProps> = ({
     people,
@@ -23,7 +26,22 @@ interface ReportTableProps {
     handlePropertyHeaderClick,
     handleToggle,
     onAddProperty,
-  }) => (
+  }) => {
+    
+
+    //group properties by landloard
+    const groupedProperties = properties.reduce((groups: { [key: string]: Property[] }, property) => {
+      const landlord = property.inquirer || 'Unknown Landlord';
+      if (!groups[landlord]) {
+        groups[landlord] = [];
+      }
+      groups[landlord].push(property);
+      return groups;
+    }, {});
+    
+
+
+    return (
     <div className="table-responsive" style={{ overflowX: "auto" }}>
       <table className="table table-bordered table-hover text-center align-middle" 
        style={{ tableLayout: "auto", width: "auto", whiteSpace: "nowrap" }}>
@@ -62,69 +80,75 @@ interface ReportTableProps {
             </thead>
 
             <tbody>
-              {properties.map((property) => (
-                <tr key={property.id} className="text-center">
-                  {/*
-                    1. New TD to show landlord 
-                      (assuming property.inquirer 
-                      contains the landlord's data)
-                  */}
-                  <td className="px-3 py-2">               
-                    {property.inquirer || 'No Landlord'}
-                  </td>
 
-                  {/* 2. Existing "Address" column */}
-                  <td
-                    className="px-3 py-2"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handlePropertyHeaderClick(property)}
-                  >
-                                    {(property.property_first_line_address || 'Address') + 
-                                    (property.property_floor ? ` _ ${property.property_floor}` : '')}
-                  </td>
-                  
-  
+              {Object.entries(groupedProperties).map(([landlord, landlordProperties]) => (
+                  <React.Fragment key={landlord}>
+                  {/* Landlord Header Row */}
+                  <tr className="table-primary">
+                    <td colSpan={3 + people.length} className="text-start fw-bold">
+                      👤 Landlord: {landlord}
+                    </td>
+                  </tr>
 
+                   {/* Property Rows */}
+                    {landlordProperties.map((property) => (
+                      <tr key={property.id} className="text-center">
+                        {/* Empty landlord column since we already showed it */}
+                        <td></td>
 
-                   {/* 3. column for adding more property */}
-                  <td className="px-3 py-2">
-                    <div className="d-flex gap-2 justify-content-center">
-                      {(['floor','neighbor','template'] as const).map(type => (
-                        <button
-                          key={type}
-                          className="btn btn-sm btn-primary"
-                          onClick={() => onAddProperty(property, type)}
+                        {/* Property first line address + floor */}
+                        <td
+                          className="px-3 py-2"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => handlePropertyHeaderClick(property)}
                         >
-                          {type}
-                        </button>
-                      ))}
-                    </div>
-                  </td>
+                          {(property.property_first_line_address || 'Address') + 
+                          (property.property_floor ? ` _ ${property.property_floor}` : '')}
+                        </td>
 
-                  {/* 4. Continue your "checklist" columns for each person */}
-                  {people.map((person) => {
-                    const relation = personProperties.find(
-                      (pp) =>
-                        pp.property_id === property.id && pp.person_id === person.id
-                    );
-                    const isRelated = relation?.is_related ?? false;
+                        {/* Add More Property buttons */}
+                        <td className="px-3 py-2">
+                          <div className="d-flex gap-2 justify-content-center">
+                            {(['floor','neighbor','template'] as const).map(type => (
+                              <button
+                                key={type}
+                                className="btn btn-sm btn-primary"
+                                onClick={() => onAddProperty(property, type)}
+                              >
+                                {type}
+                              </button>
+                            ))}
+                          </div>
+                        </td>
 
-                    return (
-                      <td
-                        className="px-3 py-2"
-                        key={person.id}
-                        onClick={() => handleToggle(person.id, property.id)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {isRelated ? '✔️' : ''}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                        {/* Checklist for each person */}
+                        {people.map((person) => {
+                          const relation = personProperties.find(
+                            (pp) => pp.property_id === property.id && pp.person_id === person.id
+                          );
+                          const isRelated = relation?.is_related ?? false;
+
+                          return (
+                            <td
+                              key={person.id}
+                              className="px-3 py-2"
+                              onClick={() => handleToggle(person.id, property.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              {isRelated ? '✔️' : ''}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </React.Fragment>
+
+
+              ))}         
             </tbody>
           </table>
         </div>
-  );
+    );
+  };
   
   export default ReportTable;
