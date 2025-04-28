@@ -39,7 +39,15 @@ interface ReportTableProps {
       return groups;
     }, {});
     
-
+    //Expand/Collapse properties of landlord
+    const [expandedLandlords, setExpandedLandlords] = React.useState<{ [landlord: string]: boolean }>({});
+    const toggleLandlord = (landlord: string) => {
+      setExpandedLandlords(prev => ({
+        ...prev,
+        [landlord]: !prev[landlord]
+      }));
+    };
+    
 
     return (
     <div className="table-responsive" style={{ overflowX: "auto" }}>
@@ -84,14 +92,16 @@ interface ReportTableProps {
               {Object.entries(groupedProperties).map(([landlord, landlordProperties]) => (
                   <React.Fragment key={landlord}>
                   {/* Landlord Header Row */}
-                  <tr className="table-primary">
+                  <tr className="table-primary"
+                    onClick={() => toggleLandlord(landlord)}
+                    style={{ cursor: 'pointer' }}>
                     <td colSpan={3 + people.length} className="text-start fw-bold">
-                      👤 Landlord: {landlord}
+                    👤 {landlord} {expandedLandlords[landlord] ? '▲' : '▼'}
                     </td>
                   </tr>
 
-                   {/* Property Rows */}
-                    {landlordProperties.map((property) => (
+                   {/* Property Rows - show only if expanded */}
+                   {expandedLandlords[landlord] && landlordProperties.map((property) => (
                       <tr key={property.id} className="text-center">
                         {/* Empty landlord column since we already showed it */}
                         <td></td>
