@@ -47,6 +47,8 @@ interface Props {
       .map(pp => properties.find(prop => prop.id === pp.property_id))
       .filter((p): p is Property => !!p);
 
+
+
       return (
         <div className="container mt-4">
           
@@ -207,7 +209,7 @@ interface Props {
                                     property.post_code,
                                   ]
                                     .filter(Boolean) // Removes any empty, null, or undefined values
-                                    .join(' _ ')}
+                                    .join(' _ ') || 'Address'}
                             </span>
                             {isExpanded && (
                               <div className="mt-3">                            
@@ -478,6 +480,7 @@ interface Props {
                                               <div className="mb-3">
                                                 <label className="form-label"><strong>Landloard register Adress:</strong></label>     
                                                 <input
+                                                  placeholder="Landlord Address"
                                                   className="form-control"
                                                   value={editedProperty.landlord_Address ?? property.landlord_Address}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
@@ -506,6 +509,7 @@ interface Props {
                                               <div className="mb-3">
                                                 <label className="form-label"><strong>Landloard email:</strong></label>     
                                                 <input
+                                                  placeholder="Landlord emai"
                                                   className="form-control"
                                                   value={editedProperty.landlord_email ?? property.landlord_email}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
@@ -574,8 +578,7 @@ interface Props {
                                               <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
                                               <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
                                               <p><strong>Car park rates payable before relief per year:</strong> {property.car_park_rates_payable_before_relief}</p>
-                                              <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>
-                                            
+                                              <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>                                       
                                               <p><strong>Total Rate Payable:</strong> {property.total_rateable_value}</p>
                                               <p><strong> Rates Multiplier applicable for the property :</strong> {property.total_rateable_value}</p>
                                              
@@ -585,33 +588,20 @@ interface Props {
                                                     : 'N/A'}
                                               </p>
                                               
-                                              <p><strong>Donation Due:</strong>{property.donation_due
-                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
-                                                    : 'N/A'}
-                                              </p>
-
-                                              <p><strong>Donation Due:</strong>{property.donation_due
-                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
-                                                    : 'N/A'}
-                                              </p>
-                                              
-
-                                              <p><strong>Rateable Multiplier applicable for the property :</strong> {property.rates_multiplier}</p>            
-                                              
-                                              <p><strong>Agreed Start data of lease:</strong> {property.start_date_of_lease
+                                              <p><strong>Start Date of Lease:</strong>{property.start_date_of_lease
                                                     ? new Date(property.start_date_of_lease).toISOString().split('T')[0]
                                                     : 'N/A'}
                                               </p>
+                                              
                                               <p><strong>End data of lease:</strong> {property.end_date_of_lease
                                                     ? new Date(property.end_date_of_lease).toISOString().split('T')[0]
                                                     : 'N/A'}
                                               </p>
                                               <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
-                                
-                                             
+                                         
+ 
                                               <p><strong>Landlord Register address :</strong> {property.landlord_email}</p>
                                               <p><strong>Landlord Postcode :</strong> {property.landlord_email}</p>
-
                                               <p><strong>Landlord email :</strong> {property.landlord_email}</p>
                                               <p><strong>Landlord Contact number :</strong> {property.landlord_no}</p>
                                             
