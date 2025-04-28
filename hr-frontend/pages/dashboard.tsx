@@ -109,6 +109,7 @@ export default function Dashboard() {
   const [editedProperty, setEditedProperty] = useState<Partial<Property>>({});
 //
 
+
 /////SEARCH PART//////
 //const [searchType, setSearchType] = useState<"people" | "propertiies">("people");
 //  const [query, setQuery] = useState("");
@@ -238,6 +239,14 @@ export default function Dashboard() {
     localStorage.removeItem('token');
     router.push('/login');
   };
+
+  const handlePersonRoleClick = (person: Person) => {
+    // example: navigate to /persons/123?role=manager
+    router.push({
+      pathname: `/contact/${person.id}`,
+      query: { role: person.role }
+    })
+  }
 
 {/*
 
@@ -680,6 +689,7 @@ useEffect(() => {
                 scrollToRegisterProperty();  // <- Add scrolling here
               }}
               handleSelectPersonToContactForm={handleSelectPersonToContactForm}
+              //handlePersonRoleClick={handlePersonRoleClick}
             />
             
 

@@ -30,6 +30,21 @@ interface ReportTableProps {
     handleSelectPersonToContactForm,
   }) => {
        
+
+    // 1️⃣ Group people by full name
+const grouped = people.reduce((acc, p) => {
+  const fullName = `${p.name} ${p.family}`;
+  if (!acc[fullName]) acc[fullName] = [];
+  acc[fullName].push(p);
+  return acc;
+}, {} as Record<string, Person[]>);
+
+// 2️⃣ Turn into an array of [fullName, Person[]] so you can .map it
+const groupedEntries = Object.entries(grouped);
+
+// 3️⃣ (Optional) flatten back out for your <tbody> mapping
+const flatPeople = groupedEntries.flatMap(([, arr]) => arr);
+
     //group properties by landloard
     const groupedProperties = properties.reduce((groups: { [key: string]: Property[] }, property) => {
       const landlord = property.inquirer || 'Unknown Landlord';
@@ -54,63 +69,56 @@ interface ReportTableProps {
     <div className="table-responsive" style={{ overflowX: "auto" }}>
       <table className="table table-bordered table-hover text-center align-middle" 
        style={{ tableLayout: "auto", width: "auto", whiteSpace: "nowrap" }}>
-            <thead className="table-light">
-            
-              <tr>
-                {/* New column for Landlord/Organization */}
-                <th className="px-3 py-2">
-                  Landlord \ Organization
-                </th>
+         
+            <thead>
+               {/* — First header row: merged names + single “+” per group — */}
+                <tr>
+                  <th className="px-3 py-2">Landlord \ Organization</th>
+                  <th className="px-3 py-2">Property</th>
+                  <th className="px-3 py-2">Add More Property</th>
 
-                {/* Existing column: "Property \ Person" */}
-                <th className="px-3 py-2">
-                  Property
-                </th>
+                  {groupedEntries.map(([fullName, persons]) => (
+                    <th
+                      key={fullName}
+                      className="px-3 py-2 text-center"
+                      colSpan={persons.length}
+                      style={{ minWidth: `${persons.length * 140}px` }}
+                    >
+                      <div className="d-flex align-items-center justify-content-center gap-2">
+                        <span>{fullName}</span>
+                        <button
+                          className="btn btn-sm btn-outline-primary p-1"
+                          style={{ fontSize: 14, lineHeight: 1, padding: '2px 6px' }}
+                          onClick={e => {
+                            e.stopPropagation()
+                            handleSelectPersonToContactForm(persons[0])
+                          }}
+                        >+</button>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
 
-                {/* ← new header */}
-                <th className="px-3 py-2">
-                  Add More Property
-                </th>
+                {/* — Second header row: one column per role, clickable to open details — */}
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
 
-                {/**/}
-                {people.map((person) => (
-                  <th
-                    key={person.id}
-                    className="px-3 py-2"
-                    style={{ cursor: 'pointer', minWidth: "140px" }}
-                  >
-                    {/* Name + Family + Plus Button all on one line */}
-                    <div className="d-flex align-items-center justify-content-center gap-2">
-                      <span onClick={() => handlePersonHeaderClick(person)}>
-                        {(person.name || 'Name') + ' ' + (person.family || '-last name')}
-                      </span>
-                      <button
-                        className="btn btn-sm btn-outline-primary p-1"
-                        onClick={(e) => {
-                          e.stopPropagation(); // Don't trigger header click
-                          handleSelectPersonToContactForm(person);
-                        }}
-                        style={{ fontSize: "14px", lineHeight: "1", padding: "2px 6px" }}
+                  {groupedEntries.flatMap(([, persons]) =>
+                    persons.map(person => (
+                      <th
+                        key={person.id}
+                        className="px-3 py-2 small"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handlePersonHeaderClick(person)}
                       >
-                        +
-                      </button>
-                    </div>
-
-                    {/* Role shown underneath */}
-                    <div className="mt-1 small text-muted">
-                      <span onClick={() => handlePersonHeaderClick(person)}>
                         Role: {person.role || 'N/A'}
-                      </span>
-                    </div>
-                  </th>
-                ))}
-
-                {/* */}
-                
-                {/* */}
-              </tr>
+                      </th>
+                    ))
+                  )}
+                </tr>
             </thead>
-
             <tbody>
 
               {Object.entries(groupedProperties).map(([landlord, landlordProperties]) => (
