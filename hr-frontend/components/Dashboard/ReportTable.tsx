@@ -80,7 +80,7 @@ interface ReportTableProps {
                     style={{ cursor: 'pointer', minWidth: "120px" }}
                     onClick={() =>handlePersonHeaderClick(person) }
                   >
-                    {person.name || 'Name'}
+                     {(person.name || 'Name') + ' ' + (person.family || '-last name')}
                   </th>
                 ))}
 
