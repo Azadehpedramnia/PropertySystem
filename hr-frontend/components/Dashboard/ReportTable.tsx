@@ -13,6 +13,7 @@ interface ReportTableProps {
     handlePropertyHeaderClick: (property: Property) => void;
     handleToggle: (personId: number, propertyId: number) => void;
     onAddProperty: (property: Property, type: 'floor'|'neighbor'|'template') => void;
+    handleSelectPersonToContactForm: (person: Person) => void;
   }
 
 
@@ -26,9 +27,9 @@ interface ReportTableProps {
     handlePropertyHeaderClick,
     handleToggle,
     onAddProperty,
+    handleSelectPersonToContactForm,
   }) => {
-    
-
+       
     //group properties by landloard
     const groupedProperties = properties.reduce((groups: { [key: string]: Property[] }, property) => {
       const landlord = property.inquirer || 'Unknown Landlord';
@@ -70,20 +71,43 @@ interface ReportTableProps {
                 <th className="px-3 py-2">
                   Add More Property
                 </th>
-                
-                {/* Columns for each person’s name */}
+
+                {/**/}
                 {people.map((person) => (
                   <th
                     key={person.id}
                     className="px-3 py-2"
-                    //className="border min-w-[100px] min-h-[50px] p-2 text-center"
-                    style={{ cursor: 'pointer', minWidth: "120px" }}
-                    onClick={() =>handlePersonHeaderClick(person) }
+                    style={{ cursor: 'pointer', minWidth: "140px" }}
                   >
-                     {(person.name || 'Name') + ' ' + (person.family || '-last name')}
+                    {/* Name + Family + Plus Button all on one line */}
+                    <div className="d-flex align-items-center justify-content-center gap-2">
+                      <span onClick={() => handlePersonHeaderClick(person)}>
+                        {(person.name || 'Name') + ' ' + (person.family || '-last name')}
+                      </span>
+                      <button
+                        className="btn btn-sm btn-outline-primary p-1"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Don't trigger header click
+                          handleSelectPersonToContactForm(person);
+                        }}
+                        style={{ fontSize: "14px", lineHeight: "1", padding: "2px 6px" }}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Role shown underneath */}
+                    <div className="mt-1 small text-muted">
+                      <span onClick={() => handlePersonHeaderClick(person)}>
+                        Role: {person.role || 'N/A'}
+                      </span>
+                    </div>
                   </th>
                 ))}
 
+                {/* */}
+                
+                {/* */}
               </tr>
             </thead>
 

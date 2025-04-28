@@ -154,7 +154,18 @@ export default function Dashboard() {
     iqu_post_code_address:''
   });
 
-  
+  const handleSelectPersonToContactForm = (person: Person) => {
+    setNewPerson({
+      name: person.name,
+      family: person.family,
+      organisation: person.organisation,
+      role: person.role,
+      email: person.email,
+      contact_number: person.contact_number,
+      property_address_for_enquiry: '', // empty by default
+      iqu_post_code_address: '', // empty by default
+    });
+  };
  
 
 
@@ -668,6 +679,7 @@ useEffect(() => {
                 handleAddProperty(property, type);
                 scrollToRegisterProperty();  // <- Add scrolling here
               }}
+              handleSelectPersonToContactForm={handleSelectPersonToContactForm}
             />
             
 

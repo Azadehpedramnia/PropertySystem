@@ -57,7 +57,7 @@ interface Props {
               <div className="col-md-6">
                 <div className="card shadow-sm rounded">
                   <div className="card-body">
-                    <h5 className="card-title mb-3">Report For <strong>{selectedPerson.name}</strong></h5>
+                    <h5 className="card-title mb-3">Report For <strong>{selectedPerson.name}</strong> as <strong>{selectedPerson.role}</strong></h5>
                     {/* Person Info Form */}
                     {editPersonMode ? (
                       <>
