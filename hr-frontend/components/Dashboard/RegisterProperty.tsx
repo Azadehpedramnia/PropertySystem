@@ -279,12 +279,12 @@ newProperty.has_car_park && (
   </div>,
   <div key="total_rate_payable " className="col-12">
     <label  className="form-label">
-      Total Rate Payable:
+      Total Rates Payable Before Relief:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder="Total Rate Payable"
+      placeholder=" Total Rates Payable Before Relief"
       value={newProperty.total_rate_payable ?? ""}
       onChange={(e) =>
         setNewProperty({
@@ -297,7 +297,7 @@ newProperty.has_car_park && (
   </div>,
   <div key="rates_multiplier" className="col-12">
                 <label  className="form-label">
-                  Rates Multiplier applicable for the property :
+                  Rates Multiplier Of The Property :
                 </label>
                 <input
                   className="form-control"
@@ -316,10 +316,10 @@ newProperty.has_car_park && (
 
     // 3) New third group: "advancedFields"
     const thirdFields = [
-      
+      // this type is number not date
       <div className="col-12" key="donation_due">
         <label  className="form-label">
-          Donation Due:
+          Donation Due By Landlord:
         </label>
 
         <input
@@ -422,11 +422,11 @@ newProperty.has_car_park && (
   const forthFields = [
       <div key="landlord_Address"  className="col-12">
         <label  className="form-label">
-          Landlord register Adress:
+          Landlord's Registered Address:
         </label>
         <input
           className="form-control"
-          placeholder="Landlord register Address"
+          placeholder="Landlord's Registered Address"
           value={newProperty.landlord_Address}
           onChange={(e) =>
             setNewProperty({
@@ -438,7 +438,7 @@ newProperty.has_car_park && (
       </div>,
       <div key="landlord_post_code_address" className="col-12">
         <label  className="form-label">
-          Landlord Postcode
+          Landlord's Postcode
         </label>
         <input
           className="form-control"
@@ -453,7 +453,7 @@ newProperty.has_car_park && (
         />
       </div>,
       <div key="landlord_email" className="col-12">
-        <label  className="form-label">Landlord Email:</label>
+        <label  className="form-label">Landlord's Email:</label>
         <input
           className="form-control"
           placeholder="Landlord Email"
@@ -462,7 +462,7 @@ newProperty.has_car_park && (
         />
       </div>,
       <div key="landlord_no" className="col-12">
-        <label  className="form-label">Landlord Contact Number:</label>
+        <label  className="form-label">Landlord's Contact Number:</label>
         <input
           className="form-control"
           placeholder="Landlord Contact Number"
@@ -486,7 +486,7 @@ newProperty.has_car_park && (
               className="btn btn-secondary"
               onClick={() => setShowSecondFields((prev) => !prev)}
             >
-              {showSecondFields ? "– Collapse" : "+ more"}
+              {showSecondFields ? "– Minimise" : "+ more"}
             </button>
           </div>
 
@@ -502,7 +502,7 @@ newProperty.has_car_park && (
                 onClick={() => setShowThirdFields((prev) => !prev)}
               >
                 {showThirdFields
-                  ? "– Collapse"
+                  ? "– Minimise"
                   : "+ more"}
               </button>
             </div>
@@ -520,7 +520,7 @@ newProperty.has_car_park && (
                 onClick={() => setShowForthFields((prev) => !prev)}
               >
                 {showForthFields
-                  ? "– Collapse"
+                  ? "– Minimise"
                   : "+ if landlord details requierd"}
               </button>
             </div>

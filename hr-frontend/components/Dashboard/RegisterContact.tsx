@@ -31,7 +31,7 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
         <div className="row g-3">
           {/* Row: Name */}
           <div className="col-12">
-            <label className="form-label me-2 mb-0 w-50">Name:</label>
+            <label className="form-label me-2 mb-0 w-50">First Name:</label>
             <input
               className="form-control"
               placeholder="Name"
@@ -99,7 +99,7 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
           </div>
           {/* Row: Contact Number */}
           <div className="col-12">
-            <label  className="form-label">Contact No:</label>
+            <label  className="form-label">Contact:</label>
             <input
               className="form-control"
               placeholder="Contact Number"
@@ -111,10 +111,10 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
           </div>
           {/* Row: Postcode*/}
           <div className="col-12">
-            <label  className="form-label">postcode:</label>
+            <label  className="form-label">Postcode:</label>
             <input
               className="form-control"
-              placeholder="postcode"
+              placeholder="Postcode"
               value={newPerson.iqu_post_code_address}
               onChange={(e) =>
                 setNewPerson({

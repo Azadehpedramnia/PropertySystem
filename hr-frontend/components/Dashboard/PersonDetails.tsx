@@ -62,11 +62,20 @@ interface Props {
                     {editPersonMode ? (
                       <>
                         <div className="mb-3">
-                          <label className="form-label"><strong>Name:</strong></label>
+                          <label className="form-label"><strong>First Name:</strong></label>
                           <input
                             className="form-control"
                             value={selectedPerson.name}
                             onChange={(e) => setSelectedPerson({ ...selectedPerson, name: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label className="form-label"><strong>Last Name:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.family}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson,family: e.target.value })}
                           />
                         </div>
 
@@ -107,7 +116,7 @@ interface Props {
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label"><strong>Contact:</strong></label>
+                          <label className="form-label"><strong>Contact Number:</strong></label>
                           <input
                             className="form-control"
                             value={selectedPerson.contact_number}
@@ -116,7 +125,16 @@ interface Props {
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label"><strong>Property address for enquiry:</strong></label>
+                          <label className="form-label"><strong>Contact's Postcode:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.iqu_post_code_address}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, iqu_post_code_address: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label className="form-label"><strong>Contact's Address:</strong></label>
                           <input
                             className="form-control"
                             value={selectedPerson.property_address_for_enquiry}
@@ -126,13 +144,14 @@ interface Props {
                       </>
                     ) : (
                       <>
-                        <p><strong>Name:</strong> {selectedPerson.name}</p>
+                        <p><strong>First Name:</strong> {selectedPerson.name}</p>
                         <p><strong>Last Name:</strong> {selectedPerson.family}</p>
                         <p><strong>Organisation:</strong> {selectedPerson.organisation}</p>
                         <p><strong>Role:</strong> {selectedPerson.role}</p>
                         <p><strong>Email:</strong> {selectedPerson.email}</p>
-                        <p><strong>Contact:</strong> {selectedPerson.contact_number}</p>
-                        <p><strong>Property address for enquiry:</strong> {selectedPerson.property_address_for_enquiry}</p>
+                        <p><strong>Contact Number:</strong> {selectedPerson.contact_number}</p>
+                        <p><strong>Contact's Postcode:</strong> {selectedPerson.iqu_post_code_address}</p>
+                        <p><strong>Contact's Address:</strong> {selectedPerson.property_address_for_enquiry}</p>
                       </>
                     )}
 

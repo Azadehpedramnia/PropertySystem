@@ -631,13 +631,13 @@ useEffect(() => {
   // controls modal visibility
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   // which button was clicked
-  const [addModalType,   setAddModalType]   = useState<'floor'|'neighbor'|'template'|null>(null);
+  const [addModalType,   setAddModalType]   = useState<'Floor'|'Neighbor'|'Template'|null>(null);
   // store the clicked row’s property
   const [selectedPropertyForAdd, setSelectedPropertyForAdd] = useState<Property|null>(null);
 
 
 
-  function handleAddProperty(property: Property, type: 'floor'|'neighbor'|'template') {
+  function handleAddProperty(property: Property, type: 'Floor'|'Neighbor'|'Template') {
     console.log('🏷️ button clicked:', property.id, type);
     // 1) Copy *all* fields into your form state so it’s prefilled
     setNewProperty({
@@ -785,7 +785,7 @@ useEffect(() => {
               <div className="card shadow-sm border-2">
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom" 
                 style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
-                  Register Contact
+                  Register a contact
                 </div>
                 <div className="card-body">
                   <RegisterContact
@@ -803,7 +803,7 @@ useEffect(() => {
               <div className={`card shadow-sm border-2 ${highlight ? 'highlighted-card' : ''}`}>
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom"
                  style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
-                  Register Property
+                  Register a property
                 </div>
                 <div className="card-body">
                   <RegisterProperty

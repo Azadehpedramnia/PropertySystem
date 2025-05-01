@@ -12,7 +12,7 @@ interface ReportTableProps {
     handlePersonHeaderClick: (person: Person) => void;
     handlePropertyHeaderClick: (property: Property) => void;
     handleToggle: (personId: number, propertyId: number) => void;
-    onAddProperty: (property: Property, type: 'floor'|'neighbor'|'template') => void;
+    onAddProperty: (property: Property, type: 'Floor'|'Neighbor'|'Template') => void;
     handleSelectPersonToContactForm: (person: Person) => void;
     handlePersonRoleClick: (person: Person) => void;
   }
@@ -75,9 +75,9 @@ interface ReportTableProps {
             <thead>
                {/* — First header row: merged names + single “+” per group — */}
                 <tr>
-                  <th className="px-3 py-2">Landlord \ Organization</th>
+                  <th className="px-3 py-2">Landlord \ Organisation</th>
                   <th className="px-3 py-2">Property</th>
-                  <th className="px-3 py-2">Add More Property</th>
+                  <th className="px-3 py-2">Add More Properties</th>
 
                   {groupedEntries.map(([fullName, persons]) => (
                     <th
@@ -147,14 +147,16 @@ interface ReportTableProps {
                           style={{ cursor: 'pointer' }}
                           onClick={() => handlePropertyHeaderClick(property)}
                         >
-                          {(property.property_first_line_address || 'Address') + 
-                          (property.property_floor ? ` _ ${property.property_floor}` : '')}
+                          {
+                            (property.property_floor ? `${property.property_floor} _ ` : '') +
+                            (property.property_first_line_address || 'Address') 
+                          }
                         </td>
 
                         {/* Add More Property buttons */}
                         <td className="px-3 py-2">
                           <div className="d-flex gap-2 justify-content-center">
-                            {(['floor','neighbor','template'] as const).map(type => (
+                            {(['Floor','Neighbor','Template'] as const).map(type => (
                               <button
                                 key={type}
                                 className="btn btn-sm btn-primary"
