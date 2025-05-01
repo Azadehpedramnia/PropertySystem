@@ -652,9 +652,6 @@ useEffect(() => {
   
 
 
-
-  /////////////////
-
   return (
     <div className="mb-6 p-4 border rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
@@ -689,7 +686,7 @@ useEffect(() => {
                 scrollToRegisterProperty();  // <- Add scrolling here
               }}
               handleSelectPersonToContactForm={handleSelectPersonToContactForm}
-              //handlePersonRoleClick={handlePersonRoleClick}
+              handlePersonRoleClick={handlePersonRoleClick}
             />
             
 

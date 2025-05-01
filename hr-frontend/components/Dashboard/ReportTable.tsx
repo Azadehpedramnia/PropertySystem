@@ -14,6 +14,7 @@ interface ReportTableProps {
     handleToggle: (personId: number, propertyId: number) => void;
     onAddProperty: (property: Property, type: 'floor'|'neighbor'|'template') => void;
     handleSelectPersonToContactForm: (person: Person) => void;
+    handlePersonRoleClick: (person: Person) => void;
   }
 
 
@@ -28,22 +29,23 @@ interface ReportTableProps {
     handleToggle,
     onAddProperty,
     handleSelectPersonToContactForm,
+    handlePersonRoleClick,
   }) => {
        
 
     // 1️⃣ Group people by full name
-const grouped = people.reduce((acc, p) => {
-  const fullName = `${p.name} ${p.family}`;
-  if (!acc[fullName]) acc[fullName] = [];
-  acc[fullName].push(p);
-  return acc;
-}, {} as Record<string, Person[]>);
+    const grouped = people.reduce((acc, p) => {
+      const fullName = `${p.name} ${p.family}`;
+      if (!acc[fullName]) acc[fullName] = [];
+      acc[fullName].push(p);
+      return acc;
+    }, {} as Record<string, Person[]>);
 
-// 2️⃣ Turn into an array of [fullName, Person[]] so you can .map it
-const groupedEntries = Object.entries(grouped);
+    // 2️⃣ Turn into an array of [fullName, Person[]] so you can .map it
+    const groupedEntries = Object.entries(grouped);
 
-// 3️⃣ (Optional) flatten back out for your <tbody> mapping
-const flatPeople = groupedEntries.flatMap(([, arr]) => arr);
+    // 3️⃣ (Optional) flatten back out for your <tbody> mapping
+    const flatPeople = groupedEntries.flatMap(([, arr]) => arr);
 
     //group properties by landloard
     const groupedProperties = properties.reduce((groups: { [key: string]: Property[] }, property) => {
@@ -111,7 +113,8 @@ const flatPeople = groupedEntries.flatMap(([, arr]) => arr);
                         key={person.id}
                         className="px-3 py-2 small"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => handlePersonHeaderClick(person)}
+                        //onClick={() => handlePersonHeaderClick(person)}
+                        onClick={() => handlePersonRoleClick(person)}
                       >
                         Role: {person.role || 'N/A'}
                       </th>
@@ -164,7 +167,7 @@ const flatPeople = groupedEntries.flatMap(([, arr]) => arr);
                         </td>
 
                         {/* Checklist for each person */}
-                        {people.map((person) => {
+                        {flatPeople.map((person) => {
                           const relation = personProperties.find(
                             (pp) => pp.property_id === property.id && pp.person_id === person.id
                           );
