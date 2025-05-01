@@ -24,7 +24,7 @@ interface ReportTableProps {
     people,
     properties,
     personProperties,
-    handlePersonHeaderClick,
+    //handlePersonHeaderClick,
     handlePropertyHeaderClick,
     handleToggle,
     onAddProperty,
