@@ -109,7 +109,7 @@ interface Props {
               }
             /></p>
             <p> 
-            <label><strong>Rates payable before relief:</strong></label> 
+            <label><strong>Rates Payable Before Relief per year:</strong></label> 
             <input
               className="border p-2 w-full my-1"
               type="number"
@@ -174,7 +174,7 @@ interface Props {
               }
             /></p>
               <p> 
-              <label><strong>Total rate payable:</strong></label> 
+              <label><strong>Total Rates Payable Before Relief::</strong></label> 
             <input
               className="border p-2 w-full my-1"
               type="number"
@@ -186,6 +186,9 @@ interface Props {
                 })
               }
             /></p>
+
+            
+            
             {/* Repeat for other fields */}
           </>
         ) : (
@@ -200,7 +203,8 @@ interface Props {
             <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
             <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
             <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
-            <p><strong>Total rate payable:</strong> {selectedPropety.total_rate_payable}</p>         
+            <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable}</p> 
+            <p><strong>Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>         
             <p><strong>Dontion:</strong> {selectedPropety.donation_due
                   ? new Date(selectedPropety.donation_due).toISOString().split('T')[0]
                   : 'N/A'}

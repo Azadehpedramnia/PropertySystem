@@ -122,17 +122,19 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
           {/* Row: Postcode*/}
           <div className="col-12">
             <label  className="form-label">Postcode:</label>
-            <input
-              className="form-control"
-              placeholder="Postcode"
-              value={newPerson.iqu_post_code_address}
-              onChange={(e) =>
-                setNewPerson({
-                  ...newPerson,
-                  iqu_post_code_address: e.target.value,
-                })
-              }
-            />
+              <input
+                className="form-control"
+                placeholder="Postcode"
+                value={newPerson.iqu_post_code_address}
+                pattern="^[A-Za-z].*"
+                title="Postcode must start with a letter"
+                onChange={(e) =>
+                  setNewPerson({
+                    ...newPerson,
+                    iqu_post_code_address: e.target.value.toUpperCase(),
+                  })
+                }
+              />
           </div>
 
           {/* Row: Address */}

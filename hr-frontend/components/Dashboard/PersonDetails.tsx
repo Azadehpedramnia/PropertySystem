@@ -308,7 +308,7 @@ interface Props {
                                               </div>                                   
                                          
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Post Code:</strong></label>     
+                                                <label className="form-label"><strong>Postcode:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   value={editedProperty.post_code?? property.post_code}
@@ -409,7 +409,7 @@ interface Props {
                                               </div>
                                    
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Total rate payable:</strong></label>     
+                                                <label className="form-label"><strong>Total Rates Payable Before Relief:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -422,7 +422,7 @@ interface Props {
 
                                               
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Rates Multiplier applicable for the property :</strong></label>     
+                                                <label className="form-label"><strong>Rates Multiplier Of The Property :</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -435,7 +435,7 @@ interface Props {
 
  
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Donation Due:</strong></label>
+                                                <label className="form-label"><strong>Donation Due By Landlord:</strong></label>
                                                 <input
                                                   className="form-control"
                                                   type="date"
@@ -510,7 +510,7 @@ interface Props {
                                               
 
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Landloard register Adress:</strong></label>     
+                                                <label className="form-label"><strong>Landlord's Registered Address:</strong></label>     
                                                 <input
                                                   placeholder="Landlord Address"
                                                   className="form-control"
@@ -522,12 +522,12 @@ interface Props {
                                               <div className="mb-3">
                                                 <label  className="form-label">
                                                   <strong>
-                                                    Landlord Postcode
+                                                    Landlord's Postcode
                                                   </strong>                                        
                                                 </label>
                                                 <input
                                                   className="form-control"
-                                                  placeholder="Landlord postcode"
+                                                  placeholder="Landlord's postcode"
                                                   value={editedProperty.landlord_post_code_address}
                                                   onChange={(e) =>
                                                     setEditedProperty({
@@ -539,9 +539,9 @@ interface Props {
                                                 </div>
                                              
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Landloard email:</strong></label>     
+                                                <label className="form-label"><strong>Landloard's email:</strong></label>     
                                                 <input
-                                                  placeholder="Landlord emai"
+                                                  placeholder="Landlord's emai"
                                                   className="form-control"
                                                   value={editedProperty.landlord_email ?? property.landlord_email}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
@@ -549,10 +549,10 @@ interface Props {
                                               </div>
                                                   
                                               <div className="mb-3">
-                                                <label  className="form-label"><strong>Landlord Contact Number:</strong></label>
+                                                <label  className="form-label"><strong>Landlord's Contact Number:</strong></label>
                                                 <input
                                                   className="form-control"
-                                                  placeholder="Landlord Contact Number"
+                                                  placeholder="Landlord's Contact Number"
                                                   value={editedProperty.landlord_no}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_no: e.target.value })}
                                                 />
@@ -603,7 +603,7 @@ interface Props {
                                               <p><strong>Property Fisrt Line Address:</strong> {property.city}</p>
                                               <p><strong>Property Second Line Address:</strong> {property.city}</p>
                                               <p><strong>City:</strong> {property.city}</p>
-                                              <p><strong>Post Code:</strong> {property.city}</p>
+                                              <p><strong>Postcode:</strong> {property.post_code}</p>
                                               <p><strong>Property Type:</strong> {property.property_type}</p>
                                               <p><strong>Property rateable value:</strong> {property.building_rateable_value}</p>
                                               <p><strong>Rates payable before relief per year:</strong> {property.rates_payable_before_relief}</p>
@@ -611,11 +611,11 @@ interface Props {
                                               <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
                                               <p><strong>Car park rates payable before relief per year:</strong> {property.car_park_rates_payable_before_relief}</p>
                                               <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>                                       
-                                              <p><strong>Total Rate Payable:</strong> {property.total_rateable_value}</p>
-                                              <p><strong> Rates Multiplier applicable for the property :</strong> {property.total_rateable_value}</p>
+                                              <p><strong>Total Rates Payable Before Relief:</strong> {property.total_rateable_value}</p>
+                                              <p><strong> Rates Multiplier Of The Property:</strong> {property.total_rateable_value}</p>
                                              
                                            
-                                              <p><strong>Donation Due:</strong>{property.donation_due
+                                              <p><strong>Donation Due By Landlord::</strong>{property.donation_due
                                                     ? new Date(property.donation_due).toISOString().split('T')[0]
                                                     : 'N/A'}
                                               </p>
@@ -632,10 +632,10 @@ interface Props {
                                               <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
                                          
  
-                                              <p><strong>Landlord Register address :</strong> {property.landlord_email}</p>
-                                              <p><strong>Landlord Postcode :</strong> {property.landlord_email}</p>
-                                              <p><strong>Landlord email :</strong> {property.landlord_email}</p>
-                                              <p><strong>Landlord Contact number :</strong> {property.landlord_no}</p>
+                                              <p><strong>Landlord's Registered Address:</strong> {property.landlord_Address}</p>
+                                              <p><strong>Landlord's Postcode :</strong> {property.landlord_post_code_address}</p>
+                                              <p><strong>Landlord's email :</strong> {property.landlord_email}</p>
+                                              <p><strong>Landlord's Contact Number::</strong> {property.landlord_no}</p>
                                             
                                               
                                               {/* ACTION BUTTONS */}
