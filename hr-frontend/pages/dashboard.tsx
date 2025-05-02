@@ -85,7 +85,9 @@ export default function Dashboard() {
   //const [roles, setRoles] = useState<string[]>([]);
 
   const [allRoles, setAllRoles] = useState<string[]>([]);
- 
+
+  //add cansel button aftr click add for new role for contact
+  const [showContactCancel, setShowContactCancel] = useState(false);
 
   //scrooling smooth after click on floor and neighbour and template
   const registerPropertyRef = useRef<HTMLDivElement>(null);
@@ -101,8 +103,8 @@ export default function Dashboard() {
   const [highlightContact, setHighlightContact] = useState(false);
   const scrollToRegisterContact = () => {
     registerPersonRoleRef.current?.scrollIntoView({ behavior: 'smooth' });
-    
-    setHighlightContact(true);                 // Set highlight to true immediately
+    setHighlightContact(true);
+    setShowContactCancel(true); // show cancel button
   };
 
 
@@ -386,6 +388,8 @@ export default function Dashboard() {
     });
     // Reload table
     fetchPeople();
+    setHighlightContact(false);
+    setShowContactCancel(false);
   };
 
 
@@ -810,6 +814,29 @@ useEffect(() => {
                     addPersoon={addPersoon}
                     allRoles={allRoles}
                   />
+                    {showContactCancel && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger mt-2"
+                        onClick={() => {
+                          setHighlightContact(false);
+                          setShowContactCancel(false);
+                          setNewPerson({
+                            name: '',
+                            organisation: '',
+                            role: '',
+                            email: '',
+                            contact_number: '',
+                            family: '',
+                            property_address_for_enquiry: '',
+                            iqu_post_code_address: ''
+                          });
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
+
                 </div>
               </div>
             </div>
