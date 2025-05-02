@@ -11,6 +11,7 @@ interface Person {
   contact_number: string;
   property_address_for_enquiry: string;
   iqu_post_code_address:string;
+  contact_county:string;
 }
 
 interface RegisterContactProps {
@@ -135,6 +136,22 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
                   })
                 }
               />
+          </div>
+
+          {/* Row: County */}
+          <div className="col-12">
+            <label  className="form-label">County:</label>
+            <input
+              className="form-control"
+              placeholder="Address"
+              value={newPerson.contact_county}
+              onChange={(e) =>
+                setNewPerson({
+                  ...newPerson,
+                  contact_county: e.target.value,
+                })
+              }
+            />
           </div>
 
           {/* Row: Address */}

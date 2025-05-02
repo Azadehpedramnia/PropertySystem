@@ -12,8 +12,7 @@ interface Property {
   car_park_rateable_value: number | null;
   car_park_rates_payable_before_relief: number | null;
   total_rateable_value: number | null;
-  total_rate_payable: number | null;
-  donation_due: Date | null;
+  total_rate_payable_before_relief: number | null;
   post_code: string;
   landlord_Address: string;
   landlord_email: string;
@@ -28,6 +27,10 @@ interface Property {
   property_second_line_address:string;
   property_floor:string;
   property_solely_occupied:boolean;
+  property_county:string;
+  landlord_county:string;
+  donation_due:number | null;
+  total_rate_payable_after_relief:number| null;
 }
 
 interface RegisterPropertyProps {
@@ -285,11 +288,11 @@ newProperty.has_car_park && (
       type="number"
       className="form-control"
       placeholder=" Total Rates Payable Before Relief"
-      value={newProperty.total_rate_payable ?? ""}
+      value={newProperty.total_rate_payable_before_relief?? ""}
       onChange={(e) =>
         setNewProperty({
           ...newProperty,
-          total_rate_payable:
+          total_rate_payable_before_relief:
             e.target.value === "" ? null : Number(e.target.value),
         })
       }
@@ -323,22 +326,19 @@ newProperty.has_car_park && (
         </label>
 
         <input
-          type="date"
+          type="number"
           className="form-control"
-          value={
-            newProperty.donation_due &&
-              !isNaN(new Date(newProperty.donation_due).getTime())
-              ? new Date(newProperty.donation_due).toISOString().split('T')[0]
-              : ""
-          }
+          value={newProperty.donation_due ?? ""}
           onChange={(e) =>
             setNewProperty({
               ...newProperty,
-              donation_due: e.target.value ? new Date(e.target.value) : null,
+              donation_due: e.target.value ?  parseFloat(e.target.value) : null,
             })
           }
         />
       </div>,
+
+      
     
       <div className="col-12" key="start_date_of_lease">
         <label className="form-label">Start Date of Lease:</label>
