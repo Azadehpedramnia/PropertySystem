@@ -77,12 +77,9 @@ export default function Dashboard() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [editPropertyMode, setEditPropertyMode] = useState(false);
   const [editPersonMode, setEditPersonMode] = useState(false);
-  //const [newPersonName, setNewPersonName] = useState('');
- // const [newPropertyAddress, setNewPropertyAddress] = useState('');
   const [editingPersonIdForProperty, setEditingPersonIdForProperty] = useState<number | null>(null);
   const [editedPersonForProperty, setEditedPersonForProperty] = useState<Partial<Person>>({});
-  //const [openPersonPopups, setOpenPersonPopups] = useState<Person[]>([]);
-  //const [roles, setRoles] = useState<string[]>([]);
+
 
   const [allRoles, setAllRoles] = useState<string[]>([]);
 
@@ -699,7 +696,7 @@ useEffect(() => {
                     setNewProperty={setNewProperty}
                     addProperrty={addProperrty}
                     onSuccessAdd={() => {
-                      setHighlightProperty(false);         // 👈 turn off border here
+                      setHighlightProperty(false);         //turn off border here
                       setAddModalType(null);
                       setIsAddModalOpen(false);
                       setSelectedPropertyForAdd(null);
