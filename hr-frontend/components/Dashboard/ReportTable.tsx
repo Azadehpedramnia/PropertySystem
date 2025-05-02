@@ -15,6 +15,7 @@ interface ReportTableProps {
     onAddProperty: (property: Property, type: 'Floor'|'Neighbor'|'Template') => void;
     handleSelectPersonToContactForm: (person: Person) => void;
     handlePersonRoleClick: (person: Person) => void;
+    scrollToRegisterContact: () => void;
   }
 
 
@@ -30,6 +31,7 @@ interface ReportTableProps {
     onAddProperty,
     handleSelectPersonToContactForm,
     handlePersonRoleClick,
+    scrollToRegisterContact,
   }) => {
        
 
@@ -94,6 +96,7 @@ interface ReportTableProps {
                           onClick={e => {
                             e.stopPropagation()
                             handleSelectPersonToContactForm(persons[0])
+                            scrollToRegisterContact()
                           }}
                         >+</button>
                       </div>

@@ -85,18 +85,32 @@ export default function Dashboard() {
   //const [roles, setRoles] = useState<string[]>([]);
 
   const [allRoles, setAllRoles] = useState<string[]>([]);
-  //const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+ 
 
   //scrooling smooth after click on floor and neighbour and template
   const registerPropertyRef = useRef<HTMLDivElement>(null);
-  const [highlight, setHighlight] = useState(false);
-  
+  const [highlightProperty, setHighlightProperty] = useState(false);
   const scrollToRegisterProperty = () => {
     registerPropertyRef.current?.scrollIntoView({ behavior: 'smooth' });
     
-    setHighlight(true);                 // Set highlight to true immediately
+    setHighlightProperty(true);                 // Set highlight to true immediately
   };
   
+  //smooth scrool to register contact
+  const registerPersonRoleRef = useRef<HTMLDivElement>(null);
+  const [highlightContact, setHighlightContact] = useState(false);
+  const scrollToRegisterContact = () => {
+    registerPersonRoleRef.current?.scrollIntoView({ behavior: 'smooth' });
+    
+    setHighlightContact(true);                 // Set highlight to true immediately
+  };
+
+
+
+
+
+
+
 
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
@@ -680,13 +694,15 @@ useEffect(() => {
               personProperties={personProperties}
               handlePersonHeaderClick={handlePersonHeaderClick}
               handlePropertyHeaderClick={handlePropertyHeaderClick}
+              
               handleToggle={handleToggle}
               onAddProperty={(property, type) => {
                 handleAddProperty(property, type);
                 scrollToRegisterProperty();  // <- Add scrolling here
               }}
-              handleSelectPersonToContactForm={handleSelectPersonToContactForm}
+              handleSelectPersonToContactForm={handleSelectPersonToContactForm}    
               handlePersonRoleClick={handlePersonRoleClick}
+              scrollToRegisterContact={scrollToRegisterContact}
             />
             
 
@@ -701,7 +717,7 @@ useEffect(() => {
                     newProperty={newProperty}
                     setNewProperty={setNewProperty}
                     onSuccessAdd={() => {
-                      setHighlight(false);         // 👈 turn off border here
+                      setHighlightProperty(false);         // 👈 turn off border here
                       setAddModalType(null);
                       setIsAddModalOpen(false);
                       setSelectedPropertyForAdd(null);
@@ -781,8 +797,8 @@ useEffect(() => {
       </div>
 
         {/* Contact Registration Card */}
-            <div className="col-md-6 mb-4" >
-              <div className="card shadow-sm border-2">
+            <div className="col-md-6 mb-4"  ref={registerPersonRoleRef}>
+              <div className={`card shadow-sm border-2 ${highlightContact ? 'highlighted-card' : ''}`}>
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom" 
                 style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
                   Register a contact
@@ -800,7 +816,7 @@ useEffect(() => {
 
             {/* Property Registration Card */}
             <div className="col-md-6 mb-4"  ref={registerPropertyRef}>
-              <div className={`card shadow-sm border-2 ${highlight ? 'highlighted-card' : ''}`}>
+              <div className={`card shadow-sm border-2 ${highlightProperty ? 'highlighted-card' : ''}`}>
                 <div className="card-header bg-light text-dark fw-bold fs-5 border-bottom"
                  style={{ height: '60px', display: 'flex', alignItems: 'center' }}>
                   Register a property
@@ -811,7 +827,7 @@ useEffect(() => {
                     setNewProperty={setNewProperty}
                     addProperrty={addProperrty}
                     onSuccessAdd={() => {
-                      setHighlight(false);         // 👈 turn off border here
+                      setHighlightProperty(false);         // 👈 turn off border here
                       setAddModalType(null);
                       setIsAddModalOpen(false);
                       setSelectedPropertyForAdd(null);
@@ -825,7 +841,7 @@ useEffect(() => {
                         className="btn btn-outline-danger mt-2"
                         onClick={() => {
                           setIsAddModalOpen(false);
-                          setHighlight(false);
+                          setHighlightProperty(false);
                           setAddModalType(null);
                           setSelectedPropertyForAdd(null);                        
                           setNewProperty({ 
