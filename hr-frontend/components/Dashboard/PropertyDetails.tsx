@@ -17,6 +17,14 @@ interface Props {
     editedPersonForProperty: Partial<Person>;
     setEditedPersonForProperty: (p: Partial<Person>) => void;
   }
+
+  //keep capital first letter of each name like 'Jone Poul'
+  const capitalizeWords = (str: string) =>
+    str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+
   
   const PropertyDetails: React.FC<Props> = ({
     selectedPropety,
@@ -34,6 +42,7 @@ interface Props {
     editedPersonForProperty,
     setEditedPersonForProperty,
   }) => {
+
     return (
         
         <div className="p-4 mt-4 border rounded">
@@ -302,12 +311,26 @@ interface Props {
                             {editingPersonIdForProperty === person.id ? (
                               <>
                                 <p>
-                                <label><strong>Name:</strong></label>
+                                <label><strong>First Name:</strong></label>
                                 <input
                                   className="border p-2 w-full my-1"
                                   value={editedPersonForProperty.name ?? person.name}
-                                  onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, name: e.target.value })}
+                                  onChange={(e) => {
+                                    const capitalized = capitalizeWords(e.target.value);
+                                    setEditedPersonForProperty({ ...editedPersonForProperty, name: capitalized })}    
+                                }
                                 /></p>
+
+<p>
+                                <label><strong>Last Name:</strong></label>
+                                <input
+                                  className="border p-2 w-full my-1"
+                                  value={editedPersonForProperty.family ?? person.family}
+                                  onChange={(e) =>{
+                                    const capitalized = capitalizeWords(e.target.value);
+                                    setEditedPersonForProperty({ ...editedPersonForProperty, family: capitalized })}
+                                  }
+                                    /></p>
                                 
                                 <p>
                                 <label><strong>Organisation:</strong></label>
@@ -397,7 +420,8 @@ interface Props {
                               </>
                             ) : (
                               <>
-                                <p><strong>Name:</strong> {person.name}</p>
+                                <p><strong>First Name:</strong> {person.name}</p>
+                                <p><strong>Last Name:</strong> {person.family}</p>
                                 <p><strong>Organisation:</strong> {person.organisation}</p>
                                 <p><strong>Role:</strong> {person.role}</p>
                                 <p><strong>Email:</strong> {person.email}</p>

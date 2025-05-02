@@ -20,6 +20,14 @@ interface RegisterContactProps {
   allRoles: string[];
 }
 
+//keep capital first letter of each name like 'Jone Poul'
+const capitalizeWords = (str: string) =>
+  str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+
 const RegisterContact: React.FC<RegisterContactProps> = ({
   newPerson,
   setNewPerson,
@@ -36,9 +44,10 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               className="form-control"
               placeholder="Name"
               value={newPerson.name}
-              onChange={(e) =>
-                setNewPerson({ ...newPerson, name: e.target.value })
-              }
+             onChange={(e) => {
+                const capitalized = capitalizeWords(e.target.value);
+                setNewPerson({ ...newPerson, name: capitalized });
+              }}
               required
             />
           </div>
@@ -49,9 +58,10 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               className="form-control"
               placeholder="Last Name"
               value={newPerson.family}
-              onChange={(e) =>
-                setNewPerson({ ...newPerson, family: e.target.value })
-              }
+              onChange={(e) => {
+                const capitalized = capitalizeWords(e.target.value);
+                setNewPerson({ ...newPerson, family: capitalized });
+              }}
               required
             />
           </div>

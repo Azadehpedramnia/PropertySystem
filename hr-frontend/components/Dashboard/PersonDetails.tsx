@@ -47,7 +47,12 @@ interface Props {
       .map(pp => properties.find(prop => prop.id === pp.property_id))
       .filter((p): p is Property => !!p);
 
-
+    //keep capital first letter of each name like 'Jone Poul'
+    const capitalizeWords = (str: string) =>
+      str
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 
       return (
         <div className="container mt-4">
@@ -66,7 +71,11 @@ interface Props {
                           <input
                             className="form-control"
                             value={selectedPerson.name}
-                            onChange={(e) => setSelectedPerson({ ...selectedPerson, name: e.target.value })}
+                            //onChange={(e) => setSelectedPerson({ ...selectedPerson, name: e.target.value })}
+                            onChange={(e) => {
+                              const capitalized = capitalizeWords(e.target.value);
+                              setSelectedPerson({ ...selectedPerson, name: capitalized });
+                            }}
                           />
                         </div>
 
@@ -75,7 +84,11 @@ interface Props {
                           <input
                             className="form-control"
                             value={selectedPerson.family}
-                            onChange={(e) => setSelectedPerson({ ...selectedPerson,family: e.target.value })}
+                            //onChange={(e) => setSelectedPerson({ ...selectedPerson,family: e.target.value })}
+                            onChange={(e) => {
+                              const capitalized = capitalizeWords(e.target.value);
+                              setSelectedPerson({ ...selectedPerson, family: capitalized });
+                            }}
                           />
                         </div>
 
