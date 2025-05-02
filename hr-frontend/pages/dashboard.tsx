@@ -112,8 +112,6 @@ export default function Dashboard() {
 
 
 
-
-
   // State for the join table
   const [personProperties, setPersonProperties] = useState<PersonProperty[]>([]);
   
@@ -145,21 +143,6 @@ export default function Dashboard() {
     setLoading(false);
   };*/}
 
-///////////
-  
-{/*
-    const handlePersonHeaderClickp = (person: Person) => {
-    setOpenPersonPopups((prev) => {
-      // Avoid duplicates
-      if (prev.find((p) => p.id === person.id)) return prev;
-      return [...prev, person];
-    });
-  };
-  
-  const closePersonPopup = (id: number) => {
-    setOpenPersonPopups((prev) => prev.filter((p) => p.id !== id));
-  };
-   */}
   const [newPerson, setNewPerson] = useState<Omit<Person, 'id'>>({
     name: '',
     organisation: '',
@@ -239,16 +222,6 @@ export default function Dashboard() {
   });
 
 
-  {/*
-  // For your join table form:
-  const [newPersonProperty, setNewPersonProperty] = useState({
-    person_id: 0,
-    property_id: 0,
-    person_name: '',
-    property_address:'',
-    is_related: false,
-  });*/}
-  
   const router = useRouter();
 
   const handleLogout = () => {
@@ -263,41 +236,6 @@ export default function Dashboard() {
       query: { role: person.role }
     })
   }
-
-{/*
-
-  const fetchPeople = async () => {
-    const res = await fetch('http://localhost:5000/api/people');
-    const data = await res.json();
-    setPeople(data);
-  };
-  
- 
-
-  const fetchProperties = async () => {
-    const res = await fetch('http://localhost:5000/api/propertiies');
-    const data = await res.json();
-    setProperties(data);
-  };
-
-  // Fetch the person-property relationships from your backend
-  const fetchPersonProperties = async () => {
-    try {
-      const res = await fetch('http://localhost:5000/api/person_property');
-      const data = await res.json();
-      setPersonProperties(data);
-    } catch (error) {
-      console.error('Error fetching person_property', error);
-    }
-  };
-
-
-  useEffect(() => {
-    fetchPeople();
-    fetchProperties();
-    fetchPersonProperties();
-  }, []);*/}
-
 
   const fetchPeople = useCallback(async () => {
     const res = await fetch('http://localhost:5000/api/people');
@@ -341,32 +279,6 @@ export default function Dashboard() {
     //setSelectedProperty(property);
   };
 
-  {/*
-      function openModal(person: Person) {
-    setSelectedPerson(person);
-    setShowModal(true);
-  }
-
-  function closeModal() {
-    setShowModal(false);
-  }
-
-  
-
-
-
-
-  const addPerson = async () => {
-    await fetch('http://localhost:5000/api/people', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newPersonName }),
-    });
-    setNewPersonName('');
-    fetchPeople();
-  };
-  
-  */}
   // Add Person
   const addPersoon = async () => {  
     await fetch('http://localhost:5000/api/people', {
@@ -450,20 +362,6 @@ useEffect(() => {
     }));
   }
 }, [newProperty.start_date_of_lease, newProperty.end_date_of_lease]);
-
-
-  {/*
-      const addProperty = async () => {
-    await fetch('http://localhost:5000/api/propertiies', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address: newPropertyAddress }),
-    });
-    setNewPropertyAddress('');
-    fetchProperties();
-  };*/}
-
-
   
     // Add Property
     const addProperrty = async (e?: React.FormEvent) => {
@@ -509,58 +407,6 @@ useEffect(() => {
       fetchProperties();
     };
 
-
-    {/*
-      const addPersonProperty = async () => {
-      //e.preventDefault(); // prevent page reload  e:React.FormEvent
-      
-      // Make sure you have valid IDs before sending:
-      if (!newPersonProperty.person_id || !newPersonProperty.property_id) {
-        alert('Please select a valid person and property.');
-        return;
-      }
-    
-      try {
-        const res = await fetch('http://localhost:5000/api/person_property', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            personId: newPersonProperty.person_id,
-            propertyId: newPersonProperty.property_id,
-            isRelated: newPersonProperty.is_related,
-            person_name: newPersonProperty.person_name,
-            property_address:newPersonProperty.property_address,
-          }),
-        });
-    
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error || 'Error adding relationship');
-        }
-    
-        // Clear the form fields
-        setNewPersonProperty({
-          person_id: 0,
-          property_id: 0,
-          person_name: '',
-          property_address: '',
-          is_related: false,
-        });
-    
-        // Refresh your table of relationships:
-        fetchPersonProperties();
-      } catch (error) {
-        console.error(error);
-        alert('Failed to add person_property relationship');
-      }
-    };
-      
-      */}
-    
-
-    //
-
-    //
 
     // Toggle the is_related value for a given (person, property) pair
     async function handleToggle(personId: number, propertyId: number) {
@@ -642,7 +488,6 @@ useEffect(() => {
       bc.close();
     };
   }, [fetchPeople, fetchProperties, fetchPersonProperties]);
-  ///////////////////
 
   //Add property in report table//
 
