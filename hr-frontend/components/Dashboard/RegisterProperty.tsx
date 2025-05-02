@@ -486,7 +486,7 @@ newProperty.has_car_park && (
               className="btn btn-secondary"
               onClick={() => setShowSecondFields((prev) => !prev)}
             >
-              {showSecondFields ? "– Minimise" : "+ more"}
+              {showSecondFields ? "– Minimise" : "+ More"}
             </button>
           </div>
 
@@ -503,7 +503,7 @@ newProperty.has_car_park && (
               >
                 {showThirdFields
                   ? "– Minimise"
-                  : "+ more"}
+                  : "+ More"}
               </button>
             </div>
           )}
@@ -521,7 +521,7 @@ newProperty.has_car_park && (
               >
                 {showForthFields
                   ? "– Minimise"
-                  : "+ if landlord details requierd"}
+                  : "+ If Landlord Details Requierd"}
               </button>
             </div>
           )}
