@@ -50,15 +50,15 @@ app.get('/api/people/search', async (req, res) => {
 app.post('/api/people', async (req, res) => {
   try {
     const { name, organisation, role, email, contact_number,family,  
-      property_address_for_enquiry, iqu_post_code_address
+      property_address_for_enquiry, iqu_post_code_address, contact_county
        } = req.body;
     const result = await pool.query(
       `INSERT INTO people (name, organisation, role, email, contact_number, family, 
-       property_address_for_enquiry  , iqu_post_code_address
+       property_address_for_enquiry  , iqu_post_code_address , contact_county
         )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [name, organisation, role, email, contact_number, family,
-        property_address_for_enquiry, iqu_post_code_address]
+        property_address_for_enquiry, iqu_post_code_address, contact_county]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -97,7 +97,8 @@ app.get('/api/people', async (req, res) => {
               contact_number,
               family,          
               property_address_for_enquiry,
-              iqu_post_code_address
+              iqu_post_code_address,
+              contact_county
        FROM people`
     );
     res.json(result.rows);
@@ -124,7 +125,8 @@ app.get('/api/people/:id', async (req, res) => {
          contact_number,
          family,          
          property_address_for_enquiry,
-         iqu_post_code_address
+         iqu_post_code_address,
+         contact_county
        FROM people
        WHERE id = $1`,
       [id]
@@ -143,7 +145,7 @@ app.put('/api/people/:id',  async (req, res) => {
   try {
     const { id } = req.params;
     const { name, organisation, role, email, contact_number, family,
-      property_address_for_enquiry, iqu_post_code_address       
+      property_address_for_enquiry, iqu_post_code_address, contact_county     
      } = req.body;
 
     const result = await pool.query(
@@ -155,11 +157,12 @@ app.put('/api/people/:id',  async (req, res) => {
            contact_number = $5,
            family = $6,
            property_address_for_enquiry = $7,
-           iqu_post_code_address = $8    
-       WHERE id = $9
+           iqu_post_code_address = $8,
+           contact_county = $9
+       WHERE id = $10
        RETURNING *`,
       [name, organisation, role, email, contact_number,family,
-        property_address_for_enquiry, iqu_post_code_address, id]
+        property_address_for_enquiry, iqu_post_code_address, contact_county,id]
     );
 
     if (result.rows.length === 0) {
@@ -270,8 +273,7 @@ app.get('/api/propertiies/:id', async (req, res) => {
               car_park_rateable_value,
               car_park_rates_payable_before_relief,
               total_rateable_value,
-              total_rate_payable,
-              donation_due,
+              total_rate_payable_before_relief   ,
               post_code,
               landlord_address,
               landlord_email,
@@ -284,7 +286,12 @@ app.get('/api/propertiies/:id', async (req, res) => {
               property_first_line_address,
               property_second_line_address,
               property_floor,
-              property_solely_occupied
+              property_solely_occupied,
+              property_county,
+              landlord_county,
+              donation_due,
+              total_rate_payable_after_relief
+
        FROM propertiies
        WHERE id = $1`,
       [id]
@@ -314,8 +321,7 @@ app.get('/api/propertiies', async (req, res) => {
               car_park_rateable_value,
               car_park_rates_payable_before_relief,
               total_rateable_value,
-              total_rate_payable,
-              donation_due,
+              total_rate_payable_before_relief,
               post_code,
               landlord_address,
               landlord_email,
@@ -328,7 +334,11 @@ app.get('/api/propertiies', async (req, res) => {
               property_first_line_address,
               property_second_line_address,
               property_floor,
-              property_solely_occupied
+              property_solely_occupied,
+              property_county, 
+              landlord_county,    
+              donation_due,   
+              total_rate_payable_after_relief   
              
        FROM propertiies`
     );
@@ -351,8 +361,7 @@ app.post('/api/propertiies', async (req, res) => {
       car_park_rateable_value,
       car_park_rates_payable_before_relief,
       total_rateable_value,
-      total_rate_payable,
-      donation_due,
+      total_rate_payable_before_relief,
       post_code,
       landlord_address,
       landlord_email,
@@ -366,6 +375,10 @@ app.post('/api/propertiies', async (req, res) => {
       property_second_line_address,
       property_floor,
       property_solely_occupied,
+      property_county, 
+      landlord_county, 
+      donation_due,
+      total_rate_payable_after_relief,
     } = req.body;
 
     const result = await pool.query(
@@ -380,8 +393,7 @@ app.post('/api/propertiies', async (req, res) => {
           car_park_rateable_value,
           car_park_rates_payable_before_relief,
           total_rateable_value,
-          total_rate_payable,
-          donation_due,
+          total_rate_payable_before_relief,
           post_code,
           landlord_address,
           landlord_email,
@@ -394,10 +406,14 @@ app.post('/api/propertiies', async (req, res) => {
           property_first_line_address,
           property_second_line_address,
           property_floor,
-          property_solely_occupied
+          property_solely_occupied,
+          property_county, 
+          landlord_county,
+          donation_due,
+          total_rate_payable_after_relief
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
        RETURNING *`,
       [
         inquirer,
@@ -410,8 +426,7 @@ app.post('/api/propertiies', async (req, res) => {
         car_park_rateable_value,
         car_park_rates_payable_before_relief,
         total_rateable_value,
-        total_rate_payable,
-        donation_due,
+        total_rate_payable_before_relief,
         post_code,
         landlord_address,
         landlord_email,
@@ -424,7 +439,12 @@ app.post('/api/propertiies', async (req, res) => {
         property_first_line_address,
         property_second_line_address,
         property_floor,
-        property_solely_occupied
+        property_solely_occupied,
+        property_county, 
+        landlord_county, 
+        donation_due,
+        total_rate_payable_after_relief 
+
       ]
     );
     res.json(result.rows[0]);
@@ -447,8 +467,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
       car_park_rateable_value,
       car_park_rates_payable_before_relief,
       total_rateable_value,
-      total_rate_payable,
-      donation_due,
+      total_rate_payable_before_relief ,
       post_code,
       landlord_address,
       landlord_email,
@@ -461,7 +480,11 @@ app.put('/api/propertiies/:id', async (req, res) => {
       property_first_line_address,
       property_second_line_address,
       property_floor,
-      property_solely_occupied
+      property_solely_occupied,
+      property_county,  
+      landlord_county, 
+      donation_due,  
+      total_rate_payable_after_relief  
     
     } = req.body;
 
@@ -477,22 +500,25 @@ app.put('/api/propertiies/:id', async (req, res) => {
            car_park_rateable_value = $8,
            car_park_rates_payable_before_relief = $9,
            total_rateable_value = $10,
-           total_rate_payable = $11,
-           donation_due = $12,
-           post_code = $13,
-           landlord_address= $14,
-           landlord_email = $15,
-           landlord_no = $16,
-           rates_multiplier = $17,
-           start_date_of_lease = $18,
-           length_of_lease = $19,
-           end_date_of_lease = $20,   
-           landlord_post_code_address=$21,   
-           property_first_line_address=$22,
-           property_second_line_address=$23,
-           property_floor=$24,
-           property_solely_occupied =$25 
-       WHERE id = $26
+           total_rate_payable_before_relief = $11,  
+           post_code = $12,
+           landlord_address= $13,
+           landlord_email = $14,
+           landlord_no = $15,
+           rates_multiplier = $16,
+           start_date_of_lease = $17,
+           length_of_lease = $18,
+           end_date_of_lease = $19,   
+           landlord_post_code_address=$20,   
+           property_first_line_address=$21,
+           property_second_line_address=$22,
+           property_floor=$23,
+           property_solely_occupied = $24, 
+           property_county = $25,
+           landlord_county = $26 ,
+           donation_due = $27,
+           total_rate_payable_after_relief = $28
+       WHERE id = $29
        RETURNING *`,
       [
         inquirer,
@@ -505,8 +531,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
         car_park_rateable_value,
         car_park_rates_payable_before_relief,
         total_rateable_value,
-        total_rate_payable,
-        donation_due,
+        total_rate_payable_before_relief,
         post_code,
         landlord_address,
         landlord_email,
@@ -520,6 +545,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
         property_second_line_address,
         property_floor,
         property_solely_occupied,
+        property_county,
+        landlord_county, 
+        donation_due,
+        total_rate_payable_after_relief ,
         id
       ]
     );
