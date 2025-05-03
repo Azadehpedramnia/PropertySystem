@@ -143,9 +143,20 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
         />
     </div>,
+        <div key="property_county" className="col-12">
+        <label  className="form-label">
+          County:
+        </label>
+        <input
+          className="form-control"
+          placeholder="property_county"
+          value={newProperty.property_county}
+          onChange={(e) => setNewProperty({ ...newProperty, property_county: e.target.value })}
+        />
+    </div>,
     <div key="post_code" className="col-12">
       <label  className="form-label">
-        Post Code:
+        Postcode:
       </label>
       <input
         className="form-control"
