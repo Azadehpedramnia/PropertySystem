@@ -290,7 +290,9 @@ app.get('/api/propertiies/:id', async (req, res) => {
               property_county,
               landlord_county,
               donation_due,
-              total_rate_payable_after_relief
+              total_rate_payable_after_relief,
+              landlord_name,
+              landlord_city
 
        FROM propertiies
        WHERE id = $1`,
@@ -338,7 +340,9 @@ app.get('/api/propertiies', async (req, res) => {
               property_county, 
               landlord_county,    
               donation_due,   
-              total_rate_payable_after_relief   
+              total_rate_payable_after_relief,  
+              landlord_name,
+              landlord_city
              
        FROM propertiies`
     );
@@ -379,6 +383,8 @@ app.post('/api/propertiies', async (req, res) => {
       landlord_county, 
       donation_due,
       total_rate_payable_after_relief,
+      landlord_name,
+      landlord_city,
     } = req.body;
 
     const result = await pool.query(
@@ -410,10 +416,12 @@ app.post('/api/propertiies', async (req, res) => {
           property_county, 
           landlord_county,
           donation_due,
-          total_rate_payable_after_relief
+          total_rate_payable_after_relief,
+          landlord_name,
+          landlord_city
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30)
        RETURNING *`,
       [
         inquirer,
@@ -443,7 +451,9 @@ app.post('/api/propertiies', async (req, res) => {
         property_county, 
         landlord_county, 
         donation_due,
-        total_rate_payable_after_relief 
+        total_rate_payable_after_relief, 
+        landlord_name,
+        landlord_city
 
       ]
     );
@@ -484,8 +494,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
       property_county,  
       landlord_county, 
       donation_due,  
-      total_rate_payable_after_relief  
-    
+      total_rate_payable_after_relief, 
+      landlord_name, 
+      landlord_city
     } = req.body;
 
     const result = await pool.query(
@@ -517,8 +528,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
            property_county = $25,
            landlord_county = $26 ,
            donation_due = $27,
-           total_rate_payable_after_relief = $28
-       WHERE id = $29
+           total_rate_payable_after_relief = $28,
+           landlord_name = $29,
+           landlord_city = $30
+       WHERE id = $31
        RETURNING *`,
       [
         inquirer,
@@ -549,6 +562,8 @@ app.put('/api/propertiies/:id', async (req, res) => {
         landlord_county, 
         donation_due,
         total_rate_payable_after_relief ,
+        landlord_name,
+        landlord_city,
         id
       ]
     );

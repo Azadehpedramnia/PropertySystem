@@ -31,6 +31,8 @@ interface Property {
   landlord_county:string;
   donation_due:number | null;
   total_rate_payable_after_relief:number| null;
+  landlord_name:string;
+  landlord_city:string;
 }
 
 interface RegisterPropertyProps {
@@ -420,6 +422,22 @@ newProperty.has_car_park && (
     
   // 4) New third group: "advancedFields"
   const forthFields = [
+      <div key="landlord_name"  className="col-12">
+        <label  className="form-label">
+          Landlord's Name:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord's Name"
+          value={newProperty.landlord_name}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_name: e.target.value,
+            })
+          }
+        />
+      </div>,
       <div key="landlord_Address"  className="col-12">
         <label  className="form-label">
           Landlord's Registered Address:
@@ -432,6 +450,38 @@ newProperty.has_car_park && (
             setNewProperty({
               ...newProperty,
               landlord_Address: e.target.value,
+            })
+          }
+        />
+      </div>,
+      <div key="landlord_city"  className="col-12">
+        <label  className="form-label">
+          Landlord's City:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord's City"
+          value={newProperty.landlord_city}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_city: e.target.value,
+            })
+          }
+        />
+      </div>,
+      <div key="landlord_county"  className="col-12">
+        <label  className="form-label">
+          Landlord's County:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord's County"
+          value={newProperty.landlord_county}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_county: e.target.value,
             })
           }
         />

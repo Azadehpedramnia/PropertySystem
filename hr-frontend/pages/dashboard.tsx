@@ -25,6 +25,7 @@ export interface Person {
   family : string;
   property_address_for_enquiry:string;
   iqu_post_code_address:string;
+  contact_county:string;
 }
 
 export interface Property {
@@ -39,8 +40,7 @@ export interface Property {
   car_park_rateable_value: number | null;
   car_park_rates_payable_before_relief: number | null;
   total_rateable_value:number | null;
-  total_rate_payable: number | null;
-  donation_due : Date | null;
+  total_rate_payable_before_relief: number | null;
   post_code : string;
   landlord_Address :string;
   landlord_email:string;
@@ -55,6 +55,12 @@ export interface Property {
   property_second_line_address:string;
   property_floor:string;
   property_solely_occupied:boolean;
+  property_county:string;
+  landlord_county:string;
+  donation_due :number | null;
+  total_rate_payable_after_relief:number | null;
+  landlord_name : string;
+  landlord_city:string;
 }
 
 export interface PersonProperty {
@@ -148,7 +154,8 @@ export default function Dashboard() {
     contact_number: '',
     family:'',
     property_address_for_enquiry:'',
-    iqu_post_code_address:''
+    iqu_post_code_address:'',
+    contact_county:''
   });
 
   const handleSelectPersonToContactForm = (person: Person) => {
@@ -156,11 +163,12 @@ export default function Dashboard() {
       name: person.name,
       family: person.family,
       organisation: person.organisation,
-      role: person.role,
+      role: '',
       email: person.email,
       contact_number: person.contact_number,
-      property_address_for_enquiry: '', // empty by default
-      iqu_post_code_address: '', // empty by default
+      property_address_for_enquiry: person.property_address_for_enquiry, // empty by default
+      iqu_post_code_address:person.iqu_post_code_address, // empty by default   
+      contact_county:person.contact_county,
     });
   };
  
@@ -200,8 +208,7 @@ export default function Dashboard() {
     car_park_rateable_value: null,
     car_park_rates_payable_before_relief: null,
     total_rateable_value: null,
-    total_rate_payable: null,
-    donation_due:null,
+    total_rate_payable_before_relief: null,
     post_code : '',
     landlord_Address:'',
     landlord_email:'',
@@ -216,6 +223,12 @@ export default function Dashboard() {
     property_second_line_address:'',
     property_floor:'',
     property_solely_occupied:false,
+    property_county:'',
+    landlord_county:'',
+    donation_due:null,
+    total_rate_payable_after_relief:null,
+    landlord_name:'',
+    landlord_city:'',
   });
 
 
@@ -293,7 +306,8 @@ export default function Dashboard() {
       contact_number: '',
       family:'',
       property_address_for_enquiry:'',
-      iqu_post_code_address:''    
+      iqu_post_code_address:'' ,  
+      contact_county:'' 
     });
     // Reload table
     fetchPeople();
@@ -382,8 +396,7 @@ useEffect(() => {
         car_park_rateable_value: null,
         car_park_rates_payable_before_relief: null,
         total_rateable_value: null,
-        total_rate_payable:null,
-        donation_due:null,
+        total_rate_payable_before_relief:null,
         post_code:'',
         landlord_Address:'',
         landlord_email:'',
@@ -398,6 +411,12 @@ useEffect(() => {
         property_second_line_address:'',
         property_floor:'',
         property_solely_occupied:false,
+        property_county:'',
+        landlord_county:'',
+        donation_due:null,
+        total_rate_payable_after_relief:null,
+        landlord_name : '',
+        landlord_city:'',
       });
       // Reload table
       setIsAddModalOpen(false);
@@ -671,7 +690,8 @@ useEffect(() => {
                             contact_number: '',
                             family: '',
                             property_address_for_enquiry: '',
-                            iqu_post_code_address: ''
+                            iqu_post_code_address: '',
+                            contact_county:'',
                           });
                         }}
                       >
@@ -724,8 +744,8 @@ useEffect(() => {
                             car_park_rateable_value: null,
                             car_park_rates_payable_before_relief: null,
                             total_rateable_value: null,
-                            total_rate_payable: null,
-                            donation_due: null,
+                            total_rate_payable_before_relief: null,
+     
                             post_code: '',
                             landlord_Address: '',
                             landlord_email: '',
@@ -740,6 +760,13 @@ useEffect(() => {
                             property_second_line_address:'',
                             property_floor:'',
                             property_solely_occupied:false,
+                            property_county:'',
+                            landlord_county:'',
+                            donation_due: null,
+                            total_rate_payable_after_relief:null,
+                            landlord_name:'',
+                            landlord_city:'',
+                            
                           });
                         }}
                       >
