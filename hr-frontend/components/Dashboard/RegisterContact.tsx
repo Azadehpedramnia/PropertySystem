@@ -12,6 +12,10 @@ interface Person {
   property_address_for_enquiry: string;
   iqu_post_code_address:string;
   contact_county:string;
+  floor_no:string;
+  first_line_contac_address:string;
+  second_line_contac_address:string;
+  contac_city:string;
 }
 
 interface RegisterContactProps {
@@ -129,12 +133,12 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             <label  className="form-label">First Address Line:</label>
             <input
               className="form-control"
-              placeholder="Address"
-              value={newPerson.property_address_for_enquiry}
+              placeholder="First Address Line"
+              value={newPerson.first_line_contac_address}
               onChange={(e) =>
                 setNewPerson({
                   ...newPerson,
-                  property_address_for_enquiry: e.target.value,
+                  first_line_contac_address: e.target.value,
                 })
               }
             />
@@ -145,12 +149,12 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             <label  className="form-label">Second Address Line:</label>
             <input
               className="form-control"
-              placeholder="Address"
-              value={newPerson.property_address_for_enquiry}
+              placeholder="Second Address Line"
+              value={newPerson.second_line_contac_address}
               onChange={(e) =>
                 setNewPerson({
                   ...newPerson,
-                  property_address_for_enquiry: e.target.value,
+                  second_line_contac_address: e.target.value,
                 })
               }
             />
@@ -158,15 +162,15 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
           
           {/* Row: Floor number */}
           <div className="col-12">
-            <label  className="form-label">Floor number:</label>
+            <label  className="form-label">Floor Number:</label>
             <input
               className="form-control"
-              placeholder="Address"
-              value={newPerson.property_address_for_enquiry}
+              placeholder="Floor Number"
+              value={newPerson.floor_no}
               onChange={(e) =>
                 setNewPerson({
                   ...newPerson,
-                  property_address_for_enquiry: e.target.value,
+                  floor_no: e.target.value,
                 })
               }
             />
@@ -195,7 +199,7 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             <label  className="form-label">County:</label>
             <input
               className="form-control"
-              placeholder="Address"
+              placeholder="County"
               value={newPerson.contact_county}
               onChange={(e) =>
                 setNewPerson({

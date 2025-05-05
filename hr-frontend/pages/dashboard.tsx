@@ -26,6 +26,10 @@ export interface Person {
   property_address_for_enquiry:string;
   iqu_post_code_address:string;
   contact_county:string;
+  floor_no:string;
+  first_line_contac_address:string;
+  second_line_contac_address:string;
+  contac_city:string;
 }
 
 export interface Property {
@@ -155,7 +159,11 @@ export default function Dashboard() {
     family:'',
     property_address_for_enquiry:'',
     iqu_post_code_address:'',
-    contact_county:''
+    contact_county:'',
+    floor_no:'',
+    first_line_contac_address:'',
+    second_line_contac_address:'',
+    contac_city:'',
   });
 
   const handleSelectPersonToContactForm = (person: Person) => {
@@ -169,6 +177,10 @@ export default function Dashboard() {
       property_address_for_enquiry: person.property_address_for_enquiry, // empty by default
       iqu_post_code_address:person.iqu_post_code_address, // empty by default   
       contact_county:person.contact_county,
+      floor_no:person.floor_no,
+      first_line_contac_address:person.first_line_contac_address,
+      second_line_contac_address:person.second_line_contac_address,
+      contac_city:person.contac_city,
     });
   };
  
@@ -307,7 +319,12 @@ export default function Dashboard() {
       family:'',
       property_address_for_enquiry:'',
       iqu_post_code_address:'' ,  
-      contact_county:'' 
+      contact_county:'' ,
+      floor_no:'',
+      first_line_contac_address:'',
+      second_line_contac_address:'',
+      contac_city:'',
+      
     });
     // Reload table
     fetchPeople();
@@ -692,6 +709,10 @@ useEffect(() => {
                             property_address_for_enquiry: '',
                             iqu_post_code_address: '',
                             contact_county:'',
+                            floor_no:'',
+                            first_line_contac_address:'',
+                            second_line_contac_address:'',
+                            contac_city:'',
                           });
                         }}
                       >
