@@ -1,5 +1,8 @@
-import React from 'react';
 import type { Property, Person, PersonProperty } from '../../pages/dashboard';
+import CreateProposalForm from './CreateProposalForm'; // adjust path if needed
+import ProposalStatus from './ProposalStatus';
+import React, { useState } from 'react';
+
 
 interface Props {
     selectedPropety: Property;
@@ -26,6 +29,9 @@ interface Props {
       .join(' ');
 
   
+
+
+
   const PropertyDetails: React.FC<Props> = ({
     selectedPropety,
     editPropertyMode,
@@ -43,6 +49,9 @@ interface Props {
     setEditedPersonForProperty,
   }) => {
 
+    //proposal create form sataes refresh after creat proposal
+  const [proposalRefreshKey, setProposalRefreshKey] = useState(0);
+    const [creatingProposalForPersonId, setCreatingProposalForPersonId] = React.useState<number | null>(null);
     return (
         
         <div className="p-4 mt-4 border rounded">
@@ -178,11 +187,24 @@ interface Props {
             <input
               className="border p-2 w-full my-1"
               type="number"
-              value={selectedPropety.total_rate_payable ?? ''}
+              value={selectedPropety.total_rate_payable_before_relief?? ''}
               onChange={(e) =>
                 setSelectedProperty({
                   ...selectedPropety,
-                  total_rate_payable : e.target.value === '' ? null : Number(e.target.value),
+                  total_rate_payable_before_relief : e.target.value === '' ? null : Number(e.target.value),
+                })
+              }
+            /></p>
+            <p> 
+            <label><strong>Total Rates Payable after Relief::</strong></label> 
+            <input
+              className="border p-2 w-full my-1"
+              type="number"
+              value={selectedPropety.total_rate_payable_after_relief?? ''}
+              onChange={(e) =>
+                setSelectedProperty({
+                  ...selectedPropety,
+                  total_rate_payable_after_relief : e.target.value === '' ? null : Number(e.target.value),
                 })
               }
             /></p>
@@ -203,7 +225,8 @@ interface Props {
             <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
             <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
             <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
-            <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable}</p> 
+            <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable_before_relief}</p> 
+            <p><strong>Total Rates Payable afterRelief:</strong> {selectedPropety.total_rate_payable_after_relief}</p> 
             <p><strong>Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>         
             <p><strong>Dontion:</strong> {selectedPropety.donation_due
                   ? new Date(selectedPropety.donation_due).toISOString().split('T')[0]
@@ -310,7 +333,7 @@ interface Props {
                     <div className="mt-6 border-t pt-4">
                       <h3 className="text-lg font-semibold mb-2">People Related to This Property</h3>
                       <ol className="space-y-2">
-                        {relatedPeople.map((person) => (
+                        {relatedPeople.map((person) => (             
                           <li key={person.id} className="border p-3 rounded bg-gray-50">
                             {editingPersonIdForProperty === person.id ? (
                               <>
@@ -325,7 +348,7 @@ interface Props {
                                 }
                                 /></p>
 
-<p>
+                                <p>
                                 <label><strong>Last Name:</strong></label>
                                 <input
                                   className="border p-2 w-full my-1"
@@ -424,6 +447,47 @@ interface Props {
                               </>
                             ) : (
                               <>
+                                <button
+                                  className="bg-blue-300 px-4 py-2 rounded"
+                                  onClick={() => setCreatingProposalForPersonId(person.id)}
+                                >
+                                  Create Proposal
+                                </button>
+                                {creatingProposalForPersonId === person.id && (
+                                    <CreateProposalForm
+                                      personId={person.id}
+                                      propertyId={selectedPropety.id}
+                                      RecipiantName ={
+                                        selectedPropety.landlord_name?.trim()
+                                          ? selectedPropety.landlord_name
+                                          : `${person.name} ${person.family}`.trim()
+                                      }
+                                      RecipiantAddress = {
+                                        selectedPropety.landlord_Address?.trim()
+                                          ? selectedPropety.landlord_Address
+                                          : `${person.property_address_for_enquiry}`.trim()
+                                      }
+                                      personName={`${person.name} ${person.family}`}
+                                      propertyAddress={selectedPropety.property_first_line_address}
+                                     
+                                      onCancel={() => setCreatingProposalForPersonId(null)}
+                                      onSuccess={() => {
+                                        setCreatingProposalForPersonId(null);
+                                        setProposalRefreshKey(prev => prev + 1); // ✅ trigger refresh
+                                      }}
+                                    />
+                                  )}
+                                {/**/}
+                                <ProposalStatus personId={person.id} propertyId={selectedPropety.id} />
+                               
+                                <ProposalStatus
+                                  personId={person.id}
+                                  propertyId={selectedPropety.id}
+                                  refreshKey={proposalRefreshKey}
+                                />
+
+
+                                {/* */}
                                 <p><strong>First Name:</strong> {person.name}</p>
                                 <p><strong>Last Name:</strong> {person.family}</p>
                                 <p><strong>Organisation:</strong> {person.organisation}</p>

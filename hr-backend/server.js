@@ -686,7 +686,7 @@ app.delete('/api/person_property/:id',  async (req, res) => {
 // Proposals
 // ------------------------------
 
-{/*
+
 app.post('/api/proposals', async (req, res) => {
   try {
     const { personId, propertyId, proposalData } = req.body; 
@@ -705,7 +705,9 @@ app.post('/api/proposals', async (req, res) => {
     res.status(500).json({ error: 'Failed to create proposal' });
   }
 });
-*/}
+
+
+{/*
 app.post('/api/proposals', async (req, res) => {
   const { personId, propertyId, proposalData: clientData } = req.body;
   try {
@@ -765,7 +767,7 @@ app.post('/api/proposals', async (req, res) => {
   }
 });
 
-
+*/}
 // GET: Retrieve a single proposal (with joined person & property info)
 app.get('/api/proposals/:id', async (req, res) => {
   try {
@@ -874,6 +876,36 @@ app.delete('/api/proposals/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete proposal' });
   }
 });
+
+
+// GET /api/proposals/latest?personId=2&propertyId=3
+app.get('/api/proposals/latest', async (req, res) => {
+  const { personId, propertyId } = req.query;
+
+  if (!personId || !propertyId) {
+    return res.status(400).json({ error: 'Missing personId or propertyId' });
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT id, status, created_at FROM proposals
+       WHERE person_id = $1 AND property_id = $2
+       ORDER BY created_at DESC
+       LIMIT 1`,
+      [personId, propertyId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'No proposal found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch proposal' });
+  }
+});
+
 
 
 
