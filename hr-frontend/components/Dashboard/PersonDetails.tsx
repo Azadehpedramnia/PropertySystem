@@ -307,7 +307,7 @@ interface Props {
                                                         setEditedProperty({ ...editedProperty, property_solely_occupied: e.target.checked })
                                                       }
                                                     />
-                                                    <span><strong>Is the property solely occupied?</strong></span>
+                                                    <span><strong>Is The Property Solely Occupied?</strong></span>
                                                   </label>
                                               </div>
                                                      
@@ -346,7 +346,16 @@ interface Props {
                                                   value={editedProperty.city ?? property.city}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, city: e.target.value })}
                                                 />
-                                              </div>                                   
+                                              </div>         
+
+                                                <div className="mb-3">
+                                                <label className="form-label"><strong>County:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  value={editedProperty.city ?? property.property_county}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, property_county: e.target.value })}
+                                                />
+                                              </div>                            
                                          
                                               <div className="mb-3">
                                                 <label className="form-label"><strong>Postcode:</strong></label>     
@@ -376,7 +385,7 @@ interface Props {
                                               </div>
                   
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Property rateable value:</strong></label>     
+                                                <label className="form-label"><strong>Property Rateable Value::</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -388,7 +397,7 @@ interface Props {
                                               </div>
                                            
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Rates payable before relief per year:</strong></label>     
+                                                <label className="form-label"><strong>Rates Payable Before Relief per year:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -414,7 +423,7 @@ interface Props {
                                               </div>
                                      
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Car park rateable value:</strong></label>     
+                                                <label className="form-label"><strong>Car Park Rateable Value:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -426,7 +435,7 @@ interface Props {
                                               </div>
                                         
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Car park rates payable before relief per year:</strong></label>     
+                                                <label className="form-label"><strong>Car Park Rates Payable Before Relief Per Year:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -438,7 +447,7 @@ interface Props {
                                               </div>
                                     
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Total rateable value:</strong></label>     
+                                                <label className="form-label"><strong>Total Rateable Value:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
@@ -490,7 +499,7 @@ interface Props {
  
                                               <div className="mb-3">
                                                 <label className="form-label">
-                                                  <strong>Donation Amount Due By Landlord (£):</strong>
+                                                  <strong>Donation Due By Landlord:</strong>
                                                 </label>
                                                 <input
                                                   className="form-control"
@@ -507,7 +516,7 @@ interface Props {
                                               </div>
                                                 
                                               <div className="mb-3">
-                                                <label className="form-label"><strong> Start Date of Lease:</strong></label>
+                                                <label className="form-label"><strong> Start Date Of Lease:</strong></label>
                                                   <input
                                                     type="date"
                                                     className="form-control"
@@ -528,7 +537,7 @@ interface Props {
                                               </div>
                                               
                                               <div className="mb-3">
-                                                <label className="form-label"><strong> End Date of Lease:</strong></label>
+                                                <label className="form-label"><strong> End Date Of Lease:</strong></label>
                                                   <input
                                                     type="date"
                                                     className="form-control"
@@ -550,7 +559,7 @@ interface Props {
 
                                               <div className="mb-3" key="length_of_lease">
                                                 <label  className="form-label">
-                                                  <strong>Length of Lease (days):</strong>
+                                                  <strong>Length Of Lease (days):</strong>
                                                 </label>
                                                 <input
                                                   className="form-control"
@@ -559,6 +568,35 @@ interface Props {
                                                 />
                                               </div>
                                               
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's Name:</strong></label>     
+                                                <input
+                                                  placeholder="landlord_name"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_name?? property.landlord_name}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_name : e.target.value })}
+                                                />
+                                              </div>
+
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's Email:</strong></label>     
+                                                <input
+                                                  placeholder="Landlord's emai"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_email ?? property.landlord_email}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
+                                                />
+                                              </div>
+                                                  
+                                              <div className="mb-3">
+                                                <label  className="form-label"><strong>Landlord's Contact Number:</strong></label>
+                                                <input
+                                                  className="form-control"
+                                                  placeholder="Landlord's Contact Number"
+                                                  value={editedProperty.landlord_no}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_no: e.target.value })}
+                                                />
+                                                </div>
 
                                               <div className="mb-3">
                                                 <label className="form-label"><strong>Landlord's Registered Address:</strong></label>     
@@ -567,6 +605,26 @@ interface Props {
                                                   className="form-control"
                                                   value={editedProperty.landlord_Address ?? property.landlord_Address}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
+                                                />
+                                              </div>
+
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's City:</strong></label>     
+                                                <input
+                                                  placeholder="Landlord's City"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_city?? property.landlord_city}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_city : e.target.value })}
+                                                />
+                                              </div>
+
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's County:</strong></label>     
+                                                <input
+                                                  placeholder="Landlord's County"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_county?? property.landlord_county}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_county : e.target.value })}
                                                 />
                                               </div>
 
@@ -589,25 +647,7 @@ interface Props {
                                                 />
                                                 </div>
                                              
-                                              <div className="mb-3">
-                                                <label className="form-label"><strong>Landloard's email:</strong></label>     
-                                                <input
-                                                  placeholder="Landlord's emai"
-                                                  className="form-control"
-                                                  value={editedProperty.landlord_email ?? property.landlord_email}
-                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_email : e.target.value })}
-                                                />
-                                              </div>
-                                                  
-                                              <div className="mb-3">
-                                                <label  className="form-label"><strong>Landlord's Contact Number:</strong></label>
-                                                <input
-                                                  className="form-control"
-                                                  placeholder="Landlord's Contact Number"
-                                                  value={editedProperty.landlord_no}
-                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_no: e.target.value })}
-                                                />
-                                                </div>
+                                        
                   
                                               {/* Add other fields similarly... */}
                                               <div className="flex gap-2 mt-2">

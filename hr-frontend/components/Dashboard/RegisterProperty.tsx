@@ -33,6 +33,9 @@ interface Property {
   total_rate_payable_after_relief:number| null;
   landlord_name:string;
   landlord_city:string;
+  landlord_first_line_address:string;
+  landlord_second_line_address:string;
+  landlord_floor_number:string;
 }
 
 interface RegisterPropertyProps {
@@ -259,12 +262,12 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
 newProperty.has_car_park && (
   <div key="car_park_rates_payable_before_relief"  className="col-12">
     <label  className="form-label">
-      Car Park Rates Payable Before Relief per year:
+      Car Park Rates Payable Before Relief Per Year:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder="Rates before relief"
+      placeholder="Rates Before Relief"
       value={newProperty.car_park_rates_payable_before_relief ?? ""}
       onChange={(e) =>
         setNewProperty({
@@ -293,7 +296,7 @@ newProperty.has_car_park && (
       }
     />
   </div>,
-  <div key="total_rate_payable " className="col-12">
+  <div key="total_rate_payable_before_relief " className="col-12">
     <label  className="form-label">
       Total Rates Payable Before Relief:
     </label>
@@ -306,6 +309,24 @@ newProperty.has_car_park && (
         setNewProperty({
           ...newProperty,
           total_rate_payable_before_relief:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>,
+  <div key="total_rate_payable_after_relief " className="col-12">
+    <label  className="form-label">
+      Total Rates Payable After Relief:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder=" Total Rates Payable After Relief"
+      value={newProperty.total_rate_payable_after_relief?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          total_rate_payable_after_relief:
             e.target.value === "" ? null : Number(e.target.value),
         })
       }
@@ -340,6 +361,7 @@ newProperty.has_car_park && (
 
         <input
           type="number"
+          placeholder="Donation Due By Landlord"
           className="form-control"
           value={newProperty.donation_due ?? ""}
           onChange={(e) =>
@@ -423,6 +445,7 @@ newProperty.has_car_park && (
           Length of Lease:
         </label> 
         <input
+          placeholder=" Length of Lease"
           className="form-control"
           value={newProperty.lease_duration_text}
           //value={newProperty.length_of_lease} (days)
@@ -449,22 +472,78 @@ newProperty.has_car_park && (
           }
         />
       </div>,
-      <div key="landlord_Address"  className="col-12">
+
+      <div key="landlord_email" className="col-12">
+          <label  className="form-label">Landlord's Email:</label>
+          <input
+            className="form-control"
+            placeholder="Landlord Email"
+            value={newProperty.landlord_email}
+            onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
+          />
+      </div>,
+      <div key="landlord_no" className="col-12">
+         <label  className="form-label">Landlord's Contact Number:</label>
+         <input
+           className="form-control"
+           placeholder="Landlord Contact Number"
+           value={newProperty.landlord_no}
+           onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
+         />
+      </div>,
+
+   
+
+
+      <div key="andlord_first_line_address"  className="col-12">
         <label  className="form-label">
-          Landlord's Registered Address:
+          Landlord's First Address Line:
         </label>
         <input
           className="form-control"
           placeholder="Landlord's Registered Address"
-          value={newProperty.landlord_Address}
+          value={newProperty.landlord_first_line_address}
           onChange={(e) =>
             setNewProperty({
               ...newProperty,
-              landlord_Address: e.target.value,
+              landlord_first_line_address: e.target.value,
             })
           }
         />
       </div>,
+      <div key="landlord_second_line_address"  className="col-12">
+        <label  className="form-label">
+          Landlord's Second Address Line:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord's Registered Address"
+          value={newProperty.landlord_second_line_address}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_second_line_address: e.target.value,
+            })
+          }
+        />
+      </div>,
+      <div key="landlord_floor_number"  className="col-12">
+        <label  className="form-label">
+          Landlord's Floor Number:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Landlord's Floor Number"
+          value={newProperty.landlord_floor_number}
+          onChange={(e) =>
+            setNewProperty({
+              ...newProperty,
+              landlord_floor_number: e.target.value,
+            })
+          }
+        />
+      </div>,
+  
       <div key="landlord_city"  className="col-12">
         <label  className="form-label">
           Landlord's City:
@@ -513,24 +592,8 @@ newProperty.has_car_park && (
           }
         />
       </div>,
-      <div key="landlord_email" className="col-12">
-        <label  className="form-label">Landlord's Email:</label>
-        <input
-          className="form-control"
-          placeholder="Landlord Email"
-          value={newProperty.landlord_email}
-          onChange={(e) => setNewProperty({ ...newProperty, landlord_email: e.target.value })}
-        />
-      </div>,
-      <div key="landlord_no" className="col-12">
-        <label  className="form-label">Landlord's Contact Number:</label>
-        <input
-          className="form-control"
-          placeholder="Landlord Contact Number"
-          value={newProperty.landlord_no}
-          onChange={(e) => setNewProperty({ ...newProperty, landlord_no: e.target.value })}
-        />
-      </div>
+
+   
   ];
 
   return (

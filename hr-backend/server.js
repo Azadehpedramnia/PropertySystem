@@ -309,8 +309,10 @@ app.get('/api/propertiies/:id', async (req, res) => {
               donation_due,
               total_rate_payable_after_relief,
               landlord_name,
-              landlord_city
-
+              landlord_city,
+              landlord_first_line_address,
+              landlord_second_line_address,
+              landlord_floor_number
        FROM propertiies
        WHERE id = $1`,
       [id]
@@ -359,7 +361,10 @@ app.get('/api/propertiies', async (req, res) => {
               donation_due,   
               total_rate_payable_after_relief,  
               landlord_name,
-              landlord_city
+              landlord_city,
+              landlord_first_line_address,
+              landlord_second_line_address,
+              landlord_floor_number
              
        FROM propertiies`
     );
@@ -402,6 +407,9 @@ app.post('/api/propertiies', async (req, res) => {
       total_rate_payable_after_relief,
       landlord_name,
       landlord_city,
+      landlord_first_line_address,
+      landlord_second_line_address,
+      landlord_floor_number,
     } = req.body;
 
     const result = await pool.query(
@@ -435,10 +443,13 @@ app.post('/api/propertiies', async (req, res) => {
           donation_due,
           total_rate_payable_after_relief,
           landlord_name,
-          landlord_city
+          landlord_city,
+          landlord_first_line_address,
+          landlord_second_line_address,
+          landlord_floor_number
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33)
        RETURNING *`,
       [
         inquirer,
@@ -470,7 +481,10 @@ app.post('/api/propertiies', async (req, res) => {
         donation_due,
         total_rate_payable_after_relief, 
         landlord_name,
-        landlord_city
+        landlord_city,
+        landlord_first_line_address,
+        landlord_second_line_address,
+        landlord_floor_number
 
       ]
     );
@@ -513,7 +527,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
       donation_due,  
       total_rate_payable_after_relief, 
       landlord_name, 
-      landlord_city
+      landlord_city,
+      landlord_first_line_address,
+      landlord_second_line_address,
+      landlord_floor_number
     } = req.body;
 
     const result = await pool.query(
@@ -547,8 +564,11 @@ app.put('/api/propertiies/:id', async (req, res) => {
            donation_due = $27,
            total_rate_payable_after_relief = $28,
            landlord_name = $29,
-           landlord_city = $30
-       WHERE id = $31
+           landlord_city = $30,
+           landlord_first_line_address= $31,
+           landlord_second_line_address= $32,
+           landlord_floor_number= $33
+       WHERE id = $34
        RETURNING *`,
       [
         inquirer,
@@ -581,6 +601,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
         total_rate_payable_after_relief ,
         landlord_name,
         landlord_city,
+        landlord_first_line_address,
+        landlord_second_line_address,
+        landlord_floor_number,
         id
       ]
     );
@@ -631,7 +654,7 @@ app.get('/api/propertiies/property_type', async (req, res) => {
 // Person-Properties (the join table)
 // ------------------------------
 
-// GET: Retrieve all person-property relationships
+// GET: Retrieve all person-property relationships\d
 app.get('/api/person_property', async (req, res) => {
   try {
     const query = `

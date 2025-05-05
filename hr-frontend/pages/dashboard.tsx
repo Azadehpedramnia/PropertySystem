@@ -65,6 +65,9 @@ export interface Property {
   total_rate_payable_after_relief:number | null;
   landlord_name : string;
   landlord_city:string;
+  landlord_first_line_address:string;
+  landlord_second_line_address:string;
+  landlord_floor_number:string;
 }
 
 export interface PersonProperty {
@@ -241,6 +244,9 @@ export default function Dashboard() {
     total_rate_payable_after_relief:null,
     landlord_name:'',
     landlord_city:'',
+    landlord_first_line_address:'',
+    landlord_second_line_address:'',
+    landlord_floor_number:'',
   });
 
 
@@ -434,6 +440,9 @@ useEffect(() => {
         total_rate_payable_after_relief:null,
         landlord_name : '',
         landlord_city:'',
+        landlord_first_line_address:'',
+        landlord_second_line_address:'',
+        landlord_floor_number:'',
       });
       // Reload table
       setIsAddModalOpen(false);
@@ -787,6 +796,9 @@ useEffect(() => {
                             total_rate_payable_after_relief:null,
                             landlord_name:'',
                             landlord_city:'',
+                            landlord_first_line_address:'',
+                            landlord_second_line_address:'',
+                            landlord_floor_number:'',
                             
                           });
                         }}
