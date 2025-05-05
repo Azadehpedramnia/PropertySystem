@@ -1,8 +1,17 @@
 import type { Property, Person, PersonProperty } from '../../pages/dashboard';
 import CreateProposalForm from './CreateProposalForm'; // adjust path if needed
 import ProposalStatus from './ProposalStatus';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+interface Proposal {
+  id: number;
+  person_id: number;
+  property_id: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  // …other fields if you like
+}
 
 interface Props {
     selectedPropety: Property;
@@ -51,7 +60,24 @@ interface Props {
 
     //proposal create form sataes refresh after creat proposal
   const [proposalRefreshKey, setProposalRefreshKey] = useState(0);
+  const [allProposals, setAllProposals] = useState<Proposal[]>([]);
     const [creatingProposalForPersonId, setCreatingProposalForPersonId] = React.useState<number | null>(null);
+
+     // load (and reload) all proposals
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch('http://localhost:5000/api/proposals');
+        if (!res.ok) throw new Error(await res.text());
+        setAllProposals(await res.json());
+      } catch (err) {
+        console.error('Could not load proposals', err);
+      }
+    }
+    load();
+  }, [proposalRefreshKey]);  
+
+
     return (
         
         <div className="p-4 mt-4 border rounded">
@@ -333,7 +359,31 @@ interface Props {
                     <div className="mt-6 border-t pt-4">
                       <h3 className="text-lg font-semibold mb-2">People Related to This Property</h3>
                       <ol className="space-y-2">
-                        {relatedPeople.map((person) => (             
+                        {relatedPeople.map((person) => { 
+                          
+                              // ──❶ Compute this person’s proposals once per render:
+                              const mine = allProposals
+                              .filter(
+                                (p) =>
+                                  p.person_id === person.id &&
+                                  p.property_id === selectedPropety.id
+                              )
+                              .sort(
+                                (a, b) =>
+                                  new Date(b.created_at).getTime() -
+                                  new Date(a.created_at).getTime()
+                              );
+
+                            // ──❷ Derive latestStatus & latestDate here:
+                            const latestStatus =
+                              mine.length > 0 ? mine[0].status : 'No proposal';
+                            const latestDate =
+                              mine.length > 0
+                                ? new Date(mine[0].created_at).toLocaleDateString()
+                                : '';
+
+                           
+                          return(
                           <li key={person.id} className="border p-3 rounded bg-gray-50">
                             {editingPersonIdForProperty === person.id ? (
                               <>
@@ -473,19 +523,17 @@ interface Props {
                                       onCancel={() => setCreatingProposalForPersonId(null)}
                                       onSuccess={() => {
                                         setCreatingProposalForPersonId(null);
-                                        setProposalRefreshKey(prev => prev + 1); // ✅ trigger refresh
+                                        setProposalRefreshKey(k => k + 1);
                                       }}
+                                      
                                     />
-                                  )}
-                                {/**/}
-                                <ProposalStatus personId={person.id} propertyId={selectedPropety.id} />
-                               
-                                <ProposalStatus
-                                  personId={person.id}
-                                  propertyId={selectedPropety.id}
-                                  refreshKey={proposalRefreshKey}
-                                />
-
+                                )}
+                                {/**/}                           
+                                {/*state of last proposal*/}
+                                <span className="ml-2">
+                                  <strong>Status:</strong> {latestStatus}
+                                  {latestDate && <em className="text-sm text-gray-600"> ({latestDate})</em>}
+                                </span>
 
                                 {/* */}
                                 <p><strong>First Name:</strong> {person.name}</p>
@@ -528,7 +576,8 @@ interface Props {
                               </>
                             )}
                           </li>
-                        ))}
+                          );
+                        })}
                       </ol>
                     </div>
                   )
@@ -536,15 +585,6 @@ interface Props {
               })()
             )}
           </div>
-
-
-
-        
-
-
-
-
-
     );
   };
   export default PropertyDetails;
