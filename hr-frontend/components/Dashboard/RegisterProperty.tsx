@@ -95,7 +95,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           }
         />
         <label className="form-check-label" htmlFor="solelyOccupied">
-            Is the property solely occupied?
+            Is The Property Solely Occupied?
         </label>
       </div>
     </div>
@@ -211,7 +211,7 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
     </div>,
     <div key="rates_payable_before_relief" className="col-12">
       <label  className="form-label">
-        Rates Payable Before Relief per year:
+        Rates Payable Before Relief Per Year:
       </label>
       <input
         type="number"
@@ -376,7 +376,7 @@ newProperty.has_car_park && (
       
     
       <div className="col-12" key="start_date_of_lease">
-        <label className="form-label">Start Date of Lease:</label>
+        <label className="form-label">Start Date Of Lease:</label>
         <input
           type="date"
           className="form-control"
@@ -404,7 +404,7 @@ newProperty.has_car_park && (
     
  
     <div className="col-12" key="end_date_of_lease">
-      <label className="form-label">End Date of Lease:</label>
+      <label className="form-label">End Date Of Lease:</label>
       <input
         type="date"
         className="form-control"

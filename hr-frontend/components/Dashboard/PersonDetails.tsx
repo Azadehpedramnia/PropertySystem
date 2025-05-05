@@ -596,15 +596,35 @@ interface Props {
                                                   value={editedProperty.landlord_no}
                                                   onChange={(e) => setEditedProperty({ ...editedProperty, landlord_no: e.target.value })}
                                                 />
-                                                </div>
+                                              </div>
 
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Landlord's Registered Address:</strong></label>     
+                                                <label className="form-label"><strong>Landlord's First Address Line:</strong></label>     
                                                 <input
-                                                  placeholder="Landlord Address"
+                                                  placeholder="Landlord's First Address Line"
                                                   className="form-control"
-                                                  value={editedProperty.landlord_Address ?? property.landlord_Address}
-                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_Address : e.target.value })}
+                                                  value={editedProperty.landlord_first_line_address ?? property.landlord_first_line_address}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_first_line_address : e.target.value })}
+                                                />
+                                              </div>
+
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's Second Address Line:</strong></label>     
+                                                <input
+                                                  placeholder="Landlord's Second Address Line"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_second_line_address ?? property.landlord_second_line_address}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_second_line_address : e.target.value })}
+                                                />
+                                              </div>
+
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Landlord's Floor Number:</strong></label>     
+                                                <input
+                                                  placeholder="Landlord's Floor Number"
+                                                  className="form-control"
+                                                  value={editedProperty.landlord_floor_number ?? property.landlord_floor_number}
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, landlord_floor_number : e.target.value })}
                                                 />
                                               </div>
 
@@ -689,26 +709,29 @@ interface Props {
                                           ) : (
                                             <>
                                               <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
-                                              <p><strong>Is the property solely occupied? :</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
+                                              <p><strong>Is The Property Solely Occupied? :</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
                                               <p><strong>Floor Number:</strong> {property.city}</p>
                                               <p><strong>Property Fisrt Line Address:</strong> {property.city}</p>
                                               <p><strong>Property Second Line Address:</strong> {property.city}</p>
                                               <p><strong>City:</strong> {property.city}</p>
                                               <p><strong>Postcode:</strong> {property.post_code}</p>
                                               <p><strong>Property Type:</strong> {property.property_type}</p>
-                                              <p><strong>Property rateable value:</strong> {property.building_rateable_value}</p>
-                                              <p><strong>Rates payable before relief per year:</strong> {property.rates_payable_before_relief}</p>
+
+                                              <p><strong>Property Rateable Value:</strong> {property.building_rateable_value}</p>
+                                              <p><strong>Rates Payable Before Relief Per Year:</strong> {property.rates_payable_before_relief}</p>
                                               <p><strong>Has car park:</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
-                                              <p><strong>Car park rateable value:</strong> {property.car_park_rateable_value}</p>
-                                              <p><strong>Car park rates payable before relief per year:</strong> {property.car_park_rates_payable_before_relief}</p>
-                                              <p><strong>Total rateable value:</strong> {property.total_rateable_value}</p>                                       
-                                              <p><strong>Total Rates Payable Before Relief:</strong> {property.total_rateable_value}</p>
-                                              <p><strong> Rates Multiplier Of The Property:</strong> {property.total_rateable_value}</p>
+                                              <p><strong>Car Park Rateable Value:</strong> {property.car_park_rateable_value}</p>
+                                              <p><strong>Car Park Rates Payable Before Relief Per Year:</strong> {property.car_park_rates_payable_before_relief}</p>
+                                              <p><strong>Total Rateable Value:</strong> {property.total_rateable_value}</p>                                       
+                                              <p><strong>Total Rates Payable Before Relief:</strong> {property.total_rate_payable_before_relief}</p>
+                                              <p><strong>Total Rates Payable After Relief:</strong> {property.total_rate_payable_after_relief}</p>
+                                              <p><strong> Rates Multiplier Of The Property:</strong> {property.rates_multiplier}</p>
                                              
-                                           
-                                              <p><strong>Donation Due By Landlord::</strong>{property.donation_due
-                                                    ? new Date(property.donation_due).toISOString().split('T')[0]
-                                                    : 'N/A'}
+                                              <p>
+                                                <strong>Donation Due By Landlord:</strong> 
+                                                {property.donation_due !== null && property.donation_due !== undefined
+                                                  ? `£${property.donation_due}`
+                                                  : 'N/A'}
                                               </p>
                                               
                                               <p><strong>Start Date of Lease:</strong>{property.start_date_of_lease
@@ -716,17 +739,29 @@ interface Props {
                                                     : 'N/A'}
                                               </p>
                                               
-                                              <p><strong>End data of lease:</strong> {property.end_date_of_lease
+                                              <p><strong>End Data Of Lease:</strong> {property.end_date_of_lease
                                                     ? new Date(property.end_date_of_lease).toISOString().split('T')[0]
                                                     : 'N/A'}
                                               </p>
                                               <p><strong>Length Of Lease:</strong> {property.length_of_lease}</p>
                                          
- 
-                                              <p><strong>Landlord's Registered Address:</strong> {property.landlord_Address}</p>
+
+                                         
+                                              <p><strong>Landlord's Name:</strong> {property.landlord_name}</p>
+                                              <p><strong>Landlord's Email :</strong> {property.landlord_email}</p>
+                                              <p><strong>Landlord's Contact Number:</strong> {property.landlord_no}</p>
+
+                                              <p><strong>Landlord's First Address Line:</strong> {property.landlord_first_line_address}</p>
+                                              <p><strong>Landlord's Second Address Line:</strong> {property.landlord_second_line_address}</p>
+                                              <p><strong>Landlord's Floor Number:</strong> {property.landlord_floor_number}</p>
+                                             
+                                              <p><strong>Landlord's City:</strong> {property.landlord_city}</p>
+                                              <p><strong>Landlord's County:</strong> {property.landlord_county}</p>
                                               <p><strong>Landlord's Postcode :</strong> {property.landlord_post_code_address}</p>
-                                              <p><strong>Landlord's email :</strong> {property.landlord_email}</p>
-                                              <p><strong>Landlord's Contact Number::</strong> {property.landlord_no}</p>
+
+
+                                            
+                                              
                                             
                                               
                                               {/* ACTION BUTTONS */}
