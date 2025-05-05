@@ -138,20 +138,57 @@ interface Props {
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label"><strong>Contact's Postcode:</strong></label>
+                          <label className="form-label"><strong>First Address Line:</strong></label>
                           <input
                             className="form-control"
-                            value={selectedPerson.iqu_post_code_address}
-                            onChange={(e) => setSelectedPerson({ ...selectedPerson, iqu_post_code_address: e.target.value })}
+                            value={selectedPerson.first_line_contac_address}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, first_line_contac_address: e.target.value })}
                           />
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label"><strong>Contact's Address:</strong></label>
+                          <label className="form-label"><strong>Second Address Line:</strong></label>
                           <input
                             className="form-control"
-                            value={selectedPerson.property_address_for_enquiry}
-                            onChange={(e) => setSelectedPerson({ ...selectedPerson, property_address_for_enquiry: e.target.value })}
+                            value={selectedPerson.second_line_contac_address}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, second_line_contac_address: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label className="form-label"><strong>Floor Number:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.floor_no}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson,floor_no: e.target.value })}
+                          />
+                        </div>
+                        
+                        <div className="mb-3">
+                          <label className="form-label"><strong>City:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.contac_city}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, contac_city: e.target.value })}
+                          />
+                        </div>
+                     
+
+                        <div className="mb-3">
+                          <label className="form-label"><strong>County:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.contact_county}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, contact_county: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label className="form-label"><strong>Postcode:</strong></label>
+                          <input
+                            className="form-control"
+                            value={selectedPerson.iqu_post_code_address}
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, iqu_post_code_address: e.target.value })}
                           />
                         </div>
                       </>
@@ -163,8 +200,12 @@ interface Props {
                         <p><strong>Role:</strong> {selectedPerson.role}</p>
                         <p><strong>Email:</strong> {selectedPerson.email}</p>
                         <p><strong>Contact Number:</strong> {selectedPerson.contact_number}</p>
-                        <p><strong>Contact's Postcode:</strong> {selectedPerson.iqu_post_code_address}</p>
-                        <p><strong>Contact's Address:</strong> {selectedPerson.property_address_for_enquiry}</p>
+                        <p><strong>First Address Line:</strong> {selectedPerson.first_line_contac_address}</p>
+                        <p><strong>Second Address Line:</strong> {selectedPerson.second_line_contac_address}</p>
+                        <p><strong>Floor Number:</strong> {selectedPerson.floor_no}</p>
+                        <p><strong>City:</strong> {selectedPerson.contac_city}</p>
+                        <p><strong>County:</strong> {selectedPerson.contact_county}</p>
+                        <p><strong>Postcode:</strong> {selectedPerson.iqu_post_code_address}</p>
                       </>
                     )}
 
@@ -413,9 +454,22 @@ interface Props {
                                                 <input
                                                   className="form-control"
                                                   type="number"
-                                                  value={editedProperty.total_rate_payable ?? property.total_rate_payable ?? ''}
+                                                  value={editedProperty.total_rate_payable_before_relief ?? property.total_rate_payable_before_relief  ?? ''}
                                                   onChange={(e) =>
-                                                    setEditedProperty({ ...editedProperty, total_rate_payable: e.target.value === '' ? null : Number(e.target.value) })
+                                                    setEditedProperty({ ...editedProperty, total_rate_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+
+                                              
+                                              <div className="mb-3">
+                                                <label className="form-label"><strong>Total Rates Payable After Relief:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.total_rate_payable_after_relief ?? property.total_rate_payable_after_relief  ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, total_rate_payable_after_relief : e.target.value === '' ? null : Number(e.target.value) })
                                                   }
                                                 />
                                               </div>
@@ -435,21 +489,18 @@ interface Props {
 
  
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Donation Due By Landlord:</strong></label>
+                                                <label className="form-label">
+                                                  <strong>Donation Amount Due By Landlord (£):</strong>
+                                                </label>
                                                 <input
                                                   className="form-control"
-                                                  type="date"
-                                                  value={
-                                                    editedProperty.donation_due
-                                                      ? new Date(editedProperty.donation_due).toISOString().split('T')[0]
-                                                      : property.donation_due
-                                                      ? new Date(property.donation_due).toISOString().split('T')[0]
-                                                      : ''
-                                                  }
+                                                  type="number"
+                                                  step="0.01"
+                                                  value={editedProperty.donation_due ?? property.donation_due ?? ''}
                                                   onChange={(e) =>
                                                     setEditedProperty({
                                                       ...editedProperty,
-                                                      donation_due: e.target.value === '' ? null : new Date(e.target.value),
+                                                      donation_due: e.target.value === '' ? null : parseFloat(e.target.value),
                                                     })
                                                   }
                                                 />

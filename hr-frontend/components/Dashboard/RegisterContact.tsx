@@ -175,6 +175,39 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               }
             />
           </div>
+
+          
+          {/* Row: City */}
+          <div className="col-12">
+            <label  className="form-label">City:</label>
+            <input
+              className="form-control"
+              placeholder="City"
+              value={newPerson.contac_city}
+              onChange={(e) =>
+                setNewPerson({
+                  ...newPerson,
+                  contac_city: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* Row: County */}
+          <div className="col-12">
+            <label  className="form-label">County:</label>
+            <input
+              className="form-control"
+              placeholder="County"
+              value={newPerson.contact_county}
+              onChange={(e) =>
+                setNewPerson({
+                  ...newPerson,
+                  contact_county: e.target.value,
+                })
+              }
+            />
+          </div>
    
           {/* Row: Postcode*/}
           <div className="col-12">
@@ -194,21 +227,7 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               />
           </div>
           
-          {/* Row: County */}
-          <div className="col-12">
-            <label  className="form-label">County:</label>
-            <input
-              className="form-control"
-              placeholder="County"
-              value={newPerson.contact_county}
-              onChange={(e) =>
-                setNewPerson({
-                  ...newPerson,
-                  contact_county: e.target.value,
-                })
-              }
-            />
-          </div>
+        
 
         
           {/* Submit Button */}
