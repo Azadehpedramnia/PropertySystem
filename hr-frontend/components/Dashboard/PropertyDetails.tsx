@@ -382,7 +382,9 @@ interface Props {
                                 ? new Date(mine[0].created_at).toLocaleDateString()
                                 : '';
 
-                           
+                            const latestProposal = mine[0];             // this is undefined if no proposals
+                            const proposalId     = latestProposal?.id;  // safely get the id or undefined
+
                           return(
                           <li key={person.id} className="border p-3 rounded bg-gray-50">
                             {editingPersonIdForProperty === person.id ? (
@@ -533,7 +535,17 @@ interface Props {
                                 <span className="ml-2">
                                   <strong>Status:</strong> {latestStatus}
                                   {latestDate && <em className="text-sm text-gray-600"> ({latestDate})</em>}
-                                </span>
+                                </span>                     
+
+                                {proposalId && (
+                                  <a
+                                    href={`http://localhost:5000/api/proposals/${proposalId}/download-pdf`}
+                                    className="ml-4 text-blue-600 hover:underline"
+                                  >
+                                    Download PDF
+                                  </a>
+                                )}
+
 
                                 {/* */}
                                 <p><strong>First Name:</strong> {person.name}</p>

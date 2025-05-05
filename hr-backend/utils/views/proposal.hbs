@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Proposal {{id}}</title></head>
+  <body>
+    <p>Dear {{proposal_data.RecipiantName}},</p>
+    <p>Re: Offer of Rates Mitigation for {{property_address}}</p>
+    {{#each bodyLines}}
+      <p>{{this}}</p>
+    {{/each}}
+    <p>Thank you,<br/>Humanitarian Operations</p>
+  </body>
+</html>
