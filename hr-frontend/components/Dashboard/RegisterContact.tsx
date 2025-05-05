@@ -206,23 +206,6 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
             />
           </div>
 
-          {/* Row: County */}
-          <div className="col-12">
-            <label  className="form-label">County:</label>
-            <input
-              className="form-control"
-              placeholder="Address"
-              value={newPerson.contact_county}
-              onChange={(e) =>
-                setNewPerson({
-                  ...newPerson,
-                  contact_county: e.target.value,
-                })
-              }
-            />
-          </div>
-
-
         
           {/* Submit Button */}
           <div className="col-12 text-end">
