@@ -188,7 +188,9 @@ interface Props {
                           <input
                             className="form-control"
                             value={selectedPerson.iqu_post_code_address}
-                            onChange={(e) => setSelectedPerson({ ...selectedPerson, iqu_post_code_address: e.target.value })}
+                            pattern="^[A-Za-z].*"
+                            title="Postcode must start with a letter"
+                            onChange={(e) => setSelectedPerson({ ...selectedPerson, iqu_post_code_address: e.target.value.toUpperCase() })}
                           />
                         </div>
                       </>
@@ -362,7 +364,10 @@ interface Props {
                                                 <input
                                                   className="form-control"
                                                   value={editedProperty.post_code?? property.post_code}
-                                                  onChange={(e) => setEditedProperty({ ...editedProperty, post_code: e.target.value })}
+                                                  pattern="^[A-Za-z].*"
+                                                  title="Postcode must start with a letter"
+                                                  onChange={(e) => setEditedProperty({ ...editedProperty, post_code: e.target.value.toUpperCase() })}
+                                                
                                                 />
                                               </div>
                                         
@@ -658,13 +663,18 @@ interface Props {
                                                   className="form-control"
                                                   placeholder="Landlord's postcode"
                                                   value={editedProperty.landlord_post_code_address}
+                                                  pattern="^[A-Za-z].*"
+                                                  title="Postcode must start with a letter"
                                                   onChange={(e) =>
                                                     setEditedProperty({
                                                       ...editedProperty,
-                                                      landlord_post_code_address: e.target.value,
+                                                      landlord_post_code_address: e.target.value.toUpperCase(),
                                                     })
                                                   }
                                                 />
+
+
+
                                                 </div>
                                              
                                         

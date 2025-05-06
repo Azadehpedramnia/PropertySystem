@@ -1,7 +1,6 @@
-import type { Property, Person, PersonProperty } from '../../pages/dashboard';
-import CreateProposalForm from './CreateProposalForm'; // adjust path if needed
-import ProposalStatus from './ProposalStatus';
 import React, { useState, useEffect } from 'react';
+import type { Property, Person, PersonProperty } from '../../pages/dashboard';
+import CreateProposalForm from './CreateProposalForm';
 
 interface Proposal {
   id: number;
@@ -10,60 +9,51 @@ interface Proposal {
   status: string;
   created_at: string;
   updated_at: string;
-  // …other fields if you like
 }
 
 interface Props {
-    selectedPropety: Property;
-    editPropertyMode: boolean;
-    personProperties: PersonProperty[];
-    people: Person[];
-    fetchProperties: () => void;
-    fetchPeople: () => void;
-    fetchPersonProperties: () => void;  
-    setSelectedProperty: (p: Property | null) => void;
-    setEditPropertyMode: (mode: boolean) => void;
-    //setSelectedPerson: (p: Person | null) => void;
-    setEditingPersonIdForProperty: (id: number | null) => void;
-    editingPersonIdForProperty: number | null;
-    editedPersonForProperty: Partial<Person>;
-    setEditedPersonForProperty: (p: Partial<Person>) => void;
-  }
-
-  //keep capital first letter of each name like 'Jone Poul'
-  const capitalizeWords = (str: string) =>
-    str
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-
-  
+  selectedPropety: Property;
+  editPropertyMode: boolean;
+  personProperties: PersonProperty[];
+  people: Person[];
+  fetchProperties: () => void;
+  fetchPeople: () => void;
+  fetchPersonProperties: () => void;
+  setSelectedProperty: (p: Property | null) => void;
+  setEditPropertyMode: (mode: boolean) => void;
+  setEditingPersonIdForProperty: (id: number | null) => void;
+  editingPersonIdForProperty: number | null;
+  editedPersonForProperty: Partial<Person>;
+  setEditedPersonForProperty: (p: Partial<Person>) => void;
+}
 
 
+const capitalizeWords = (str: string) =>
+  str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 
-  const PropertyDetails: React.FC<Props> = ({
-    selectedPropety,
-    editPropertyMode,
-    personProperties,
-    people,
-    fetchProperties,
-    fetchPeople,
-    fetchPersonProperties,
-    setSelectedProperty,
-    setEditPropertyMode,
-    //setSelectedPerson,
-    setEditingPersonIdForProperty,
-    editingPersonIdForProperty,
-    editedPersonForProperty,
-    setEditedPersonForProperty,
-  }) => {
-
-    //proposal create form sataes refresh after creat proposal
+const PropertyDetails: React.FC<Props> = ({
+  selectedPropety,
+  editPropertyMode,
+  personProperties,
+  people,
+  fetchProperties,
+  fetchPeople,
+  fetchPersonProperties,
+  setSelectedProperty,
+  setEditPropertyMode,
+  setEditingPersonIdForProperty,
+  editingPersonIdForProperty,
+  editedPersonForProperty,
+  setEditedPersonForProperty,
+}) => {
   const [proposalRefreshKey, setProposalRefreshKey] = useState(0);
   const [allProposals, setAllProposals] = useState<Proposal[]>([]);
-    const [creatingProposalForPersonId, setCreatingProposalForPersonId] = React.useState<number | null>(null);
+  const [creatingProposalForPersonId, setCreatingProposalForPersonId] = useState<number | null>(null);
+  const [editModeForPersonId, setEditModeForPersonId] = useState<number | null>(null);
 
-     // load (and reload) all proposals
   useEffect(() => {
     async function load() {
       try {
@@ -75,528 +65,334 @@ interface Props {
       }
     }
     load();
-  }, [proposalRefreshKey]);  
+  }, [proposalRefreshKey]);
 
+  const relatedPeople = personProperties
+    .filter(pp => pp.property_id === selectedPropety.id && pp.is_related)
+    .map(pp => people.find(p => p.id === pp.person_id))
+    .filter((p): p is Person => !!p);
+
+  return (
+    <div className="container mt-4">
+      <div className="row">
+        {/* Left - Property Report */}
+        <div className="col-md-6">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title mb-3">
+                Report For Address:
+                <br />
+                <strong>
+                  {selectedPropety.property_first_line_address}_{selectedPropety.property_floor}_{selectedPropety.post_code}
+                </strong>
+              </h5>
+
+              {!editPropertyMode ? (
+                <>
+                  <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
+                  <p><strong>City:</strong> {selectedPropety.city}</p>
+                  <p><strong>Address:</strong> {selectedPropety.address}</p>
+                  <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
+                  <p><strong>Building rateable value:</strong> {selectedPropety.building_rateable_value}</p>
+                  <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
+                  <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
+                  <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
+                  <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
+                  <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
+                  <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable_before_relief}</p>
+                  <p><strong>Total Rates Payable After Relief:</strong> {selectedPropety.total_rate_payable_after_relief}</p>
+                  <p><strong>Rates Multiplier:</strong> {selectedPropety.rates_multiplier}</p>
+                  <p><strong>Donation Due:</strong> {selectedPropety.donation_due}</p>
+                  <p><strong>Landlord:</strong> {selectedPropety.landlord_name}</p>
+                  <p><strong>Landlord Email:</strong> {selectedPropety.landlord_email}</p>
+                  <p><strong>Landlord Phone:</strong> {selectedPropety.landlord_no}</p>
+                  <p><strong>Lease Start:</strong> {selectedPropety.start_date_of_lease?.toString()}</p>
+                  <p><strong>Lease End:</strong> {selectedPropety.end_date_of_lease?.toString()}</p>
+                  <p><strong>Lease Length:</strong> {selectedPropety.length_of_lease}</p>
+
+                  <div className="mt-3">
+                    <button className="btn btn-primary me-2" onClick={() => setEditPropertyMode(true)}>Edit</button>
+                    <button className="btn btn-danger me-2" onClick={async () => {
+                      if (confirm('Are you sure you want to delete this property?')) {
+                        const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, { method: 'DELETE' });
+                        if (res.ok) {
+                          setSelectedProperty(null);
+                          fetchProperties();
+                        } else {
+                          alert('Delete failed');
+                        }
+                      }
+                    }}>Delete</button>
+                    <button className="btn btn-secondary" onClick={() => setSelectedProperty(null)}>Close</button>
+                  </div>
+                </>
+              ) : (
+                <div className="container mt-4">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="card shadow-sm rounded">
+                        <div className="card-body">
+                          <h5 className="card-title mb-3">
+                            Edit Property Details for: <strong>{selectedPropety.property_first_line_address}</strong>
+                          </h5>
+
+                          <div className="mb-3">
+                            <label className="form-label"><strong>Landlord/Organisation:</strong></label>
+                            <input
+                              className="form-control"
+                              value={selectedPropety.inquirer}
+                              onChange={(e) => setSelectedProperty({ ...selectedPropety, inquirer: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="form-label"><strong>City:</strong></label>
+                            <input
+                              className="form-control"
+                              value={selectedPropety.city}
+                              onChange={(e) => setSelectedProperty({ ...selectedPropety, city: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="form-label"><strong>Address:</strong></label>
+                            <input
+                              className="form-control"
+                              value={selectedPropety.address}
+                              onChange={(e) => setSelectedProperty({ ...selectedPropety, address: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="form-label"><strong>Property Type:</strong></label>
+                            <select
+                              className="form-select"
+                              value={selectedPropety.property_type}
+                              onChange={(e) =>
+                                setSelectedProperty({
+                                  ...selectedPropety,
+                                  property_type: e.target.value as Property['property_type'],
+                                })
+                              }
+                            >
+                              <option value="Office">Office</option>
+                              <option value="Retail">Retail</option>
+                              <option value="Warehouse">Warehouse</option>
+                            </select>
+                          </div>
+
+                          <div className="d-flex gap-2 mt-4">
+                            <button
+                              className="btn btn-success me-2"
+                              onClick={async () => {
+                                const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
+                                  method: 'PUT',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify(selectedPropety),
+                                });
+                                if (res.ok) {
+                                  const bc = new BroadcastChannel('dashboard-updates');
+                                  bc.postMessage('property-updated');
+                                  bc.close();
+                                  setEditPropertyMode(false);
+                                  fetchProperties();
+                                } else {
+                                  alert('Update failed');
+                                }
+                              }}
+                            >
+                              Save
+                            </button>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => setEditPropertyMode(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right - Related People */}
+        <div className="col-md-6">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title mb-3">People Related to This Property</h5>
+              {relatedPeople.length === 0 ? (
+                <p>No related people found.</p>
+              ) : (
+
+
+
+                <ol className="list-group list-group-numbered">
+  {relatedPeople.map((person) => {
+    const isExpanded = editingPersonIdForProperty === person.id;
+    const isEditing = editModeForPersonId === person.id;
 
     return (
-        
-        <div className="p-4 mt-4 border rounded">
-        <h2 className="text-xl font-semibold mb-2">Report For Address : {selectedPropety.property_first_line_address}_{selectedPropety.property_floor}_{selectedPropety.post_code}</h2>
+      <li key={person.id} className="list-group-item">
+        <div
+          role="button"
+          className="text-primary fw-bold"
+          onClick={() =>
+            setEditingPersonIdForProperty(isExpanded ? null : person.id)
+          }
+        >
+          {person.name} {person.family}
+        </div>
 
-        {editPropertyMode ? (
-          <>
-            <p> 
-            <label><strong>Landlord/Organisation:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              value={selectedPropety.inquirer}
-              onChange={(e) =>
-                setSelectedProperty({ ...selectedPropety, inquirer: e.target.value })
-              }
-            /></p>
-              <p> 
-              <label><strong>City:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              value={selectedPropety.city}
-              onChange={(e) =>
-                setSelectedProperty({ ...selectedPropety, city: e.target.value })
-              }
-            /></p>
-              <p> 
-              <label><strong>Address:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              value={selectedPropety.address}
-              onChange={(e) =>
-                setSelectedProperty({ ...selectedPropety, address: e.target.value })
-              }
-            /></p>
-            <p> 
-                <label><strong>Property Type:</strong></label> 
-                <select
-                  className="border p-2 w-full my-1"
-                  value={selectedPropety.property_type}
-                  onChange={(e) =>
-                    setSelectedProperty({
-                      ...selectedPropety,
-                      property_type: e.target.value as Property['property_type'],
-                    })
-                  }
-                >
-                  <option value="Office">Office</option>
-                  <option value="Retail">Retail</option>
-                  <option value="Warehouse">Warehouse</option>
-                </select>
-            </p>
-
-            <p> 
-            <label><strong>Building rateable value:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.building_rateable_value ?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  building_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-            <p> 
-            <label><strong>Rates Payable Before Relief per year:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-            <label className="inline-flex items-center space-x-2 my-1">
-              <input
-                type="checkbox"
-                checked={selectedPropety.has_car_park}
-                onChange={(e) =>
-                  setSelectedProperty({
-                    ...selectedPropety,
-                    has_car_park: e.target.checked, // ✅ checkbox gives true/false
-                  })
-                }
-              />
-              <span><strong>Has Car Park?</strong></span>
-            </label>
-            <p> 
-            <label><strong>Car park rateable value:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.car_park_rateable_value ?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  car_park_rateable_value: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-              <p> 
-              <label><strong>Car park rates payable before relief:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.car_park_rates_payable_before_relief ?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  car_park_rates_payable_before_relief: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-              <p> 
-              <label><strong>Total rateable value:</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.total_rateable_value ?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  total_rateable_value : e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-              <p> 
-              <label><strong>Total Rates Payable Before Relief::</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.total_rate_payable_before_relief?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  total_rate_payable_before_relief : e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-            <p> 
-            <label><strong>Total Rates Payable after Relief::</strong></label> 
-            <input
-              className="border p-2 w-full my-1"
-              type="number"
-              value={selectedPropety.total_rate_payable_after_relief?? ''}
-              onChange={(e) =>
-                setSelectedProperty({
-                  ...selectedPropety,
-                  total_rate_payable_after_relief : e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-            /></p>
-
-            
-            
-            {/* Repeat for other fields */}
-          </>
-        ) : (
-          <>
-            <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
-            <p><strong>City:</strong> {selectedPropety.city}</p>
-            <p><strong>Address:</strong> {selectedPropety.address}</p>
-            <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
-            <p><strong>Building rateable value:</strong> {selectedPropety.building_rateable_value}</p>
-            <p><strong>Rates payable before relief:</strong> {selectedPropety.rates_payable_before_relief}</p>
-            <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
-            <p><strong>Car park rateable value:</strong> {selectedPropety.car_park_rateable_value}</p>
-            <p><strong>Car park rates payable before relief:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
-            <p><strong>Total rateable value:</strong> {selectedPropety.total_rateable_value}</p>
-            <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable_before_relief}</p> 
-            <p><strong>Total Rates Payable afterRelief:</strong> {selectedPropety.total_rate_payable_after_relief}</p> 
-            <p><strong>Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>         
-            <p><strong>Dontion:</strong> {selectedPropety.donation_due
-                  ? new Date(selectedPropety.donation_due).toISOString().split('T')[0]
-                  : 'N/A'}
-            </p>
-            <p><strong>Landlord name :</strong> {selectedPropety.landlord_Address}</p>
-            <p><strong>Landlord email address :</strong> {selectedPropety.landlord_email}</p>
-            <p><strong>Landlord phone number :</strong> {selectedPropety.landlord_no}</p>
-            <p><strong>Rateable Multiplier applicable for the property :</strong> {selectedPropety.rates_multiplier}</p>            
-            <p><strong>Agreed Start data of lease:</strong> {selectedPropety.start_date_of_lease
-                ? new Date(selectedPropety.start_date_of_lease).toISOString().split('T')[0]
-                : 'N/A'}                
-            </p>
-            <p><strong>End data of lease:</strong> {selectedPropety.end_date_of_lease
-                 ? new Date(selectedPropety.end_date_of_lease).toISOString().split('T')[0]
-                 : 'N/A'}
-            </p>
-            <p><strong>Length Of Lease:</strong> {selectedPropety.length_of_lease}</p>
-          </>
-        )}
-
-        {/* ACTION BUTTONS */}
-          <div className="mt-4 space-x-2">
-            {editPropertyMode ? (
+        {isExpanded && (
+          <div className="mt-3 border-top pt-3">
+            {isEditing ? (
               <>
-                <button
-                  onClick={async () => {
-                    // Call PUT API to update property
-                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(selectedPropety),
-                    });
-                    if (res.ok) {
-
-                      // tell all dashboard tabs to refresh
-                      const bc = new BroadcastChannel('dashboard‑updates')
-                      bc.postMessage('property‑updated')
-                      bc.close()
-
-
-                      setEditPropertyMode(false);
-                      fetchProperties();
-                    } else {
-                      alert('Update failed');
+                <div className="mb-3">
+                  <label className="form-label"><strong>First Name:</strong></label>
+                  <input
+                    className="form-control"
+                    value={editedPersonForProperty.name ?? person.name}
+                    onChange={(e) =>
+                      setEditedPersonForProperty({
+                        ...editedPersonForProperty,
+                        name: capitalizeWords(e.target.value),
+                      })
                     }
-                  }}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEditPropertyMode(false)}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </>
-              ) : (
-                <>
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label"><strong>Last Name:</strong></label>
+                  <input
+                    className="form-control"
+                    value={editedPersonForProperty.family ?? person.family}
+                    onChange={(e) =>
+                      setEditedPersonForProperty({
+                        ...editedPersonForProperty,
+                        family: capitalizeWords(e.target.value),
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label"><strong>Organisation:</strong></label>
+                  <input
+                    className="form-control"
+                    value={editedPersonForProperty.organisation ?? person.organisation}
+                    onChange={(e) =>
+                      setEditedPersonForProperty({
+                        ...editedPersonForProperty,
+                        organisation: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Add more fields here as needed... */}
+
+                <div className="d-flex gap-2 mt-2">
                   <button
-                    onClick={() => setEditPropertyMode(true)}
-                    className="bg-gray-300 px-4 py-2 rounded"
+                    className="btn btn-success btn-sm"
+                    onClick={async () => {
+                      const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ...person, ...editedPersonForProperty }),
+                      });
+                      if (res.ok) {
+                        const bc = new BroadcastChannel("dashboard-updates");
+                        bc.postMessage("person-updated");
+                        bc.close();
+                        setEditModeForPersonId(null);
+                        setEditingPersonIdForProperty(null);
+                        setEditedPersonForProperty({});
+                        fetchPeople();
+                      } else {
+                        alert("Failed to update person");
+                      }
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      setEditModeForPersonId(null);
+                      setEditedPersonForProperty({});
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p><strong>Organisation:</strong> {person.organisation}</p>
+                <p><strong>Role:</strong> {person.role}</p>
+                <p><strong>Email:</strong> {person.email}</p>
+                <p><strong>Contact:</strong> {person.contact_number}</p>
+
+                <div className="d-flex gap-2 mt-2">
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => {
+                      setEditedPersonForProperty(person);
+                      setEditModeForPersonId(person.id);
+                    }}
                   >
                     Edit
                   </button>
                   <button
+                    className="btn btn-danger btn-sm"
                     onClick={async () => {
-                      const confirmDelete = confirm('Are you sure you want to delete this property?');
+                      const confirmDelete = confirm("Are you sure you want to delete this person?");
                       if (!confirmDelete) return;
-                      const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                        method: 'DELETE',
+                      const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+                        method: "DELETE",
                       });
                       if (res.ok) {
-                        setSelectedProperty(null);
-                        fetchProperties();
+                        fetchPeople();
+                        fetchPersonProperties();
+                        setEditingPersonIdForProperty(null);
                       } else {
-                        alert('Delete failed');
+                        alert("Delete failed");
                       }
                     }}
-                    className="bg-gray-300 px-4 py-2 rounded"
                   >
                     Delete
                   </button>
-                </>
-              )}
-              <button
-                className="bg-gray-300 px-4 py-2 rounded"
-                onClick={() => setSelectedProperty(null)}
-              >
-                Close
-              </button>
-            </div>
-
-            {personProperties.length > 0 && people.length > 0 && selectedPropety && (
-              (() => {
-                const relatedPeople = personProperties
-                  .filter((pp) => pp.property_id === selectedPropety.id && pp.is_related)
-                  .map((pp) => people.find((p) => p.id === pp.person_id))
-                  .filter((p): p is Person => !!p);
-
-                return (
-                  relatedPeople.length > 0 && (
-                    <div className="mt-6 border-t pt-4">
-                      <h3 className="text-lg font-semibold mb-2">People Related to This Property</h3>
-                      <ol className="space-y-2">
-                        {relatedPeople.map((person) => { 
-                          
-                              // ──❶ Compute this person’s proposals once per render:
-                              const mine = allProposals
-                              .filter(
-                                (p) =>
-                                  p.person_id === person.id &&
-                                  p.property_id === selectedPropety.id
-                              )
-                              .sort(
-                                (a, b) =>
-                                  new Date(b.created_at).getTime() -
-                                  new Date(a.created_at).getTime()
-                              );
-
-                            // ──❷ Derive latestStatus & latestDate here:
-                            const latestStatus =
-                              mine.length > 0 ? mine[0].status : 'No proposal';
-                            const latestDate =
-                              mine.length > 0
-                                ? new Date(mine[0].created_at).toLocaleDateString()
-                                : '';
-
-                            const latestProposal = mine[0];             // this is undefined if no proposals
-                            const proposalId     = latestProposal?.id;  // safely get the id or undefined
-
-                          return(
-                          <li key={person.id} className="border p-3 rounded bg-gray-50">
-                            {editingPersonIdForProperty === person.id ? (
-                              <>
-                                <p>
-                                <label><strong>First Name:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.name ?? person.name}
-                                  onChange={(e) => {
-                                    const capitalized = capitalizeWords(e.target.value);
-                                    setEditedPersonForProperty({ ...editedPersonForProperty, name: capitalized })}    
-                                }
-                                /></p>
-
-                                <p>
-                                <label><strong>Last Name:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.family ?? person.family}
-                                  onChange={(e) =>{
-                                    const capitalized = capitalizeWords(e.target.value);
-                                    setEditedPersonForProperty({ ...editedPersonForProperty, family: capitalized })}
-                                  }
-                                    /></p>
-                                
-                                <p>
-                                <label><strong>Organisation:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.organisation ?? person.organisation}
-                                  onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, organisation: e.target.value })}
-                                /></p>
-                                  <p>
-                                  <label><strong>Role:</strong></label>
-                                  <select
-                                    className="border p-2 w-full my-1"
-                                    value={editedPersonForProperty.role ?? person.role}
-                                    onChange={(e) =>
-                                      setEditedPersonForProperty({
-                                        ...editedPersonForProperty,
-                                        role: e.target.value as Person['role'],
-                                      })
-                                    }
-                                  >
-                                    <option value="Est Ag">Est Ag</option>
-                                    <option value="Landlord">Landlord</option>
-                                    <option value="Ass Man">Ass Man</option>
-                                  </select>
-                                </p>
-
-
-                                <p>
-                                <label><strong>Email:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.email ?? person.email}
-                                  onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, email: e.target.value })}
-                                /></p>
-
-                                <p>
-                                <label><strong>Contact Number:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.contact_number ?? person.contact_number}
-                                  onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, contact_number: e.target.value })}
-                                /></p>
-
-                                <p>
-                                <label><strong>Adress:</strong></label>
-                                <input
-                                  className="border p-2 w-full my-1"
-                                  value={editedPersonForProperty.property_address_for_enquiry ?? person.property_address_for_enquiry}
-                                  onChange={(e) => setEditedPersonForProperty({ ...editedPersonForProperty, name: e.target.value })}
-                                /></p>
-                                
-                                <div className="flex gap-2 mt-2">
-                                  <button
-                                    className="bg-gray-300 px-4 py-2 rounded"
-                                    onClick={async () => {
-                                      const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
-                                        method: 'PUT',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ ...person, ...editedPersonForProperty }),
-                                      });
-                                      if (res.ok) {
-                                        //updata dashboard tabs
-                                        const bc = new BroadcastChannel('dashboard-updates');
-                                        bc.postMessage('person-updated');
-                                        bc.close();
-
-                                        setEditingPersonIdForProperty(null);
-                                        setEditedPersonForProperty({});
-                                        fetchPeople();
-                                      } else {
-                                        alert('Failed to update person');
-                                      }
-                                    }}
-                                  >
-                                    Save
-                                  </button>
-                                  <button
-                                    className="bg-gray-300 px-4 py-2 rounded"
-                                    onClick={() => {
-                                      setEditingPersonIdForProperty(null);
-                                      setEditedPersonForProperty({});
-                                    }}
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  className="bg-blue-300 px-4 py-2 rounded"
-                                  onClick={() => setCreatingProposalForPersonId(person.id)}
-                                >
-                                  Create Proposal
-                                </button>
-                                {creatingProposalForPersonId === person.id && (
-                                    <CreateProposalForm
-                                      personId={person.id}
-                                      propertyId={selectedPropety.id}
-                                      RecipiantName ={
-                                        selectedPropety.landlord_name?.trim()
-                                          ? selectedPropety.landlord_name
-                                          : `${person.name} ${person.family}`.trim()
-                                      }
-                                      RecipiantAddress = {
-                                        selectedPropety.landlord_Address?.trim()
-                                          ? selectedPropety.landlord_Address
-                                          : `${person.property_address_for_enquiry}`.trim()
-                                      }
-                                      personName={`${person.name} ${person.family}`}
-                                      propertyAddress={selectedPropety.property_first_line_address}
-                                     
-                                      onCancel={() => setCreatingProposalForPersonId(null)}
-                                      onSuccess={() => {
-                                        setCreatingProposalForPersonId(null);
-                                        setProposalRefreshKey(k => k + 1);
-                                      }}
-                                      
-                                    />
-                                )}
-                                {/**/}                           
-                                {/*state of last proposal*/}
-                                <span className="ml-2">
-                                  <strong>Status:</strong> {latestStatus}
-                                  {latestDate && <em className="text-sm text-gray-600"> ({latestDate})</em>}
-                                </span>                     
-
-                                {proposalId && (
-                                  <a
-                                    href={`http://localhost:5000/api/proposals/${proposalId}/download-pdf`}
-                                    className="ml-4 text-blue-600 hover:underline"
-                                  >
-                                    Download PDF
-                                  </a>
-                                )}
-
-
-                                {/* */}
-                                <p><strong>First Name:</strong> {person.name}</p>
-                                <p><strong>Last Name:</strong> {person.family}</p>
-                                <p><strong>Organisation:</strong> {person.organisation}</p>
-                                <p><strong>Role:</strong> {person.role}</p>
-                                <p><strong>Email:</strong> {person.email}</p>
-                                <p><strong>Contact Number:</strong> {person.contact_number}</p>
-                                <p><strong>Address:</strong> {person.property_address_for_enquiry}</p>
-
-                                <div className="flex gap-2 mt-2">
-                                  <button
-                                    className="bg-gray-300 px-4 py-2 rounded"
-                                    onClick={() => {
-                                      setEditingPersonIdForProperty(person.id);
-                                      setEditedPersonForProperty(person);
-                                    }}
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    className="bg-gray-300 px-4 py-2 rounded"
-                                    onClick={async () => {
-                                      const confirmDelete = confirm('Are you sure you want to delete this person?');
-                                      if (!confirmDelete) return;
-                                      const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
-                                        method: 'DELETE',
-                                      });
-                                      if (res.ok) {
-                                        fetchPeople();
-                                        fetchPersonProperties();
-                                      } else {
-                                        alert('Delete failed');
-                                      }
-                                    }}
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </>
-                            )}
-                          </li>
-                          );
-                        })}
-                      </ol>
-                    </div>
-                  )
-                );
-              })()
+                </div>
+              </>
             )}
           </div>
+        )}
+      </li>
     );
-  };
-  export default PropertyDetails;
+  })}
+</ol>
+
+
+              
+
+
+
+
+
+               
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PropertyDetails;

@@ -583,11 +583,13 @@ newProperty.has_car_park && (
         <input
           className="form-control"
           placeholder="Landlord postcode"
+          pattern="^[A-Za-z].*"
+          title="Postcode must start with a letter"
           value={newProperty.landlord_post_code_address}
           onChange={(e) =>
             setNewProperty({
               ...newProperty,
-              landlord_post_code_address: e.target.value,
+              landlord_post_code_address: e.target.value.toUpperCase(),
             })
           }
         />
