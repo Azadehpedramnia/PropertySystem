@@ -37,7 +37,7 @@ interface Props {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
 
-  
+
 
 
 
@@ -57,6 +57,20 @@ interface Props {
     editedPersonForProperty,
     setEditedPersonForProperty,
   }) => {
+
+
+    const fullPropertyAddress = [
+      selectedPropety.property_floor,
+      selectedPropety.property_first_line_address,
+      selectedPropety.property_second_line_address,
+      selectedPropety.city,
+      selectedPropety.property_county,
+      selectedPropety.post_code
+    ]
+      .filter(Boolean) // remove any undefined/null/empty values
+      .join(', ');
+
+      
 
     //proposal create form sataes refresh after creat proposal
   const [proposalRefreshKey, setProposalRefreshKey] = useState(0);
@@ -815,14 +829,41 @@ interface Props {
                                           ? selectedPropety.landlord_name
                                           : `${person.name} ${person.family}`.trim()
                                       }
-                                      RecipiantAddress = {
-                                        selectedPropety.landlord_Address?.trim()
-                                          ? selectedPropety.landlord_Address
-                                          : `${person.property_address_for_enquiry}`.trim()
+                                      RecipiantAddressFloor={
+                                        selectedPropety.landlord_floor_number?.trim()
+                                          ? selectedPropety.landlord_floor_number
+                                          : `${person.floor_no}`.trim()
                                       }
+                                      RecipiantFirstLineAddress={
+                                        selectedPropety.landlord_first_line_address?.trim()
+                                          ? selectedPropety.landlord_first_line_address
+                                          : `${person.first_line_contac_address}`.trim()
+                                      }
+                                      RecipiantSecondLineAddress={
+                                        selectedPropety.landlord_second_line_address?.trim()
+                                          ? selectedPropety.landlord_second_line_address
+                                          : `${person.second_line_contac_address}`.trim()
+                                      }
+                                      RecipiantCity={
+                                        selectedPropety.landlord_city?.trim()
+                                          ? selectedPropety.landlord_city
+                                          : `${person.contac_city}`.trim()
+                                      }
+                                      RecipiantPostcode={
+                                        selectedPropety.landlord_post_code_address?.trim()
+                                          ? selectedPropety.landlord_post_code_address
+                                          : `${person.iqu_post_code_address}`.trim()
+                                      }
+                                      RecipiantCounty={
+                                        selectedPropety.landlord_county?.trim()
+                                          ? selectedPropety.landlord_county
+                                          : `${person.contact_number}`.trim()
+                                      }
+
+                               
                                       personName={`${person.name} ${person.family}`}
-                                      propertyAddress={selectedPropety.property_first_line_address}
                                      
+                                      propertyAddress={fullPropertyAddress}
                                       onCancel={() => setCreatingProposalForPersonId(null)}
                                       onSuccess={() => {
                                         setCreatingProposalForPersonId(null);
