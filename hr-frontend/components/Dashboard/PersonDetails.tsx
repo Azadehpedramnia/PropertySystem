@@ -100,9 +100,9 @@ interface Props {
                             onChange={(e) => setSelectedPerson({ ...selectedPerson, organisation: e.target.value })}
                           />
                         </div>
-
+                          
                         <div className="mb-3">
-                          <label className="form-label"><strong>Role:</strong></label>
+                          <label className="form-label"><strong>Role :</strong></label>                        
                           <select
                             className="form-select"
                             value={selectedPerson.role}
@@ -720,9 +720,9 @@ interface Props {
                                             <>
                                               <p><strong>Landlord/Organisation:</strong> {property.inquirer}</p>
                                               <p><strong>Is The Property Solely Occupied? :</strong> {property.has_car_park ? 'Yes' : 'No'}</p>
-                                              <p><strong>Floor Number:</strong> {property.city}</p>
-                                              <p><strong>Property Fisrt Line Address:</strong> {property.city}</p>
-                                              <p><strong>Property Second Line Address:</strong> {property.city}</p>
+                                              <p><strong>Floor Number:</strong> {property.property_floor}</p>
+                                              <p><strong>Property Fisrt Line Address:</strong> {property.property_first_line_address}</p>
+                                              <p><strong>Property Second Line Address:</strong> {property.property_second_line_address}</p>
                                               <p><strong>City:</strong> {property.city}</p>
                                               <p><strong>Postcode:</strong> {property.post_code}</p>
                                               <p><strong>Property Type:</strong> {property.property_type}</p>

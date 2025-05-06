@@ -95,7 +95,7 @@ interface Props {
     return (
         
         <div className="p-4 mt-4 border rounded">
-        <h2 className="text-xl font-semibold mb-2">Report For :{selectedPropety.property_first_line_address}_{selectedPropety.property_floor}_{selectedPropety.post_code}</h2>
+        <h2 className="text-xl font-semibold mb-2">Report For :{selectedPropety.property_floor}_{selectedPropety.property_first_line_address}__{selectedPropety.post_code}</h2>
     
         {editPropertyMode ? (
           <>
@@ -164,7 +164,7 @@ interface Props {
               />
             </p>
             <p> 
-              <label><strong>County::</strong></label> 
+              <label><strong>County:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.property_county}
@@ -174,7 +174,7 @@ interface Props {
               />
             </p>
             <p> 
-              <label><strong>PostCode:</strong></label> 
+              <label><strong>Postcode:</strong></label> 
               <input
                 className="border p-2 w-full my-1"
                 value={selectedPropety.post_code}
@@ -478,14 +478,14 @@ interface Props {
 
           <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
            <p><strong>Is The Property Solely Occupied? :</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
-            <p><strong>Floor Number:</strong> {selectedPropety.city}</p>
-            <p><strong>Property Fisrt Line Address:</strong> {selectedPropety.city}</p>
-            <p><strong>Property Second Line Address:</strong> {selectedPropety.city}</p>
-                                              <p><strong>City:</strong> {selectedPropety.city}</p>
-                                              <p><strong>Postcode:</strong> {selectedPropety.post_code}</p>
-                                              <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
+            <p><strong>Floor Number:</strong> {selectedPropety.property_floor}</p>
+            <p><strong>Property Fisrt Line Address:</strong> {selectedPropety.property_first_line_address}</p>
+            <p><strong>Property Second Line Address:</strong> {selectedPropety.property_second_line_address}</p>
+            <p><strong>City:</strong> {selectedPropety.city}</p>
+            <p><strong>Postcode:</strong> {selectedPropety.post_code}</p>
+            <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
 
-                                              <p><strong>Property Rateable Value:</strong> {selectedPropety.building_rateable_value}</p>
+            <p><strong>Property Rateable Value:</strong> {selectedPropety.building_rateable_value}</p>
                                               <p><strong>Rates Payable Before Relief Per Year:</strong> {selectedPropety.rates_payable_before_relief}</p>
                                               <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
                                               <p><strong>Car Park Rateable Value:</strong> {selectedPropety.car_park_rateable_value}</p>
@@ -896,7 +896,7 @@ interface Props {
                                 <p><strong>Role:</strong> {person.role}</p>
                                 <p><strong>Email:</strong> {person.email}</p>
                                 <p><strong>Contact Number:</strong> {person.contact_number}</p>
-                                <p><strong>Address:</strong> {person.property_address_for_enquiry}</p>
+                             
 
 
                                 <p><strong>First Name:</strong> {person.name}</p>

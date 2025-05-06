@@ -49,7 +49,7 @@ ${RecipiantCounty}
 ${RecipiantPostcode}
 
 
-Dear ${RecipiantName.split(' ')[0]},
+Dear ${RecipiantName},
 
 Re: Offer of Rates Mitigation for ${propertyAddress} subject to contract.
 
@@ -92,7 +92,7 @@ Humanitarian Operations
 `.trim();
 
   const [body, setBody] = React.useState(defaultBody);
-
+  //${RecipiantName.split(' ')[0]}
   const handleSubmit = async () => {
     const res = await fetch('http://localhost:5000/api/proposals', {
       method: 'POST',
