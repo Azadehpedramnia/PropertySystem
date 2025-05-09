@@ -36,6 +36,7 @@ interface Property {
   landlord_first_line_address:string;
   landlord_second_line_address:string;
   landlord_floor_number:string;
+  country:string;
 }
 
 interface RegisterPropertyProps {
@@ -145,8 +146,8 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           value={newProperty.city}
           onChange={(e) => setNewProperty({ ...newProperty, city: e.target.value })}
         />
-    </div>,
-        <div key="property_county" className="col-12">
+      </div>,
+      <div key="property_county" className="col-12">
         <label  className="form-label">
           County:
         </label>
@@ -156,7 +157,19 @@ const RegisterProperty: React.FC<RegisterPropertyProps> = ({
           value={newProperty.property_county}
           onChange={(e) => setNewProperty({ ...newProperty, property_county: e.target.value })}
         />
-    </div>,
+      </div>,
+      <div key="country" className="col-12">
+        <label  className="form-label">
+          country:
+        </label>
+        <input
+          className="form-control"
+          placeholder="Country"
+          value={newProperty.country}
+          onChange={(e) => setNewProperty({ ...newProperty, country: e.target.value })}
+        />
+      </div>,
+
     <div key="post_code" className="col-12">
       <label  className="form-label">
         Postcode:

@@ -58,3 +58,15 @@ a {
   animation: highlightBorder 1.5s ease-in-out;
   border-color: #3b82f6 !important; /* Tailwind Blue 500 */
 }
+
+.btn-Black-White{
+  background-color: #000000 !important;
+  color: rgb(255, 255, 255) !important;
+  border: 1px solid #000000 !important;
+}
+
+
+.btn-Black-White:hover {
+  background-color: #ffffff !important;
+  color: rgb(0, 0, 0) !important;
+}

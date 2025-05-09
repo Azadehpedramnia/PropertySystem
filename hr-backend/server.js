@@ -312,7 +312,8 @@ app.get('/api/propertiies/:id', async (req, res) => {
               landlord_city,
               landlord_first_line_address,
               landlord_second_line_address,
-              landlord_floor_number
+              landlord_floor_number,
+              country
        FROM propertiies
        WHERE id = $1`,
       [id]
@@ -364,7 +365,8 @@ app.get('/api/propertiies', async (req, res) => {
               landlord_city,
               landlord_first_line_address,
               landlord_second_line_address,
-              landlord_floor_number
+              landlord_floor_number,
+              country
              
        FROM propertiies`
     );
@@ -410,6 +412,7 @@ app.post('/api/propertiies', async (req, res) => {
       landlord_first_line_address,
       landlord_second_line_address,
       landlord_floor_number,
+      country,
     } = req.body;
 
     const result = await pool.query(
@@ -446,10 +449,11 @@ app.post('/api/propertiies', async (req, res) => {
           landlord_city,
           landlord_first_line_address,
           landlord_second_line_address,
-          landlord_floor_number
+          landlord_floor_number,
+          country
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)
        RETURNING *`,
       [
         inquirer,
@@ -484,7 +488,8 @@ app.post('/api/propertiies', async (req, res) => {
         landlord_city,
         landlord_first_line_address,
         landlord_second_line_address,
-        landlord_floor_number
+        landlord_floor_number,
+        country
 
       ]
     );
@@ -530,7 +535,8 @@ app.put('/api/propertiies/:id', async (req, res) => {
       landlord_city,
       landlord_first_line_address,
       landlord_second_line_address,
-      landlord_floor_number
+      landlord_floor_number,
+      country
     } = req.body;
 
     const result = await pool.query(
@@ -567,8 +573,9 @@ app.put('/api/propertiies/:id', async (req, res) => {
            landlord_city = $30,
            landlord_first_line_address= $31,
            landlord_second_line_address= $32,
-           landlord_floor_number= $33
-       WHERE id = $34
+           landlord_floor_number= $33,
+          country=$34
+       WHERE id = $35
        RETURNING *`,
       [
         inquirer,
@@ -604,6 +611,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
         landlord_first_line_address,
         landlord_second_line_address,
         landlord_floor_number,
+        country,
         id
       ]
     );

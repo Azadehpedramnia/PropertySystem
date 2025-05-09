@@ -37,8 +37,11 @@ export default function Home() {
                   Login
                 </Link>
                 <Link href="/dashboard" className="btn btn-secondary">
-                  Go to Dashboard
+                  Go to Property Dashboard
                 </Link>
+                <Link href="/UploadModelVideo" className="btn btn-Black-White">
+                Go to Upload Model/Video
+              </Link>
               </div>
             </div>       
         </main>

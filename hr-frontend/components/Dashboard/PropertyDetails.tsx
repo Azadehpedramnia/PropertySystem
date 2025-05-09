@@ -2,6 +2,7 @@ import type { Property, Person, PersonProperty } from '../../pages/dashboard';
 import CreateProposalForm from './CreateProposalForm'; // adjust path if needed
 import ProposalStatus from './ProposalStatus';
 import React, { useState, useEffect } from 'react';
+import dynamic from "next/dynamic";
 
 interface Proposal {
   id: number;
@@ -58,7 +59,7 @@ interface Props {
     setEditedPersonForProperty,
   }) => {
 
-
+    const BuildingModelViewer = dynamic(() => import("./BuildingModelViewer"), { ssr: false });
     const fullPropertyAddress = [
       selectedPropety.property_floor,
       selectedPropety.property_first_line_address,
@@ -95,8 +96,18 @@ interface Props {
     return (
         
         <div className="p-4 mt-4 border rounded">
-        <h2 className="text-xl font-semibold mb-2">Report For :{selectedPropety.property_floor}_{selectedPropety.property_first_line_address}__{selectedPropety.post_code}</h2>
-    
+        <h2 className="text-xl font-semibold mb-2">
+            Report For :{selectedPropety.property_floor}_{selectedPropety.property_first_line_address}__{selectedPropety.post_code}
+        </h2>
+
+        {/* Show 3D model of the propert if selected property*/}
+        {selectedPropety && (
+          <div className="my-4">
+            <h5 className="text-lg font-semibold mb-2">3D Building View</h5>
+            <BuildingModelViewer modelPath="/models/PropertyA.glb" />
+          </div>
+        )}
+
         {editPropertyMode ? (
           <>
             <p> 
