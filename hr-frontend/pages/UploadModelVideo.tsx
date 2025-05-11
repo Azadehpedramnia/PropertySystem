@@ -20,7 +20,6 @@ export default function UploadModelVideo() {
                 <PropertyGroupList />
         </div>
 
-      
     </div>
 
     
