@@ -13,6 +13,23 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+function buildAddress ({
+  property_first_line_address,
+  property_second_line_address,
+  property_floor,
+  post_code
+}) {
+  return [
+    property_first_line_address,
+    property_second_line_address,
+    property_floor,
+    post_code
+  ]
+  .filter(Boolean)          // drops null, undefined, and empty strings
+  .join(', ');
+}
+
+
 // ------------------------------
 // Search people
 // ------------------------------
@@ -276,17 +293,28 @@ app.get('/api/propertiies/search', async (req, res) => {
 app.get('/api/propertiies/grouped', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT country, city, property_first_line_address
+       SELECT
+        COALESCE(NULLIF(TRIM(country), ''), 'Unknown')             AS country,
+        COALESCE(NULLIF(TRIM(city),    ''), 'Unknown')             AS city,
+
+        /* single, ready-to-use line */
+        concat_ws(', ',
+          NULLIF(TRIM(property_floor), ''),
+          NULLIF(TRIM(property_first_line_address), ''),
+          NULLIF(TRIM(property_second_line_address), ''),
+          NULLIF(TRIM(post_code), '')
+        ) AS address
+
       FROM propertiies
-      ORDER BY country, city, property_first_line_address
+      ORDER BY 1, 2, 3;
     `);
 
     const grouped = {};
 
-    result.rows.forEach(({ country, city, property_first_line_address }) => {
+    result.rows.forEach(({ country, city, address }) => {
       if (!grouped[country]) grouped[country] = {};
       if (!grouped[country][city]) grouped[country][city] = [];
-      grouped[country][city].push(property_first_line_address);
+      grouped[country][city].push(address);
     });
 
     res.json(grouped);
@@ -306,7 +334,12 @@ app.get('/api/propertiies/:id', async (req, res) => {
       `SELECT id,
               inquirer,
               city,
-              address,
+              concat_ws(', ',
+                property_floor,
+                property_first_line_address,
+                property_second_line_address,
+                post_code
+              ) AS address,
               property_type,
               building_rateable_value,
               rates_payable_before_relief,
@@ -359,7 +392,12 @@ app.get('/api/propertiies', async (req, res) => {
       `SELECT id,
               inquirer,
               city,
-              address,
+              concat_ws(', ',
+                property_floor,
+                property_first_line_address,
+                property_second_line_address,
+                post_code
+              ) AS address,
               property_type,
               building_rateable_value,
               rates_payable_before_relief,
@@ -399,6 +437,8 @@ app.get('/api/propertiies', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 
 app.post('/api/propertiies', async (req, res) => {
   try {
