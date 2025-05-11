@@ -68,6 +68,7 @@ export interface Property {
   landlord_first_line_address:string;
   landlord_second_line_address:string;
   landlord_floor_number:string;
+  country:string;
 }
 
 export interface PersonProperty {
@@ -247,6 +248,7 @@ export default function Dashboard() {
     landlord_first_line_address:'',
     landlord_second_line_address:'',
     landlord_floor_number:'',
+    country:'',
   });
 
 
@@ -443,6 +445,7 @@ useEffect(() => {
         landlord_first_line_address:'',
         landlord_second_line_address:'',
         landlord_floor_number:'',
+        country:'',
       });
       // Reload table
       setIsAddModalOpen(false);
@@ -799,6 +802,7 @@ useEffect(() => {
                             landlord_first_line_address:'',
                             landlord_second_line_address:'',
                             landlord_floor_number:'',
+                            country:'',
                             
                           });
                         }}

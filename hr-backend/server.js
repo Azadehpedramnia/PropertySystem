@@ -271,6 +271,76 @@ app.get('/api/propertiies/search', async (req, res) => {
 // Propertiies
 // ------------------------------
 
+// GET /api/properties/grouped  – country ➜ city ➜ [addresses]
+{/* 
+app.get('/api/propertiies/grouped', async (_, res) => {
+  try {
+    // 1) Fetch, normalising country & city on the way out
+    const { rows } = await pool.query(`
+      SELECT
+        COALESCE(NULLIF(TRIM(country), ''), 'Unknown')              AS country,
+        COALESCE(NULLIF(TRIM(city),    ''), 'Unknown')              AS city,
+        TRIM(property_first_line_address)                           AS address
+      FROM propertiies
+      ORDER BY 1, 2, 3;
+    `);
+
+    // 2) Build the nested object
+    const grouped = {};
+    rows.forEach(({ country, city, address }) => {
+      if (!address) return;                       // skip completely blank lines
+      grouped[country] ??= {};
+      grouped[country][city] ??= [];
+      grouped[country][city].push(address);
+    });
+
+    res.json(grouped);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET distinct roles from the people table
+app.get('/api/propertiies/property_type', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT property_type
+      FROM propertiies
+      WHERE property_type IS NOT NULL
+      ORDER BY property_type
+    `);
+    // result.rows might look like ['Office' | 'Retail' | 'Warehouse' ]
+    const property_types = result.rows.map(row => row.property_type);
+    res.json(property_types); // => ['Office' | 'Retail' | 'Warehouse' ]
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});*/}
+
+// 👇 FIRST define grouped (more specific)
+
+app.get('/api/propertiies/grouped', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT country, city, property_first_line_address
+      FROM propertiies
+      ORDER BY country, city, property_first_line_address
+    `);
+
+    const grouped = {};
+
+    result.rows.forEach(({ country, city, property_first_line_address }) => {
+      if (!grouped[country]) grouped[country] = {};
+      if (!grouped[country][city]) grouped[country][city] = [];
+      grouped[country][city].push(property_first_line_address);
+    });
+
+    res.json(grouped);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET one property by ID
 app.get('/api/propertiies/:id', async (req, res) => {
   const id = Number(req.params.id)
@@ -499,6 +569,8 @@ app.post('/api/propertiies', async (req, res) => {
   }
 });
 
+
+
 app.put('/api/propertiies/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -625,6 +697,7 @@ app.put('/api/propertiies/:id', async (req, res) => {
   }
 });
 
+
 app.delete('/api/propertiies/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -641,22 +714,7 @@ app.delete('/api/propertiies/:id', async (req, res) => {
 });
 
 
-// GET distinct roles from the people table
-app.get('/api/propertiies/property_type', async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT DISTINCT property_type
-      FROM propertiies
-      WHERE property_type IS NOT NULL
-      ORDER BY property_type
-    `);
-    // result.rows might look like ['Office' | 'Retail' | 'Warehouse' ]
-    const property_types = result.rows.map(row => row.property_type);
-    res.json(property_types); // => ['Office' | 'Retail' | 'Warehouse' ]
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+
 
 // ------------------------------
 // Person-Properties (the join table)

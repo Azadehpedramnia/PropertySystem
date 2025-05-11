@@ -40,8 +40,8 @@ export default function Home() {
                   Go to Property Dashboard
                 </Link>
                 <Link href="/UploadModelVideo" className="btn btn-Black-White">
-                Go to Upload Model/Video
-              </Link>
+                  Go to Upload Model/Video
+                </Link>
               </div>
             </div>       
         </main>

@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import PropertyGroupList from './PropertyGroupList';
+
 
 export default function UploadModelVideo() {
   return (
@@ -15,7 +17,7 @@ export default function UploadModelVideo() {
 
         <div className="container mt-5">
             <h1>Grouped Properties</h1>
-                {/*<PropertyGroupList />*/}
+                <PropertyGroupList />
         </div>
 
       
