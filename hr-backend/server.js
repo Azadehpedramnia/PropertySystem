@@ -288,12 +288,14 @@ app.get('/api/propertiies/search', async (req, res) => {
 // Propertiies
 // ------------------------------
 
+
 // 👇 FIRST define grouped (more specific)
 
 app.get('/api/propertiies/grouped', async (req, res) => {
   try {
     const result = await pool.query(`
        SELECT
+        id,
         COALESCE(NULLIF(TRIM(country), ''), 'Unknown')             AS country,
         COALESCE(NULLIF(TRIM(city),    ''), 'Unknown')             AS city,
 
@@ -311,10 +313,10 @@ app.get('/api/propertiies/grouped', async (req, res) => {
 
     const grouped = {};
 
-    result.rows.forEach(({ country, city, address }) => {
+    result.rows.forEach(({ id,country, city, address }) => {
       if (!grouped[country]) grouped[country] = {};
       if (!grouped[country][city]) grouped[country][city] = [];
-      grouped[country][city].push(address);
+      grouped[country][city].push({ id, address });
     });
 
     res.json(grouped);
