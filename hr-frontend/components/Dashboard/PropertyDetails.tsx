@@ -59,7 +59,7 @@ interface Props {
     setEditedPersonForProperty,
   }) => {
 
-    const BuildingModelViewer = dynamic(() => import("./BuildingModelViewer"), { ssr: false });
+    const BuildingModelViewer = dynamic(() => import("./BuildingModelViewer"), { ssr: false });//
     const fullPropertyAddress = [
       selectedPropety.property_floor,
       selectedPropety.property_first_line_address,
