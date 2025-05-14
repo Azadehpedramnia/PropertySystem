@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { MediaUploader } from '../components/Dashboard/MediaUploader';
+import { useMediaUpload } from '../hooks/useMediaUpload'; 
 
 type AddressItem  = { id: number; address: string };
 type GroupedData  = Record<string, Record<string, AddressItem[]>>;
@@ -58,7 +60,10 @@ export default function GroupedPropertyList() {
                     {addresses
                       .filter(a => a.address)          // skip blank strings
                       .map(({ id, address }) => (
-                        <li key={id}>{address}</li>   
+                        <li key={id} className="flex justify-between items-center mb-2">
+                          <span>{address}</span>
+                          <MediaUploader propertyId={id} />
+                        </li> 
                       ))}
                   </ul>
                 )}
