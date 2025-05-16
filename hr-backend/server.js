@@ -17,9 +17,6 @@ const pool = new Pool({
 ///for uploadinfg 3Dimage/video
 const mediaRoutes = require('./controllers/media.controller');
 app.use('/api/media', mediaRoutes);
-app.listen(5001, () => {
-  console.log('Server running on http://localhost:5001');
-});
 
 
 // ------------------------------
