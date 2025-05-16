@@ -15,10 +15,14 @@ export default function UploadModelVideo() {
       <p>Here you will be able to upload 3D models and building videos.</p>
 
 
-        <div className="container mt-5">
-            <h1>Grouped Properties</h1>
-                <PropertyGroupList />
-        </div>
+       {/* Grouped Properties Section */}
+    <div
+  className="mt-5 p-4 rounded shadow-sm border"
+  style={{ backgroundColor: '#fefefe' }}
+>
+  <h2 className="mb-4">Grouped Properties</h2>
+  <PropertyGroupList />
+</div>
 
     </div>
 

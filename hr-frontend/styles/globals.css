@@ -70,3 +70,49 @@ a {
   background-color: #ffffff !important;
   color: rgb(0, 0, 0) !important;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.list-group-item {
+  border-left: 4px solid #0d6efd;
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f1f3f5; 
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+button.bg-dark {
+  transition: background-color 0.2s;
+}
+
+button.bg-dark:hover {
+  background-color: #1c1c1c;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.arrow-neutral {
+  color: black !important;
+}
+
+.arrow-white {
+  color: white !important;
+}
+
+button.bg-secondary:hover {
+  background-color: #5c636a !important;
+}
