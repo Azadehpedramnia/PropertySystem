@@ -105,6 +105,7 @@ interface Props {
           <div className="my-4">
             <h5 className="text-lg font-semibold mb-2">3D Building View</h5>
             <BuildingModelViewer modelPath="/models/PropertyA.glb" />
+            
           </div>
         )}
 

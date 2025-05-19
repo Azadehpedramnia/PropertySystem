@@ -17,6 +17,7 @@ export function MediaList({
     reloadTrigger?: number;
   }) {
   const [media, setMedia] = useState<MediaItemType[]>([]);
+  
 
   const loadMedia = async () => {
     const res = await fetch(`http://localhost:5000/api/media/property/${propertyId}`);
@@ -39,6 +40,7 @@ export function MediaList({
         <p className="text-sm text-gray-500">No media uploaded yet.</p>
       ) : (
         media.map(item => (
+          
           <MediaItem
             key={item.id}
             item={item}
