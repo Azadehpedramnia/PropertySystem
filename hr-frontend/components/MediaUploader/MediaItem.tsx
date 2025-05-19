@@ -14,28 +14,33 @@ export function MediaItem({
   item: MediaItemType;
   onDelete: () => void;
 }) {
-  //const s3Url = `https://property-media-uploads.s3.eu-north-1.amazonaws.com/${item.file_key}`; 
   const cloudfrontUrl = `https://d1ng67xvpe0g4i.cloudfront.net/${item.file_key}`;
 
   return (
-    <div className="flex items-center justify-between bg-gray-100 p-2 rounded">
-      <div>
-        <p className="text-sm font-semibold">{item.filename}</p>
+    <div className="d-flex align-items-center justify-content-between bg-light border rounded px-3 py-2 mb-2">
+      <div className="text-truncate me-3" style={{ maxWidth: '40%' }}>
+        <strong className="text-dark">{item.filename}</strong>
+      </div>
+
+      <div className="d-flex gap-2">
         <a
           href={cloudfrontUrl}
           target="_blank"
           rel="noreferrer"
-          className="text-blue-500 text-xs underline"
+          className="btn btn-sm"
+          style={{ backgroundColor: '#6c757d', color: 'white' }} // gray
         >
           View / Download
         </a>
+
+        <button
+          onClick={onDelete}
+          className="btn btn-sm"
+          style={{ backgroundColor: '#343a40', color: 'white' }} // dark gray
+        >
+          Delete
+        </button>
       </div>
-      <button
-        onClick={onDelete}
-        className="text-xs px-2 py-1 bg-red-500 text-white rounded"
-      >
-        Delete
-      </button>
     </div>
   );
 }

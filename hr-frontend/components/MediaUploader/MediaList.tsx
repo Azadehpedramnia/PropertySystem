@@ -8,7 +8,14 @@ type MediaItemType = {
   media_type: string;
 };
 
-export function MediaList({ propertyId }: { propertyId: number }) {
+
+export function MediaList({
+   propertyId,
+   reloadTrigger, 
+  }: {
+    propertyId: number;
+    reloadTrigger?: number;
+  }) {
   const [media, setMedia] = useState<MediaItemType[]>([]);
 
   const loadMedia = async () => {
@@ -19,7 +26,7 @@ export function MediaList({ propertyId }: { propertyId: number }) {
 
   useEffect(() => {
     loadMedia();
-  }, [propertyId]);
+  }, [propertyId, reloadTrigger]);
 
   const handleDelete = async (mediaId: number) => {
     await fetch(`http://localhost:5000/api/media/${mediaId}`, { method: 'DELETE' });

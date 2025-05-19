@@ -10,6 +10,8 @@ export default function GroupedPropertyList() {
   const [expandedCountries, setExpandedCountries] = useState(new Set<string>());
   const [expandedCities, setExpandedCities] = useState(new Set<string>());
   const [showUploaderFor, setShowUploaderFor] = useState<number | null>(null);
+  const [mediaReloadMap, setMediaReloadMap] = useState<Record<number, number>>({});
+
 
   useEffect(() => {
     fetch('http://localhost:5000/api/propertiies/grouped')
@@ -54,6 +56,7 @@ export default function GroupedPropertyList() {
             Object.entries(cities).map(([city, addresses]) => (
               <div key={city} className="ms-4 mt-2">
                 <button
+                //hight of button in each row
                   //className="w-100 text-start py-2 px-3 mb-2 border-0 rounded bg-secondary text-white fw-semibold d-flex align-items-center"
                   className="w-100 text-start py-4 px-3 mb-2 border-0 rounded bg-secondary text-white fw-semibold d-flex align-items-center"
 
@@ -83,13 +86,26 @@ export default function GroupedPropertyList() {
                           </div>
 
                           {showUploaderFor === id && (
-                            <div className="mb-2">
-                              <MediaUploader propertyId={id} />
-                              <MediaList propertyId={id} />
+                            <div className="mt-4 mb-2">
+                              
+                              <MediaUploader
+                                propertyId={id}
+                                onUploadComplete={() =>
+                                  setMediaReloadMap(prev => ({
+                                    ...prev,
+                                    [id]: (prev[id] || 0) + 1,
+                                  }))
+                                }
+                              />
                             </div>
-                          )}       
-                        </li>
-                      ))}
+                            
+                          )} 
+                          <div className="mt-5">
+                            <label className="fw-bold d-block mb-2">Uploaded Media:</label>                   
+                            <MediaList propertyId={id} reloadTrigger={mediaReloadMap[id]} />
+                          </div>    
+                        </li>                        
+                      ))}                     
                   </ul>
                 )}
               </div>
