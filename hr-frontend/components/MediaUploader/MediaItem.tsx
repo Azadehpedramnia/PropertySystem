@@ -11,9 +11,12 @@ type MediaItemType = {
 export function MediaItem({
   item,
   onDelete,
+  deletionCode = '1234',  // <--  “secret” code
 }: {
   item: MediaItemType
-   onDelete?: () => void
+    onDelete?: () => void
+     deletionCode?: string 
+       
 }) {
   const [viewerActive, setViewerActive] = useState(false)
   const url = `https://d1ng67xvpe0g4i.cloudfront.net/${item.file_key}`
@@ -30,6 +33,25 @@ export function MediaItem({
     /^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}-/,
     ''
   );
+
+    const handleDeleteClick = () => {
+    if (!onDelete) return
+
+    // 1) quick “are you sure?”
+    if (!window.confirm(`Delete “${displayName}”? This cannot be undone.`)) {
+      return
+    }
+
+    // 2) code-entry prompt
+    const entered = window.prompt('Enter deletion code to confirm:')
+    if (entered !== deletionCode) {
+      alert('❌ Wrong code—deletion aborted.')
+      return
+    }
+
+    // 3) finally call the original onDelete
+    onDelete()
+  }
 
   return (
     <div className="mb-4">
@@ -48,7 +70,7 @@ export function MediaItem({
             </button>
           )}
         {onDelete && (
-            <button onClick={onDelete} className="btn btn-sm btn-dark">
+            <button onClick={handleDeleteClick} className="btn btn-sm btn-dark">
               Delete
             </button>
           )}
