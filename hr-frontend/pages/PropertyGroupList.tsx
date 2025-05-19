@@ -12,6 +12,29 @@ export default function GroupedPropertyList() {
   const [showUploaderFor, setShowUploaderFor] = useState<number | null>(null);
   const [mediaReloadMap, setMediaReloadMap] = useState<Record<number, number>>({});
 
+  //for priority list in country
+  // 1. pull your raw country keys out of `data`
+  const countries = Object.keys(data)
+
+  // 2. define your “top four” in the order you want them
+  const priority = [
+    'Scotland',
+    'England',
+    'Wales',
+    'Northern Ireland',
+  ]
+
+  // 3. build a sorted array of keys:
+  //    • first all the ones in `priority` (if they exist in your data)
+  //    • then every other country, alphabetized
+  const sortedCountries = [
+    ...priority.filter((c) => countries.includes(c)),
+    ...countries
+      .filter((c) => !priority.includes(c))
+      .sort((a, b) =>
+        a.localeCompare(b, undefined, { sensitivity: 'base' })
+      ),
+  ]
 
   useEffect(() => {
     fetch('http://localhost:5000/api/propertiies/grouped')
@@ -41,9 +64,11 @@ export default function GroupedPropertyList() {
     setShowUploaderFor(prev => (prev === id ? null : id));
   };
 
-  return (
-    <div className="container mt-4">
-      {Object.entries(data).map(([country, cities]) => (
+ return (
+  <div className="container mt-4">
+    {sortedCountries.map((country) => {
+      const cities = data[country];      // grab it back out by key
+      return (
         <div key={country} className="mb-4">
           <div
             className="d-flex align-items-center fw-bold fs-5 cursor-pointer text-dark"
@@ -56,10 +81,7 @@ export default function GroupedPropertyList() {
             Object.entries(cities).map(([city, addresses]) => (
               <div key={city} className="ms-4 mt-2">
                 <button
-                //hight of button in each row
-                  //className="w-100 text-start py-2 px-3 mb-2 border-0 rounded bg-secondary text-white fw-semibold d-flex align-items-center"
                   className="w-100 text-start py-4 px-3 mb-2 border-0 rounded bg-secondary text-white fw-semibold d-flex align-items-center"
-
                   onClick={() => toggleCity(country, city)}
                 >
                   <span className="me-2">
@@ -78,7 +100,6 @@ export default function GroupedPropertyList() {
                             <div className="fw-semibold">{address}</div>
                             <button
                               className="btn btn-outline-primary btn-sm"
-
                               onClick={() => toggleUploader(id)}
                             >
                               {showUploaderFor === id ? 'Hide' : 'Upload Media'}
@@ -87,7 +108,6 @@ export default function GroupedPropertyList() {
 
                           {showUploaderFor === id && (
                             <div className="mt-4 mb-2">
-                              
                               <MediaUploader
                                 propertyId={id}
                                 onUploadComplete={() =>
@@ -98,20 +118,27 @@ export default function GroupedPropertyList() {
                                 }
                               />
                             </div>
-                            
-                          )} 
+                          )}
+                          
                           <div className="mt-5">
-                            <label className="fw-bold d-block mb-2">Uploaded Media:</label>                   
-                            <MediaList propertyId={id} reloadTrigger={mediaReloadMap[id]} />
-                          </div>    
-                        </li>                        
-                      ))}                     
+                            <label className="fw-bold d-block mb-2">
+                              Uploaded Media:
+                            </label>
+                            <MediaList
+                              propertyId={id}
+                              reloadTrigger={mediaReloadMap[id]}
+                            />
+                          </div>
+                        </li>
+                      ))}
                   </ul>
                 )}
               </div>
             ))}
         </div>
-      ))} 
-    </div>
-  );
+      )
+    })}
+  </div>
+)
+
 }
