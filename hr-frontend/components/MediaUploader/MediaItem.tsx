@@ -65,12 +65,14 @@ export function MediaItem({
       )}
 
       {viewerActive && isModel && (
-        <div className="mt-2 w-100" style={{ height: 400 }}>
+        <div className="mt-2 w-100" style={{ height: 400 ,  
+              position: 'relative',
+              overflow: 'hidden',}}>
           <BuildingModelViewer
-            modelPath={url}
-          
+            modelPath={url} 
           />
         </div>
+        
       )}
 
       {!isVideo && !isModel && (
