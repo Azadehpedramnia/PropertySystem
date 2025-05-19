@@ -3,6 +3,7 @@ import CreateProposalForm from './CreateProposalForm'; // adjust path if needed
 import ProposalStatus from './ProposalStatus';
 import React, { useState, useEffect } from 'react';
 import dynamic from "next/dynamic";
+import { MediaList } from '../../components/MediaUploader/MediaList'
 
 interface Proposal {
   id: number;
@@ -59,6 +60,9 @@ interface Props {
     setEditedPersonForProperty,
   }) => {
 
+    //show media list
+    const [mediaReloadKey, setMediaReloadKey] = useState(0)
+    const [showMediaList, setShowMediaList] = useState(false)
     const BuildingModelViewer = dynamic(() => import("./BuildingModelViewer"), { ssr: false });//
     const fullPropertyAddress = [
       selectedPropety.property_floor,
@@ -103,12 +107,31 @@ interface Props {
         {/* Show 3D model of the propert if selected property*/}
         {selectedPropety && (
           <div className="my-4">
-            <h5 className="text-lg font-semibold mb-2">3D Building View</h5>
-            <BuildingModelViewer modelPath="/models/PropertyA.glb" />
+            {/*<h5 className="text-lg font-semibold mb-2">View Media list</h5>*/}
+            <button
+              onClick={() => setShowMediaList((v) => !v)}
+              className="btn btn-sm btn-primary mb-2"
+            >
+            {showMediaList ? 'Hide Media List' : 'View Media List'}
+            </button>
+
+          {/* Conditionally render the MediaList */}
+          {showMediaList && (
+            <MediaList
+              propertyId={selectedPropety.id}
+              reloadTrigger={mediaReloadKey}
+            />
+          )}
             
           </div>
         )}
 
+     
+
+
+
+
+{/*//////////////////////////////////////////*/}
         {editPropertyMode ? (
           <>
             <p> 
