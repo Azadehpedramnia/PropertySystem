@@ -120,6 +120,7 @@ interface Props {
             <MediaList
               propertyId={selectedPropety.id}
               reloadTrigger={mediaReloadKey}
+              allowDelete={false} 
             />
           )}
             
@@ -201,6 +202,16 @@ interface Props {
                 value={selectedPropety.property_county}
                 onChange={(e) =>
                   setSelectedProperty({ ...selectedPropety, property_county: e.target.value })
+                }
+              />
+            </p>
+            <p> 
+              <label><strong>Country:</strong></label> 
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.country}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, country: e.target.value })
                 }
               />
             </p>
@@ -421,6 +432,16 @@ interface Props {
                 }
               />
             </p>
+             <p> 
+              <label><strong>Country:</strong></label> 
+              <input
+                className="border p-2 w-full my-1"
+                value={selectedPropety.country}
+                onChange={(e) =>
+                  setSelectedProperty({ ...selectedPropety, country: e.target.value })
+                }
+              />
+            </p>
             <p> 
               <label><strong>Landlord's Name::</strong></label> 
               <input
@@ -513,6 +534,8 @@ interface Props {
             <p><strong>Property Fisrt Line Address:</strong> {selectedPropety.property_first_line_address}</p>
             <p><strong>Property Second Line Address:</strong> {selectedPropety.property_second_line_address}</p>
             <p><strong>City:</strong> {selectedPropety.city}</p>
+            <p><strong>County:</strong> {selectedPropety.property_county}</p>
+            <p><strong>country:</strong> {selectedPropety.country}</p>
             <p><strong>Postcode:</strong> {selectedPropety.post_code}</p>
             <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
 

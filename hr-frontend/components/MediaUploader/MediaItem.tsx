@@ -13,7 +13,7 @@ export function MediaItem({
   onDelete,
 }: {
   item: MediaItemType
-  onDelete: () => void
+   onDelete?: () => void
 }) {
   const [viewerActive, setViewerActive] = useState(false)
   const url = `https://d1ng67xvpe0g4i.cloudfront.net/${item.file_key}`
@@ -47,9 +47,12 @@ export function MediaItem({
               {viewerActive ? 'Hide' : 'View'}
             </button>
           )}
-          <button onClick={onDelete} className="btn btn-sm btn-dark">
-            Delete
-          </button>
+        {onDelete && (
+            <button onClick={onDelete} className="btn btn-sm btn-dark">
+              Delete
+            </button>
+          )}
+          
         </div>
       </div>
 

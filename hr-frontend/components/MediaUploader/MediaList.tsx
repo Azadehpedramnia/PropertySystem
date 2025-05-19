@@ -67,9 +67,13 @@ type MediaItemType = {
 export function MediaList({
   propertyId,
   reloadTrigger,
+  allowDelete = true,
+  
 }: {
   propertyId: number
   reloadTrigger?: number
+  allowDelete?: boolean
+
 }) {
   const [media, setMedia] = useState<MediaItemType[]>([])
 
@@ -107,7 +111,7 @@ export function MediaList({
         <MediaItem
           key={item.id}
           item={item}
-          onDelete={() => handleDelete(item.id)}
+          onDelete={allowDelete ? () => handleDelete(item.id) : undefined}
         />
       ))}
     </div>
