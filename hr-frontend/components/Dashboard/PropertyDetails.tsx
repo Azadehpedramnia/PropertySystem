@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { MediaList } from '../../components/MediaUploader/MediaList'
 import PropertyForm from '../../components/ReportPropertyDetails/PropertyForm'
 import PropertySummary from '../../components/ReportPropertyDetails/PropertySummary'
+import PropertyActions from '../../components/ReportPropertyDetails/PropertyActions'
  
 
 interface Proposal {
@@ -146,77 +147,15 @@ interface Props {
         )}
 
         {/* ACTION BUTTONS */}
-          <div className="mt-4 space-x-2">
-            {editPropertyMode ? (
-              <>
-                <button
-                  onClick={async () => {
-                    // Call PUT API to update property
-                    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(selectedPropety),
-                    });
-                    if (res.ok) {
-
-                      // tell all dashboard tabs to refresh
-                      const bc = new BroadcastChannel('dashboard‑updates')
-                      bc.postMessage('property‑updated')
-                      bc.close()
+        <PropertyActions
+          isEditing={editPropertyMode}
+          selectedProperty={selectedPropety}
+          setEditPropertyMode={setEditPropertyMode}
+          setSelectedProperty={setSelectedProperty}
+          fetchProperties={fetchProperties}
+        />
 
 
-                      setEditPropertyMode(false);
-                      fetchProperties();
-                    } else {
-                      alert('Update failed');
-                    }
-                  }}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setEditPropertyMode(false)}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setEditPropertyMode(true)}
-                    className="bg-gray-300 px-4 py-2 rounded"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={async () => {
-                      const confirmDelete = confirm('Are you sure you want to delete this property?');
-                      if (!confirmDelete) return;
-                      const res = await fetch(`http://localhost:5000/api/propertiies/${selectedPropety.id}`, {
-                        method: 'DELETE',
-                      });
-                      if (res.ok) {
-                        setSelectedProperty(null);
-                        fetchProperties();
-                      } else {
-                        alert('Delete failed');
-                      }
-                    }}
-                    className="bg-gray-300 px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-              <button
-                className="bg-gray-300 px-4 py-2 rounded"
-                onClick={() => setSelectedProperty(null)}
-              >
-                Close
-              </button>
-            </div>
 
             {personProperties.length > 0 && people.length > 0 && selectedPropety && (
               (() => {
