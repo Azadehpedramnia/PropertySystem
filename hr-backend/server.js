@@ -361,7 +361,12 @@ app.get('/api/propertiies/:id', async (req, res) => {
               landlord_first_line_address,
               landlord_second_line_address,
               landlord_floor_number,
-              country
+              country,
+              total_rates_payable_before_mandatory_relief,
+              total_rates_payable_before_discretionary_relief,
+              total_rate_payable_after_mandatory_relief,
+              total_rate_payable_after_discretionary_relief
+
        FROM propertiies
        WHERE id = $1`,
       [id]
@@ -419,8 +424,11 @@ app.get('/api/propertiies', async (req, res) => {
               landlord_first_line_address,
               landlord_second_line_address,
               landlord_floor_number,
-              country
-             
+              country,
+              total_rates_payable_before_mandatory_relief,
+              total_rates_payable_before_discretionary_relief,
+              total_rate_payable_after_mandatory_relief,
+              total_rate_payable_after_discretionary_relief
        FROM propertiies`
     );
     res.json(result.rows);
@@ -468,6 +476,10 @@ app.post('/api/propertiies', async (req, res) => {
       landlord_second_line_address,
       landlord_floor_number,
       country,
+      total_rates_payable_before_mandatory_relief,
+      total_rates_payable_before_discretionary_relief,
+      total_rate_payable_after_mandatory_relief,
+      total_rate_payable_after_discretionary_relief,
     } = req.body;
 
     const result = await pool.query(
@@ -505,10 +517,14 @@ app.post('/api/propertiies', async (req, res) => {
           landlord_first_line_address,
           landlord_second_line_address,
           landlord_floor_number,
-          country
+          country,
+          total_rates_payable_before_mandatory_relief,
+          total_rates_payable_before_discretionary_relief,
+          total_rate_payable_after_mandatory_relief,
+          total_rate_payable_after_discretionary_relief
        )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 
-       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)
+       $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,)
        RETURNING *`,
       [
         inquirer,
@@ -544,7 +560,11 @@ app.post('/api/propertiies', async (req, res) => {
         landlord_first_line_address,
         landlord_second_line_address,
         landlord_floor_number,
-        country
+        country,
+        total_rates_payable_before_mandatory_relief,
+        total_rates_payable_before_discretionary_relief,
+        total_rate_payable_after_mandatory_relief,
+        total_rate_payable_after_discretionary_relief
 
       ]
     );
@@ -593,7 +613,11 @@ app.put('/api/propertiies/:id', async (req, res) => {
       landlord_first_line_address,
       landlord_second_line_address,
       landlord_floor_number,
-      country
+      country,
+      total_rates_payable_before_mandatory_relief,
+      total_rates_payable_before_discretionary_relief,
+      total_rate_payable_after_mandatory_relief,
+      total_rate_payable_after_discretionary_relief
     } = req.body;
 
     const result = await pool.query(
@@ -631,8 +655,12 @@ app.put('/api/propertiies/:id', async (req, res) => {
            landlord_first_line_address= $31,
            landlord_second_line_address= $32,
            landlord_floor_number= $33,
-          country=$34
-       WHERE id = $35
+          country=$34,
+          total_rates_payable_before_mandatory_relief=$35,
+          total_rates_payable_before_discretionary_relief=$36,
+          total_rate_payable_after_mandatory_relief=$37,
+          total_rate_payable_after_discretionary_relief=$38
+       WHERE id = $39
        RETURNING *`,
       [
         inquirer,
@@ -669,6 +697,10 @@ app.put('/api/propertiies/:id', async (req, res) => {
         landlord_second_line_address,
         landlord_floor_number,
         country,
+        total_rates_payable_before_mandatory_relief,
+        total_rates_payable_before_discretionary_relief,
+        total_rate_payable_after_mandatory_relief,
+        total_rate_payable_after_discretionary_relief,
         id
       ]
     );
