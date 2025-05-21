@@ -462,28 +462,49 @@ interface Props {
                                                   }
                                                 />
                                               </div>
-                                   
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Total Rates Payable Before Relief:</strong></label>     
+                                                <label className="form-label"><strong>Total Rates Payable Before Mandatory Relief:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
-                                                  value={editedProperty.total_rate_payable_before_relief ?? property.total_rate_payable_before_relief  ?? ''}
+                                                  value={editedProperty.total_rates_payable_before_mandatory_relief?? property.total_rates_payable_before_mandatory_relief  ?? ''}
                                                   onChange={(e) =>
-                                                    setEditedProperty({ ...editedProperty, total_rate_payable_before_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                    setEditedProperty({ ...editedProperty, total_rates_payable_before_mandatory_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                                   <div className="mb-3">
+                                                <label className="form-label"><strong>Total Rates Payable Before Discretionary Relief:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.total_rates_payable_before_discretionary_relief ?? property.total_rates_payable_before_discretionary_relief ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, total_rates_payable_before_discretionary_relief : e.target.value === '' ? null : Number(e.target.value) })
                                                   }
                                                 />
                                               </div>
 
                                               
                                               <div className="mb-3">
-                                                <label className="form-label"><strong>Total Rates Payable After Relief:</strong></label>     
+                                                <label className="form-label"><strong>Total Rates Payable After Mandatory Relief:</strong></label>     
                                                 <input
                                                   className="form-control"
                                                   type="number"
-                                                  value={editedProperty.total_rate_payable_after_relief ?? property.total_rate_payable_after_relief  ?? ''}
+                                                  value={editedProperty.total_rate_payable_after_mandatory_relief ?? property.total_rate_payable_after_mandatory_relief  ?? ''}
                                                   onChange={(e) =>
-                                                    setEditedProperty({ ...editedProperty, total_rate_payable_after_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                    setEditedProperty({ ...editedProperty, total_rate_payable_after_mandatory_relief : e.target.value === '' ? null : Number(e.target.value) })
+                                                  }
+                                                />
+                                              </div>
+                                                <div className="mb-3">
+                                                <label className="form-label"><strong>Total Rates Payable After Discretionary Relief:</strong></label>     
+                                                <input
+                                                  className="form-control"
+                                                  type="number"
+                                                  value={editedProperty.total_rate_payable_after_discretionary_relief ?? property.total_rate_payable_after_discretionary_relief  ?? ''}
+                                                  onChange={(e) =>
+                                                    setEditedProperty({ ...editedProperty, total_rate_payable_after_discretionary_relief : e.target.value === '' ? null : Number(e.target.value) })
                                                   }
                                                 />
                                               </div>
@@ -733,8 +754,10 @@ interface Props {
                                               <p><strong>Car Park Rateable Value:</strong> {property.car_park_rateable_value}</p>
                                               <p><strong>Car Park Rates Payable Before Relief Per Year:</strong> {property.car_park_rates_payable_before_relief}</p>
                                               <p><strong>Total Rateable Value:</strong> {property.total_rateable_value}</p>                                       
-                                              <p><strong>Total Rates Payable Before Relief:</strong> {property.total_rate_payable_before_relief}</p>
-                                              <p><strong>Total Rates Payable After Relief:</strong> {property.total_rate_payable_after_relief}</p>
+                                              <p><strong>Total Rates Payable Before Mandatory Relief:</strong> {property.total_rates_payable_before_mandatory_relief}</p>
+                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {property.total_rates_payable_before_discretionary_relief}</p>
+                                              <p><strong>Total Rates Payable After Mandatory Relief:</strong> {property.total_rate_payable_after_mandatory_relief}</p>
+                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {property.total_rate_payable_after_discretionary_relief}</p>
                                               <p><strong> Rates Multiplier Of The Property:</strong> {property.rates_multiplier}</p>
                                              
                                               <p>

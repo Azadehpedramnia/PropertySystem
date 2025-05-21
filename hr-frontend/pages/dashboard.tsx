@@ -69,6 +69,10 @@ export interface Property {
   landlord_second_line_address:string;
   landlord_floor_number:string;
   country:string;
+  total_rates_payable_before_mandatory_relief:number | null;
+  total_rates_payable_before_discretionary_relief:number | null;
+  total_rate_payable_after_mandatory_relief:number | null;
+  total_rate_payable_after_discretionary_relief:number | null;
 }
 
 export interface PersonProperty {
@@ -249,6 +253,10 @@ export default function Dashboard() {
     landlord_second_line_address:'',
     landlord_floor_number:'',
     country:'',
+    total_rates_payable_before_mandatory_relief:null,
+    total_rates_payable_before_discretionary_relief: null,
+    total_rate_payable_after_mandatory_relief:null,
+    total_rate_payable_after_discretionary_relief:null,
   });
 
 
@@ -446,6 +454,10 @@ useEffect(() => {
         landlord_second_line_address:'',
         landlord_floor_number:'',
         country:'',
+        total_rates_payable_before_mandatory_relief:null,
+        total_rates_payable_before_discretionary_relief:null,
+        total_rate_payable_after_mandatory_relief:null,
+        total_rate_payable_after_discretionary_relief:null,
       });
       // Reload table
       setIsAddModalOpen(false);
@@ -803,6 +815,10 @@ useEffect(() => {
                             landlord_second_line_address:'',
                             landlord_floor_number:'',
                             country:'',
+                            total_rates_payable_before_mandatory_relief: null,
+                            total_rates_payable_before_discretionary_relief:null,
+                            total_rate_payable_after_mandatory_relief:null,
+                            total_rate_payable_after_discretionary_relief:null,
                             
                           });
                         }}

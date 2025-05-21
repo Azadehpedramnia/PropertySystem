@@ -37,6 +37,10 @@ interface Property {
   landlord_second_line_address:string;
   landlord_floor_number:string;
   country:string;
+  total_rates_payable_before_mandatory_relief:number | null;
+  total_rates_payable_before_discretionary_relief:number | null;
+  total_rate_payable_after_mandatory_relief:number | null;
+  total_rate_payable_after_discretionary_relief:number | null;
 }
 
 interface RegisterPropertyProps {
@@ -309,37 +313,73 @@ newProperty.has_car_park && (
       }
     />
   </div>,
-  <div key="total_rate_payable_before_relief " className="col-12">
+  <div key="total_rates_payable_before_mandatory_relief " className="col-12">
     <label  className="form-label">
-      Total Rates Payable Before Relief:
+      Total Rates Payable Mandatory Before Relief:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder=" Total Rates Payable Before Relief"
-      value={newProperty.total_rate_payable_before_relief?? ""}
+      placeholder=" Total Rates Payable Mandatory Before Relief"
+      value={newProperty.total_rates_payable_before_mandatory_relief?? ""}
       onChange={(e) =>
         setNewProperty({
           ...newProperty,
-          total_rate_payable_before_relief:
+          total_rates_payable_before_mandatory_relief:
             e.target.value === "" ? null : Number(e.target.value),
         })
       }
     />
   </div>,
-  <div key="total_rate_payable_after_relief " className="col-12">
+    <div key="total_rates_payable_before_discretionary_relief " className="col-12">
     <label  className="form-label">
-      Total Rates Payable After Relief:
+      Total Rates Payable Before Discretionary Relief:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder=" Total Rates Payable After Relief"
-      value={newProperty.total_rate_payable_after_relief?? ""}
+      placeholder=" Total Rates Payable Before Discretionary Relief"
+      value={newProperty.total_rates_payable_before_discretionary_relief?? ""}
       onChange={(e) =>
         setNewProperty({
           ...newProperty,
-          total_rate_payable_after_relief:
+          total_rates_payable_before_discretionary_relief:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>,
+  <div key="total_rate_payable_after_mandatory_relief " className="col-12">
+    <label  className="form-label">
+      Total Rates Payable After Mandatory Relief:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder="Total Rates Payable After Mandatory Relief"
+      value={newProperty.total_rate_payable_after_mandatory_relief?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          total_rate_payable_after_mandatory_relief:
+            e.target.value === "" ? null : Number(e.target.value),
+        })
+      }
+    />
+  </div>,
+  <div key="total_rate_payable_after_discretionary_relief " className="col-12">
+    <label  className="form-label">
+      Total Rates Payable After Discretionary Relief:
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      placeholder="Total Rates Payable After Discretionary Relief"
+      value={newProperty.total_rate_payable_after_discretionary_relief?? ""}
+      onChange={(e) =>
+        setNewProperty({
+          ...newProperty,
+          total_rate_payable_after_discretionary_relief:
             e.target.value === "" ? null : Number(e.target.value),
         })
       }

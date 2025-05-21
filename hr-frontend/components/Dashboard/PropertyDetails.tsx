@@ -321,29 +321,55 @@ interface Props {
                 })
               }
             /></p>
+            <p> 
+              <label><strong>Total Rates Payable Before Mandatory Relief :</strong></label> 
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.total_rates_payable_before_mandatory_relief?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    total_rates_payable_before_mandatory_relief : e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              /></p>
               <p> 
-              <label><strong>Total Rates Payable Before Relief :</strong></label> 
+              <label><strong>Total Rates Payable Before Discertionary Relief :</strong></label> 
+              <input
+                className="border p-2 w-full my-1"
+                type="number"
+                value={selectedPropety.total_rates_payable_before_discretionary_relief?? ''}
+                onChange={(e) =>
+                  setSelectedProperty({
+                    ...selectedPropety,
+                    total_rates_payable_before_discretionary_relief : e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+              /></p>
+            <p> 
+            <label><strong>Total Rates Payable After Mandatory Relief:</strong></label> 
             <input
               className="border p-2 w-full my-1"
               type="number"
-              value={selectedPropety.total_rate_payable_before_relief?? ''}
+              value={selectedPropety.total_rate_payable_after_mandatory_relief?? ''}
               onChange={(e) =>
                 setSelectedProperty({
                   ...selectedPropety,
-                  total_rate_payable_before_relief : e.target.value === '' ? null : Number(e.target.value),
+                  total_rate_payable_after_mandatory_relief : e.target.value === '' ? null : Number(e.target.value),
                 })
               }
             /></p>
-            <p> 
-            <label><strong>Total Rates Payable After Relief:</strong></label> 
+             <p> 
+            <label><strong>Total Rates Payable After Discertionary Relief:</strong></label> 
             <input
               className="border p-2 w-full my-1"
               type="number"
-              value={selectedPropety.total_rate_payable_after_relief?? ''}
+              value={selectedPropety.total_rate_payable_after_discretionary_relief?? ''}
               onChange={(e) =>
                 setSelectedProperty({
                   ...selectedPropety,
-                  total_rate_payable_after_relief : e.target.value === '' ? null : Number(e.target.value),
+                  total_rate_payable_after_discretionary_relief : e.target.value === '' ? null : Number(e.target.value),
                 })
               }
             /></p>
@@ -545,8 +571,10 @@ interface Props {
                                               <p><strong>Car Park Rateable Value:</strong> {selectedPropety.car_park_rateable_value}</p>
                                               <p><strong>Car Park Rates Payable Before Relief Per Year:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
                                               <p><strong>Total Rateable Value:</strong> {selectedPropety.total_rateable_value}</p>                                       
-                                              <p><strong>Total Rates Payable Before Relief:</strong> {selectedPropety.total_rate_payable_before_relief}</p>
-                                              <p><strong>Total Rates Payable After Relief:</strong> {selectedPropety.total_rate_payable_after_relief}</p>
+                                              <p><strong>Total Rates Payable Before Mandatory Relief:</strong> {selectedPropety.total_rates_payable_before_mandatory_relief}</p>
+                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {selectedPropety.total_rates_payable_before_discretionary_relief}</p>
+                                              <p><strong>Total Rates Payable After Mandatory Relief:</strong> {selectedPropety.total_rate_payable_after_mandatory_relief}</p>
+                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {selectedPropety.total_rate_payable_after_discretionary_relief}</p>
                                               <p><strong> Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>
                                              
                                               <p>
