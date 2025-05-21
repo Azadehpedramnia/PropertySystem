@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from "next/dynamic";
 import { MediaList } from '../../components/MediaUploader/MediaList'
 import PropertyForm from '../../components/ReportPropertyDetails/PropertyForm'
+import PropertySummary from '../../components/ReportPropertyDetails/PropertySummary'
  
 
 interface Proposal {
@@ -140,62 +141,7 @@ interface Props {
           </>
         ) : (
           <>
-
-          <p><strong>Landlord/Organisation:</strong> {selectedPropety.inquirer}</p>
-           <p><strong>Is The Property Solely Occupied? :</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
-            <p><strong>Floor Number:</strong> {selectedPropety.property_floor}</p>
-            <p><strong>Property Fisrt Line Address:</strong> {selectedPropety.property_first_line_address}</p>
-            <p><strong>Property Second Line Address:</strong> {selectedPropety.property_second_line_address}</p>
-            <p><strong>City:</strong> {selectedPropety.city}</p>
-            <p><strong>County:</strong> {selectedPropety.property_county}</p>
-            <p><strong>country:</strong> {selectedPropety.country}</p>
-            <p><strong>Postcode:</strong> {selectedPropety.post_code}</p>
-            <p><strong>Property Type:</strong> {selectedPropety.property_type}</p>
-
-            <p><strong>Property Rateable Value:</strong> {selectedPropety.building_rateable_value}</p>
-                                              <p><strong>Rates Payable Before Relief Per Year:</strong> {selectedPropety.rates_payable_before_relief}</p>
-                                              <p><strong>Has car park:</strong> {selectedPropety.has_car_park ? 'Yes' : 'No'}</p>
-                                              <p><strong>Car Park Rateable Value:</strong> {selectedPropety.car_park_rateable_value}</p>
-                                              <p><strong>Car Park Rates Payable Before Relief Per Year:</strong> {selectedPropety.car_park_rates_payable_before_relief}</p>
-                                              <p><strong>Total Rateable Value:</strong> {selectedPropety.total_rateable_value}</p>                                       
-                                              <p><strong>Total Rates Payable Before Mandatory Relief:</strong> {selectedPropety.total_rates_payable_before_mandatory_relief}</p>
-                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {selectedPropety.total_rates_payable_before_discretionary_relief}</p>
-                                              <p><strong>Total Rates Payable After Mandatory Relief:</strong> {selectedPropety.total_rate_payable_after_mandatory_relief}</p>
-                                              <p><strong>Total Rates Payable After Discretionary Relief:</strong> {selectedPropety.total_rate_payable_after_discretionary_relief}</p>
-                                              <p><strong> Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>
-                                             
-                                              <p>
-                                                <strong>Donation Due By Landlord:</strong> 
-                                                {selectedPropety.donation_due !== null && selectedPropety.donation_due !== undefined
-                                                  ? `£${selectedPropety.donation_due}`
-                                                  : 'N/A'}
-                                              </p>
-                                              
-                                              <p><strong>Start Date of Lease:</strong>{selectedPropety.start_date_of_lease
-                                                    ? new Date(selectedPropety.start_date_of_lease).toISOString().split('T')[0]
-                                                    : 'N/A'}
-                                              </p>
-                                              
-                                              <p><strong>End Data Of Lease:</strong> {selectedPropety.end_date_of_lease
-                                                    ? new Date(selectedPropety.end_date_of_lease).toISOString().split('T')[0]
-                                                    : 'N/A'}
-                                              </p>
-                                              <p><strong>Length Of Lease:</strong> {selectedPropety.length_of_lease}</p>
-                                         
-
-                                         
-                                              <p><strong>Landlord's Name:</strong> {selectedPropety.landlord_name}</p>
-                                              <p><strong>Landlord's Email :</strong> {selectedPropety.landlord_email}</p>
-                                              <p><strong>Landlord's Contact Number:</strong> {selectedPropety.landlord_no}</p>
-
-                                              <p><strong>Landlord's First Address Line:</strong> {selectedPropety.landlord_first_line_address}</p>
-                                              <p><strong>Landlord's Second Address Line:</strong> {selectedPropety.landlord_second_line_address}</p>
-                                              <p><strong>Landlord's Floor Number:</strong> {selectedPropety.landlord_floor_number}</p>
-                                             
-                                              <p><strong>Landlord's City:</strong> {selectedPropety.landlord_city}</p>
-                                              <p><strong>Landlord's County:</strong> {selectedPropety.landlord_county}</p>
-                                              <p><strong>Landlord's Postcode :</strong> {selectedPropety.landlord_post_code_address}</p>
-
+          <PropertySummary selectedProperty={selectedPropety} /> 
           </>
         )}
 
