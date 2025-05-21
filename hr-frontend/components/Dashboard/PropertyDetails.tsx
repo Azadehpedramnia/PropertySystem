@@ -574,7 +574,7 @@ interface Props {
                                               <p><strong>Total Rates Payable Before Mandatory Relief:</strong> {selectedPropety.total_rates_payable_before_mandatory_relief}</p>
                                               <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {selectedPropety.total_rates_payable_before_discretionary_relief}</p>
                                               <p><strong>Total Rates Payable After Mandatory Relief:</strong> {selectedPropety.total_rate_payable_after_mandatory_relief}</p>
-                                              <p><strong>Total Rates Payable Before Discretionary Relief:</strong> {selectedPropety.total_rate_payable_after_discretionary_relief}</p>
+                                              <p><strong>Total Rates Payable After Discretionary Relief:</strong> {selectedPropety.total_rate_payable_after_discretionary_relief}</p>
                                               <p><strong> Rates Multiplier Of The Property:</strong> {selectedPropety.rates_multiplier}</p>
                                              
                                               <p>

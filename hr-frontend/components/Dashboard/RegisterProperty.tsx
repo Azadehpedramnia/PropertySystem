@@ -315,12 +315,12 @@ newProperty.has_car_park && (
   </div>,
   <div key="total_rates_payable_before_mandatory_relief " className="col-12">
     <label  className="form-label">
-      Total Rates Payable Mandatory Before Relief:
+      Total Rates Payable Before Mandatory  Relief:
     </label>
     <input
       type="number"
       className="form-control"
-      placeholder=" Total Rates Payable Mandatory Before Relief"
+      placeholder=" Total Rates Payable Before Mandatory Relief"
       value={newProperty.total_rates_payable_before_mandatory_relief?? ""}
       onChange={(e) =>
         setNewProperty({
