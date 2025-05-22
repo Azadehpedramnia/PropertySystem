@@ -578,10 +578,19 @@ useEffect(() => {
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          {/* Logout Button on the left */}
-          <button onClick={handleLogout} className="btn btn-secondary">
-            Sign Out
-          </button>
+          {/* Ivoice page link ****/}
+            <div className="d-flex gap-3 mb-4">
+            
+              {/* Logout Button on the left */}
+                <button onClick={handleLogout} className="btn btn-secondary">
+                  Sign Out
+                </button>
+
+              {/* 👇 Add this button */}
+              <Link href="/invoice">
+                <button className="btn btn-dark">Invoice</button>
+              </Link>
+            </div>
 
           {/* Search Component on the right */}
           <SearchComponent />
@@ -589,15 +598,7 @@ useEffect(() => {
 
       {/* */}
       
-      {/* Ivoice page link */}
-      <div className="d-flex gap-3 mb-4">
-        <button className="btn btn-secondary">Sign Out</button>
 
-        {/* 👇 Add this button */}
-        <Link href="/invoice">
-          <button className="btn btn-dark">Invoice</button>
-        </Link>
-      </div>
       {/* */}
 
       <div className="mb-6 p-4 border rounded-lg  position-relative" style={{ position: 'relative' }}>
