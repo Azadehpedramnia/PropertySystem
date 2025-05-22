@@ -9,6 +9,7 @@ import SearchComponent from "../components/Dashboard/search";
 import PersonDetails from "../components/Dashboard/PersonDetails";
 import PropertyDetails from '../components/Dashboard/PropertyDetails';
 import ReportTable from '../components/Dashboard/ReportTable';
+import Link from 'next/link';
 
 //import { usePeople } from '../hooks/usePeople';
 
@@ -587,7 +588,17 @@ useEffect(() => {
       </div>   
 
       {/* */}
-     
+      
+      {/* Ivoice page link */}
+      <div className="d-flex gap-3 mb-4">
+        <button className="btn btn-secondary">Sign Out</button>
+
+        {/* 👇 Add this button */}
+        <Link href="/invoice">
+          <button className="btn btn-dark">Invoice</button>
+        </Link>
+      </div>
+      {/* */}
 
       <div className="mb-6 p-4 border rounded-lg  position-relative" style={{ position: 'relative' }}>
          <h2 className="text-lg font-semibold">Report</h2>
