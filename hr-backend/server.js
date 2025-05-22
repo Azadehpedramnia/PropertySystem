@@ -279,9 +279,22 @@ app.get('/api/propertiies/search', async (req, res) => {
 // ------------------------------
 // Propertiies
 // ------------------------------
+// GET /api/propertiies/with-signed-contract
+app.get('/api/propertiies/with-signed-contract', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id, address, inquirer
+      FROM propertiies
+      WHERE contract_signed = true
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching signed contracts:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-
-// 👇 FIRST define grouped (more specific)
+// 👇 FIRST define grouped for uplload media page (more specific)
 
 app.get('/api/propertiies/grouped', async (req, res) => {
   try {
@@ -1040,6 +1053,72 @@ app.get('/api/proposals/latest', async (req, res) => {
   }
 });
 
+// ------------------------------
+// Invoice
+// ------------------------------
+
+// Get Organisations with Signed Properties
+app.get('/api/invoices/organisations', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT p.organisation
+      FROM people p
+      JOIN person_property pp ON p.id = pp.person_id
+      JOIN propertiies pr ON pp.property_id = pr.id
+      WHERE pr.contract_signed = true
+        AND p.organisation IS NOT NULL
+        AND TRIM(p.organisation) <> ''
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching organisations:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+//Get Landlords Under Selected Organisation
+app.get('/api/invoices/landlords', async (req, res) => {
+  const org = req.query.org;
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT pr.inquirer AS landlord
+      FROM people p
+      JOIN person_property pp ON p.id = pp.person_id
+      JOIN propertiies pr ON pp.property_id = pr.id
+      WHERE pr.contract_signed = true
+        AND p.organisation = $1
+        AND pr.inquirer IS NOT NULL
+        AND TRIM(pr.inquirer) <> ''
+    `, [org]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching landlords (inquirers):', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+//Get Addresses for Selected Landlord
+app.get('/api/invoices/properties', async (req, res) => {
+  const inquirer = req.query.inquirer;
+  try {
+    const result = await pool.query(`
+      SELECT 
+        pr.property_floor,
+        pr.property_first_line_address,
+        pr.property_second_line_address,
+        pr.city,
+        pr.post_code
+      FROM propertiies pr
+      WHERE pr.contract_signed = true
+        AND pr.inquirer = $1
+    `, [inquirer]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching properties:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 

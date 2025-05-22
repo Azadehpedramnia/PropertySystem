@@ -1,5 +1,5 @@
 // A full-featured dashboard for people, properties, and relationships
-// React + Next.js + Tailwind + Typescript compatible
+// React + Next.js +  Typescript compatible
 
 import { useEffect, useState, useRef ,useCallback  } from 'react';
 import { useRouter } from 'next/router';
