@@ -31,6 +31,7 @@ export interface Person {
   first_line_contac_address:string;
   second_line_contac_address:string;
   contac_city:string;
+  organisation_email:string;
 }
 
 export interface Property {
@@ -74,6 +75,7 @@ export interface Property {
   total_rates_payable_before_discretionary_relief:number | null;
   total_rate_payable_after_mandatory_relief:number | null;
   total_rate_payable_after_discretionary_relief:number | null;
+  contract_signed:boolean;
 }
 
 export interface PersonProperty {
@@ -173,6 +175,7 @@ export default function Dashboard() {
     first_line_contac_address:'',
     second_line_contac_address:'',
     contac_city:'',
+    organisation_email:'',
   });
 
   const handleSelectPersonToContactForm = (person: Person) => {
@@ -190,6 +193,7 @@ export default function Dashboard() {
       first_line_contac_address:person.first_line_contac_address,
       second_line_contac_address:person.second_line_contac_address,
       contac_city:person.contac_city,
+      organisation_email:person.organisation_email,
     });
   };
  
@@ -258,6 +262,7 @@ export default function Dashboard() {
     total_rates_payable_before_discretionary_relief: null,
     total_rate_payable_after_mandatory_relief:null,
     total_rate_payable_after_discretionary_relief:null,
+    contract_signed:false,
   });
 
 
@@ -341,6 +346,7 @@ export default function Dashboard() {
       first_line_contac_address:'',
       second_line_contac_address:'',
       contac_city:'',
+      organisation_email:'',
       
     });
     // Reload table
@@ -459,6 +465,7 @@ useEffect(() => {
         total_rates_payable_before_discretionary_relief:null,
         total_rate_payable_after_mandatory_relief:null,
         total_rate_payable_after_discretionary_relief:null,
+        contract_signed:false,
       });
       // Reload table
       setIsAddModalOpen(false);
@@ -749,6 +756,7 @@ useEffect(() => {
                             first_line_contac_address:'',
                             second_line_contac_address:'',
                             contac_city:'',
+                            organisation_email:'',
                           });
                         }}
                       >
@@ -831,6 +839,7 @@ useEffect(() => {
                             total_rates_payable_before_discretionary_relief:null,
                             total_rate_payable_after_mandatory_relief:null,
                             total_rate_payable_after_discretionary_relief:null,
+                            contract_signed:false,
                             
                           });
                         }}

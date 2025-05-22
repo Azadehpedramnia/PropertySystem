@@ -41,6 +41,7 @@ interface Property {
   total_rates_payable_before_discretionary_relief:number | null;
   total_rate_payable_after_mandatory_relief:number | null;
   total_rate_payable_after_discretionary_relief:number | null;
+  contract_signed:boolean;
 }
 
 interface RegisterPropertyProps {
@@ -406,6 +407,19 @@ newProperty.has_car_park && (
 
     // 3) New third group: "advancedFields"
     const thirdFields = [
+
+        <div key="has_car_park" className="col-12">
+        <label className="form-label">
+          Is Contract Signed?
+        </label>
+        <input
+          type="checkbox"
+          checked={newProperty.contract_signed}
+          onChange={(e) =>
+            setNewProperty({ ...newProperty, contract_signed: e.target.checked })
+          }
+        />
+      </div>,
       // this type is number not date
       <div className="col-12" key="donation_due">
         <label  className="form-label">

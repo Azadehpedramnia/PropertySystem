@@ -16,6 +16,7 @@ interface Person {
   first_line_contac_address:string;
   second_line_contac_address:string;
   contac_city:string;
+  organisation_email:string;
 }
 
 interface RegisterContactProps {
@@ -79,6 +80,18 @@ const RegisterContact: React.FC<RegisterContactProps> = ({
               value={newPerson.organisation}
               onChange={(e) =>
                 setNewPerson({ ...newPerson, organisation: e.target.value })
+              }
+            />
+          </div>
+          {/*email Organisation */}
+          <div className="col-12">
+            <label className="form-label">Organisation Email:</label>
+            <input
+              className="form-control"
+              placeholder="Organisation Email"
+              value={newPerson.organisation_email}
+              onChange={(e) =>
+                setNewPerson({ ...newPerson, organisation_email: e.target.value })
               }
             />
           </div>

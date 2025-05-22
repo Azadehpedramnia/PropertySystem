@@ -57,17 +57,17 @@ app.post('/api/people', async (req, res) => {
   try {
     const { name, organisation, role, email, contact_number,family,  
       property_address_for_enquiry, iqu_post_code_address, contact_county, floor_no, first_line_contac_address,
-      second_line_contac_address, contac_city
+      second_line_contac_address, contac_city , organisation_email
        } = req.body;
     const result = await pool.query(
       `INSERT INTO people (name, organisation, role, email, contact_number, family, 
        property_address_for_enquiry  , iqu_post_code_address , contact_county, floor_no, first_line_contac_address,
-       second_line_contac_address, contac_city
+       second_line_contac_address, contac_city,  organisation_email
         )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *`,
       [name, organisation, role, email, contact_number, family,
         property_address_for_enquiry, iqu_post_code_address, contact_county,floor_no, first_line_contac_address,
-        second_line_contac_address, contac_city]
+        second_line_contac_address, contac_city  ,organisation_email]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -110,7 +110,8 @@ app.get('/api/people', async (req, res) => {
               contact_county,
               floor_no, first_line_contac_address,
               second_line_contac_address, 
-              contac_city
+              contac_city,
+              organisation_email
        FROM people`
     );
     res.json(result.rows);
@@ -142,7 +143,8 @@ app.get('/api/people/:id', async (req, res) => {
          floor_no, 
          first_line_contac_address,
          second_line_contac_address, 
-         contac_city
+         contac_city,
+         organisation_email
        FROM people
        WHERE id = $1`,
       [id]
@@ -163,7 +165,7 @@ app.put('/api/people/:id',  async (req, res) => {
     const { name, organisation, role, email, contact_number, family,
       property_address_for_enquiry, iqu_post_code_address, contact_county ,
       floor_no, first_line_contac_address,
-      second_line_contac_address, contac_city    
+      second_line_contac_address, contac_city, organisation_email   
      } = req.body;
 
     const result = await pool.query(
@@ -180,12 +182,13 @@ app.put('/api/people/:id',  async (req, res) => {
            floor_no= $10,
            first_line_contac_address= $11,
            second_line_contac_address= $12,
-           contac_city= $13
-       WHERE id = $14
+           contac_city= $13,
+           organisation_email=$14
+       WHERE id = $15
        RETURNING *`,
       [name, organisation, role, email, contact_number,family,
         property_address_for_enquiry, iqu_post_code_address, contact_county,floor_no, first_line_contac_address,
-        second_line_contac_address, contac_city ,id]
+        second_line_contac_address, contac_city,  organisation_email, id]
     );
 
     if (result.rows.length === 0) {
