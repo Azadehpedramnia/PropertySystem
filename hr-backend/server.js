@@ -14,9 +14,52 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+
 ///for uploadinfg 3Dimage/video
 const mediaRoutes = require('./controllers/media.controller');
 app.use('/api/media', mediaRoutes);
+
+// ------------------------------
+// invoice
+// ------------------------------
+app.get('/api/people-with-signed-properties', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        p.id AS person_id,
+        p.name,
+        p.role,
+        p.email,
+        p.contact_number,
+        p.organisation,
+        p.organisation_email,
+        pr.id AS property_id,
+        pr.property_floor,
+        pr.property_first_line_address,
+        pr.property_second_line_address,
+        pr.city,
+        pr.property_county,
+        pr.country,
+        pr.post_code,
+        pr.landlord_name,
+        pr.landlord_floor_number,
+        pr.landlord_first_line_address,
+        pr.landlord_second_line_address,
+        pr.landlord_city,
+        pr.landlord_county,
+        pr.landlord_post_code_address
+      FROM people p
+      JOIN person_property pp ON p.id = pp.person_id
+      JOIN propertiies pr ON pp.property_id = pr.id
+      WHERE pp.is_related = true
+        AND pr.contract_signed = true
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching people with signed properties:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 
 // ------------------------------
@@ -280,6 +323,7 @@ app.get('/api/propertiies/search', async (req, res) => {
 // Propertiies
 // ------------------------------
 // GET /api/propertiies/with-signed-contract
+{/* 
 app.get('/api/propertiies/with-signed-contract', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -293,6 +337,9 @@ app.get('/api/propertiies/with-signed-contract', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+*/}
+
+
 
 // 👇 FIRST define grouped for uplload media page (more specific)
 
@@ -1052,75 +1099,6 @@ app.get('/api/proposals/latest', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch proposal' });
   }
 });
-
-// ------------------------------
-// Invoice
-// ------------------------------
-
-// Get Organisations with Signed Properties
-app.get('/api/invoices/organisations', async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT DISTINCT p.organisation
-      FROM people p
-      JOIN person_property pp ON p.id = pp.person_id
-      JOIN propertiies pr ON pp.property_id = pr.id
-      WHERE pr.contract_signed = true
-        AND p.organisation IS NOT NULL
-        AND TRIM(p.organisation) <> ''
-    `);
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Error fetching organisations:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-//Get Landlords Under Selected Organisation
-app.get('/api/invoices/landlords', async (req, res) => {
-  const org = req.query.org;
-  try {
-    const result = await pool.query(`
-      SELECT DISTINCT pr.inquirer AS landlord
-      FROM people p
-      JOIN person_property pp ON p.id = pp.person_id
-      JOIN propertiies pr ON pp.property_id = pr.id
-      WHERE pr.contract_signed = true
-        AND p.organisation = $1
-        AND pr.inquirer IS NOT NULL
-        AND TRIM(pr.inquirer) <> ''
-    `, [org]);
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Error fetching landlords (inquirers):', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-
-//Get Addresses for Selected Landlord
-app.get('/api/invoices/properties', async (req, res) => {
-  const inquirer = req.query.inquirer;
-  try {
-    const result = await pool.query(`
-      SELECT 
-        pr.property_floor,
-        pr.property_first_line_address,
-        pr.property_second_line_address,
-        pr.city,
-        pr.post_code
-      FROM propertiies pr
-      WHERE pr.contract_signed = true
-        AND pr.inquirer = $1
-    `, [inquirer]);
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Error fetching properties:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-
 
 
 // Start the Express server

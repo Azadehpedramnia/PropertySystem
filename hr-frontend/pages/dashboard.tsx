@@ -11,6 +11,7 @@ import PropertyDetails from '../components/Dashboard/PropertyDetails';
 import ReportTable from '../components/Dashboard/ReportTable';
 import Link from 'next/link';
 
+
 //import { usePeople } from '../hooks/usePeople';
 
 type PropertyType = 'Office' | 'Retail' | 'Warehouse' | string;
@@ -32,6 +33,7 @@ export interface Person {
   second_line_contac_address:string;
   contac_city:string;
   organisation_email:string;
+
 }
 
 export interface Property {
@@ -593,11 +595,12 @@ useEffect(() => {
                   Sign Out
                 </button>
 
-              {/* 👇 Add this button */}
+              {/* 👇 Add invoice button */}
               <Link href="/invoice">
-                <button className="btn btn-dark">Invoice</button>
+                <button className="btn btn-primary">View Invoice Page</button>
               </Link>
-            </div>
+
+        </div>
 
           {/* Search Component on the right */}
           <SearchComponent />

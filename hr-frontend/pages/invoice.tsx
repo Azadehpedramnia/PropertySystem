@@ -1,100 +1,116 @@
-import { useState, useEffect } from 'react';
-import ReportTable from '../components/Dashboard/ReportTable';
+import { useEffect, useState } from "react";
 
-// You could display a list of signed properties in table format using it
-
-
-type Organisation = { organisation: string };
-type Landlord = { landlord: string };
-type Property = {
+type PersonWithContractSignedProperty = {
+  person_id: number;
+  name: string;
+  role: string;
+  email: string;
+  contact_number: string;
+  organisation: string;
+  organisation_email: string;
+  property_id: number;
   property_floor: string;
   property_first_line_address: string;
   property_second_line_address: string;
   city: string;
+  property_county: string;
+  country: string;
   post_code: string;
+  landlord_name:string;
+  landlord_floor_number:string;
+  landlord_first_line_address:string;
+  landlord_second_line_address:string;
+  landlord_city:string;
+  landlord_county:string;
+  landlord_post_code_address:string;
 };
 
-export default function InvoicePage() {
-  const [organisations, setOrganisations] = useState<Organisation[]>([]);
-  const [expandedOrg, setExpandedOrg] = useState<string | null>(null);
-  const [landlords, setLandlords] = useState<Landlord[]>([]);
-  const [expandedLandlord, setExpandedLandlord] = useState<string | null>(null);
-  const [properties, setProperties] = useState<Property[]>([]);
+type GroupedData = {
+  [organisation: string]: {
+    [landlord_name: string]: PersonWithContractSignedProperty[];
+  };
+};
 
-  // Load organisations on mount
+export default function PeopleWithSignedPropertiesGrouped() {
+  const [grouped, setGrouped] = useState<GroupedData>({});
+
   useEffect(() => {
-    fetch('http://localhost:5000/api/invoices/organisations')
-      .then(res => res.json())
-      .then(data => setOrganisations(data));
+    fetch("http://localhost:5000/api/people-with-signed-properties")
+      .then((res) => res.json())
+      .then((data: PersonWithContractSignedProperty[]) => {
+        const groupedData: GroupedData = {};
+
+        data.forEach((item) => {
+          const org = item.organisation || "Unknown Organisation";
+          const landlord = item.landlord_name || "Unknown Landlord";
+
+          if (!groupedData[org]) {
+            groupedData[org] = {};
+          }
+
+          if (!groupedData[org][landlord]) {
+            groupedData[org][landlord] = [];
+          }
+
+          groupedData[org][landlord].push(item);
+        });
+
+        setGrouped(groupedData);
+      })
+      .catch((err) => console.error("Failed to fetch:", err));
   }, []);
 
-  const handleOrgClick = async (org: string) => {
-    setExpandedOrg(org);
-    setExpandedLandlord(null);
-    setProperties([]);
-    const res = await fetch(`http://localhost:5000/api/invoices/landlords?org=${encodeURIComponent(org)}`);
-    const data = await res.json();
-    setLandlords(data);
-  };
-
-  const handleLandlordClick = async (landlord: string) => {
-    setExpandedLandlord(landlord);
-    const res = await fetch(`http://localhost:5000/api/invoices/properties?inquirer=${encodeURIComponent(landlord)}`);
-    const data = await res.json();
-    setProperties(data);
-  };
-
   return (
-    <div className="container mt-4">
-      <h2>Invoice Explorer</h2>
+    <div style={{ padding: 20 }}>
+      <h1>Organisations → Landlords → Properties</h1>
 
-      {organisations.map(org => (
-        <div key={org.organisation} className="mb-3">
-          <button
-            className="btn btn-outline-primary w-100 text-start"
-            onClick={() => handleOrgClick(org.organisation)}
-          >
-            {org.organisation}
-          </button>
-
-          {expandedOrg === org.organisation && (
-            <div className="ms-4 mt-2">
-              {landlords.map(l => (
-                <div key={l.landlord} className="mb-2">
-                  <button
-                    className="btn btn-outline-secondary w-100 text-start"
-                    onClick={() => handleLandlordClick(l.landlord)}
-                  >
-                    {l.landlord}
-                  </button>
-
-                  {expandedLandlord === l.landlord && (
-                    <div className="ms-4 mt-2">
-                      {properties.length === 0 ? (
-                        <p className="text-muted">No signed properties found.</p>
-                      ) : (
-                        <ul className="list-group">
-                          {properties.map((prop, idx) => (
-                            <li key={idx} className="list-group-item">
-                              {prop.property_floor && <strong>Floor: </strong>}
-                              {prop.property_floor && <span>{prop.property_floor}, </span>}
-                              {prop.property_first_line_address}, {prop.property_second_line_address}, {prop.city}, {prop.post_code}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+      {Object.entries(grouped).map(([org, landlords]) => (
+        <details key={org} style={{ marginBottom: 10 }}>
+          <summary>
+            <strong>{org}</strong>
+          </summary>
+          <div style={{ marginLeft: 20, marginTop: 5 }}>
+            {Object.entries(landlords).map(([landlord, properties]) => (
+              <details key={landlord} style={{ marginBottom: 5 }}>
+                <summary>
+                  <strong>Landlord:</strong> {landlord}
+                </summary>
+                <div style={{ marginLeft: 20, marginTop: 5 }}>
+                  {properties.map((prop, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: 10,
+                        marginBottom: 8,
+                        borderRadius: 5,
+                      }}
+                    >
+                      <p>
+                        <strong>Employee:</strong> {prop.name} ({prop.role}) -{" "}
+                        {prop.email}
+                      </p>
+                      <p>
+                        <strong>Property Address:</strong>{" "}
+                        {prop.property_floor}, {prop.property_first_line_address},{" "}
+                        {prop.property_second_line_address}, {prop.city},{" "}
+                        {prop.post_code}, {prop.country}
+                      </p>
+                      <p>
+                        <strong>Landlord Address:</strong>{" "}
+                        {prop.landlord_floor_number},{" "}
+                        {prop.landlord_first_line_address},{" "}
+                        {prop.landlord_second_line_address},{" "}
+                        {prop.landlord_city}, {prop.landlord_post_code_address}
+                      </p>
                     </div>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              </details>
+            ))}
+          </div>
+        </details>
       ))}
     </div>
   );
 }
-
-
-
-
