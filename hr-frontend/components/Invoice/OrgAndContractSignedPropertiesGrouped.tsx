@@ -1,4 +1,5 @@
-{/*import { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 
 type PersonWithContractSignedProperty = {
   person_id: number;
@@ -92,7 +93,7 @@ export default function PeopleWithSignedPropertiesGrouped() {
                         <strong>Employee:</strong> {prop.name} ({prop.role}) -{" "}
                         {prop.email}
                       </p>
-                      <p>*create invoice for this property i have to save the data in invoice  in database,and download as pdf  , email to organisation_email,it is need to save on server rack too for search in future what is you idea
+                      <p>{/*create invoice for this property i have to save the data in invoice  in database,and download as pdf  , email to organisation_email,it is need to save on server rack too for search in future what is you idea*/}
                         <strong>Property Address:</strong>{" "}
                         {prop.property_floor}, {prop.property_first_line_address},{" "}
                         {prop.property_second_line_address}, {prop.city},{" "}
@@ -113,16 +114,6 @@ export default function PeopleWithSignedPropertiesGrouped() {
           </div>
         </details>
       ))}
-    </div>
-  );
-}
-*/}
-import PeopleWithSignedPropertiesGrouped from "../components/Invoice/OrgAndContractSignedPropertiesGrouped";
-
-export default function Dashboard() {
-  return (
-    <div>
-      <PeopleWithSignedPropertiesGrouped />
     </div>
   );
 }
