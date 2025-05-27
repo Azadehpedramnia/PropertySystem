@@ -19,9 +19,141 @@ const pool = new Pool({
 const mediaRoutes = require('./controllers/media.controller');
 app.use('/api/media', mediaRoutes);
 
+///for saving creating invoice
+//const invoiceController = require('./controllers/invoice.controller');
+// POST /api/invoices/create
+//app.post('/api/invoices/create', invoiceController.createInvoice);
+
+//invoice fake:
+const path = require('path');
+app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
+
+
+
+
+
+const puppeteer = require('puppeteer'); // 👈 Add this
+const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); // 👈 Add this too
+
+
+
+
+
 // ------------------------------
 // invoice
 // ------------------------------
+
+
+app.get('/api/invoice/:id/download', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // 1. Fetch invoice data from the database
+    const result = await pool.query('SELECT * FROM invoice WHERE id = $1', [id]);
+    const invoiceData = result.rows[0];
+
+    if (!invoiceData) {
+      return res.status(404).json({ error: 'Invoice not found' });
+    }
+
+    // 2. Generate HTML content using Handlebars
+    const html = await generateInvoiceHTML(invoiceData);
+
+    // 3. Launch Puppeteer and render PDF
+    const browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+    await browser.close();
+
+    // 4. Send PDF to user
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${invoiceData.pdf_filename}`);
+    res.send(pdfBuffer);
+  } catch (err) {
+    console.error('Error creating invoice PDF:', err.stack || err.message || err);
+
+    res.status(500).json({ error: 'Failed to create invoice PDF' });
+  }
+});
+
+app.post('/api/invoice', async (req, res) => {
+  const {
+    organisation_name,
+    organisation_email,
+    landlord_name,
+    property_address,
+    total_amount,
+    pdf_filename,
+  } = req.body;
+
+  try {
+    await pool.query(
+      `INSERT INTO invoice 
+      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename) 
+      VALUES ($1, $2, $3, $4, $5, $6)`,
+      [organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename]
+    );
+
+    res.status(200).json({ message: 'Invoice saved' });
+  } catch (err) {
+    console.error('Failed to save invoice:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET /api/invoices?person_id=1 or ?property_id=12
+{/*}
+app.get('/api/invoices', async (req, res) => {
+  const { person_id, property_id } = req.query;
+  let condition = "";
+  let params = [];
+
+  if (person_id) {
+    condition = "WHERE person_id = $1";
+    params.push(person_id);
+  } else if (property_id) {
+    condition = "WHERE property_id = $1";
+    params.push(property_id);
+  }
+
+  const result = await pool.query(`
+    SELECT * FROM invoices ${condition}
+    ORDER BY created_at DESC
+  `, params);
+
+  res.json(result.rows);
+});*/}
+{/*
+app.post('/api/invoices', async (req, res) => {
+  const {
+    organisation_name,
+    organisation_email,
+    landlord_name,
+    property_address,
+    total_amount,
+    pdf_filename,
+  } = req.body;
+
+  try {
+    await pool.query(
+      `INSERT INTO invoices 
+      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename) 
+      VALUES ($1, $2, $3, $4, $5, $6)`,
+      [organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename]
+    );
+
+    res.status(200).json({ message: 'Invoice saved' });
+  } catch (err) {
+    console.error('Failed to save invoice:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+*/}
+
+
+
 app.get('/api/people-with-signed-properties', async (req, res) => {
   try {
     const result = await pool.query(`
