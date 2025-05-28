@@ -45,7 +45,7 @@ app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices
 // ------------------------------
 // invoice
 // ------------------------------
-
+{/*
 
 app.get('/api/invoice/:id/download', async (req, res) => {
   const { id } = req.params;
@@ -80,7 +80,7 @@ app.get('/api/invoice/:id/download', async (req, res) => {
     res.status(500).json({ error: 'Failed to create invoice PDF' });
   }
 });
-
+*/}
 app.post('/api/invoice', async (req, res) => {
   const {
     organisation_name,
@@ -182,7 +182,8 @@ app.get('/api/people-with-signed-properties', async (req, res) => {
         pr.landlord_second_line_address,
         pr.landlord_city,
         pr.landlord_county,
-        pr.landlord_post_code_address
+        pr.landlord_post_code_address,
+        pr.donation_due
       FROM people p
       JOIN person_property pp ON p.id = pp.person_id
       JOIN propertiies pr ON pp.property_id = pr.id

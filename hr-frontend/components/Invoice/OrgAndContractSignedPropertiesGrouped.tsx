@@ -151,6 +151,7 @@ type PersonWithContractSignedProperty = {
   landlord_city: string;
   landlord_county: string;
   landlord_post_code_address: string;
+  donation_due:string;
 };
 
 type GroupedData = {
@@ -200,35 +201,61 @@ const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: 
   setDownloadLinks((links) => ({ ...links, [`${prop.person_id}-${prop.property_id}`]: "" }));
 
   // Construct invoice data for backend
-  const invoiceData = {
-    to_name: prop.landlord_name,
-    to_address: [
+
+const invoiceData = {
+  landlord_name: prop.landlord_name,
+  landlord_floor_number: prop.landlord_floor_number,
+  landlord_first_line_address: prop.landlord_first_line_address,
+  landlord_second_line_address: prop.landlord_second_line_address,
+  landlord_city: prop.landlord_city,
+  landlord_county: prop.landlord_county,
+  landlord_post_code_address: prop.landlord_post_code_address,
+  invoice_no: `SC${String(Date.now()).slice(-8)}`, // or as needed
+  invoice_date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+  property_floor: prop.property_floor,
+  property_first_line_address: prop.property_first_line_address,
+  property_second_line_address: prop.property_second_line_address,
+  city: prop.city,
+  property_county: prop.property_county,
+  country: prop.country,
+  post_code: prop.post_code,
+  rent_period: "July 2025", // or dynamic
+  landlord_contribution: (Number(prop.donation_due) + 1).toFixed(2),
+  donation_due: prop.donation_due,
+  total: (2 * Number(prop.donation_due) + 1).toFixed(2),
+  remit_date: "27th January 2025"
+};
+
+  {/*const invoiceData = {
+    landlord_name: prop.landlord_name,
+    landlord_address: [
       prop.landlord_floor_number,
       prop.landlord_first_line_address,
       prop.landlord_second_line_address,
-      prop.landlord_city,
+      prop.landlord_county,
       prop.landlord_post_code_address
     ].filter(Boolean).join(", "),
-    invoice_no: `INV-${Date.now()}`, // Or generate per your needs
-    invoice_date: new Date().toLocaleDateString(),
+    invoice_no:`INV-${Date.now()}`, // Or dynamic if needed
+    invoice_date:new Date().toLocaleDateString(), // Or dynamic
     property_address: [
       prop.property_floor,
       prop.property_first_line_address,
       prop.property_second_line_address,
+      prop.property_county,
       prop.city,
-      prop.post_code,
-      prop.country
+      prop.country,
+      prop.post_code
     ].filter(Boolean).join(", "),
     rent_period: "July 2025",
     tenant_rent: "1.00",
-    landlord_contribution: "2839.72",
-    total_donation: "2838.72",
-    total: "2838.72",
+    landlord_contribution: (parseFloat(prop.donation_due) + 1).toFixed(2), // donation_due + 1
+    total_donation: prop.donation_due,
+    total: (2 * parseFloat(prop.donation_due) + 1).toFixed(2), // 2*donation_due+1
     account_name: "Humanitarian Operations",
     sort_code: "20-57-76",
     account_no: "40632546",
     remit_date: "27th January 2025"
-  };
+  };*/}
 
   try {
     const response = await fetch("http://localhost:5000/api/invoices/create", {
@@ -292,6 +319,7 @@ const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: 
                         {prop.landlord_first_line_address},{" "}
                         {prop.landlord_second_line_address},{" "}
                         {prop.landlord_city}, {prop.landlord_post_code_address}
+                        {prop.donation_due}
                       </p>
                       {/* Create Invoice Button */}
                         <button
