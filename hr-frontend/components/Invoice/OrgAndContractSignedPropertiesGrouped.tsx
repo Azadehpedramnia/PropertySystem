@@ -126,7 +126,7 @@ export default function PeopleWithSignedPropertiesGrouped() {
 }
  */}
 
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type PersonWithContractSignedProperty = {
   person_id: number;
@@ -162,9 +162,7 @@ type GroupedData = {
 export default function PeopleWithSignedPropertiesGrouped() {
   const [grouped, setGrouped] = useState<GroupedData>({});
 
-  //Download invoice
-  const [loading, setLoading] = useState(false);
-  const [downloadLink, setDownloadLink] = useState<string | null>(null);
+ 
   
 
   useEffect(() => {
@@ -193,11 +191,69 @@ export default function PeopleWithSignedPropertiesGrouped() {
       .catch((err) => console.error("Failed to fetch:", err));
   }, []);
 
+///invoice
+const [loadingIdx, setLoadingIdx] = useState<string | null>(null);
+const [downloadLinks, setDownloadLinks] = useState<{ [key: string]: string }>({});
+
+const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: number) => {
+  setLoadingIdx(`${prop.person_id}-${prop.property_id}`);
+  setDownloadLinks((links) => ({ ...links, [`${prop.person_id}-${prop.property_id}`]: "" }));
+
+  // Construct invoice data for backend
+  const invoiceData = {
+    to_name: prop.landlord_name,
+    to_address: [
+      prop.landlord_floor_number,
+      prop.landlord_first_line_address,
+      prop.landlord_second_line_address,
+      prop.landlord_city,
+      prop.landlord_post_code_address
+    ].filter(Boolean).join(", "),
+    invoice_no: `INV-${Date.now()}`, // Or generate per your needs
+    invoice_date: new Date().toLocaleDateString(),
+    property_address: [
+      prop.property_floor,
+      prop.property_first_line_address,
+      prop.property_second_line_address,
+      prop.city,
+      prop.post_code,
+      prop.country
+    ].filter(Boolean).join(", "),
+    rent_period: "July 2025",
+    tenant_rent: "1.00",
+    landlord_contribution: "2839.72",
+    total_donation: "2838.72",
+    total: "2838.72",
+    account_name: "Humanitarian Operations",
+    sort_code: "20-57-76",
+    account_no: "40632546",
+    remit_date: "27th January 2025"
+  };
+
+  try {
+    const response = await fetch("http://localhost:5000/api/invoices/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(invoiceData)
+    });
+    if (!response.ok) throw new Error("Failed to generate invoice.");
+    const data = await response.json();
+    setDownloadLinks((links) => ({
+      ...links,
+      [`${prop.person_id}-${prop.property_id}`]: `http://localhost:5000/public/invoices/${data.fileName}`
+    }));
+  } catch (error) {
+    alert("Invoice creation failed");
+  }
+  setLoadingIdx(null);
+};
+
+
+///end of invoice things
   return (
     <div style={{ padding: 20 }}>
       <h1>Invoice</h1>
        <p>you can create invoice file for each property in this page</p>
-
       {Object.entries(grouped).map(([org, landlords]) => (
         <details key={org} style={{ marginBottom: 10 }}>
           <summary>
@@ -238,88 +294,27 @@ export default function PeopleWithSignedPropertiesGrouped() {
                         {prop.landlord_city}, {prop.landlord_post_code_address}
                       </p>
                       {/* Create Invoice Button */}
-                      {downloadLink ? (
-                        <p>
-                          ✅ Invoice ready:{" "}
-                          <a
-                            href={`http://localhost:5000/invoices/${downloadLink}`}
-                            download
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Download Invoice
-                          </a>
-                        </p>
-                      ) : (
                         <button
-                          onClick={async () => {
-                            setLoading(true);
-
-                            const propertyAddress = `${prop.property_floor}, ${prop.property_first_line_address}, ${prop.property_second_line_address}, ${prop.city}, ${prop.post_code}, ${prop.country}`;
-
-                            const response = await fetch("http://localhost:5000/api/invoices/create", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                organisation_name: prop.organisation,
-                                organisation_email: prop.organisation_email,
-                                landlord_name: prop.landlord_name,
-                                property_address: propertyAddress,
-                                total_amount: 2838.72, // Replace with dynamic value if needed
-                              }),
-                            });
-
-                            const data = await response.json();
-                            setDownloadLink(data.fileName);
-                            setLoading(false);
-                          }}
-                          disabled={loading}
-                        >
-                          {loading ? "Creating..." : "Create Invoice"}
-                        </button>
-                      )}
+                            className="btn btn-primary"
+                            disabled={loadingIdx === `${prop.person_id}-${prop.property_id}`}
+                            onClick={() => handleCreateInvoice(prop, idx)}
+                          >
+                            {loadingIdx === `${prop.person_id}-${prop.property_id}` ? "Creating..." : "Create Invoice"}
+                          </button>
+                          {downloadLinks[`${prop.person_id}-${prop.property_id}`] && (
+                            <a
+                              href={downloadLinks[`${prop.person_id}-${prop.property_id}`]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 10 }}
+                              download
+                            >
+                              Download Invoice PDF
+                            </a>
+                          )}
 
                       {/**/}
 
-                      {downloadLink ? (
-                        <p>
-                          ✅ <a href={`http://localhost:5000/invoices/${downloadLink}`} target="_blank" download>Download Invoice</a>
-                        </p>
-                      ) : (
-                        <button
-                          disabled={loading}
-                          onClick={async () => {
-                            setLoading(true);
-                            const propertyAddress = `${prop.property_floor}, ${prop.property_first_line_address}, ${prop.property_second_line_address}, ${prop.city}, ${prop.post_code}, ${prop.country}`;
-
-                            try {
-                              const response = await fetch("http://localhost:5000/api/invoices/create", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  organisation_name: prop.organisation,
-                                  organisation_email: prop.organisation_email,
-                                  landlord_name: prop.landlord_name,
-                                  property_address: propertyAddress,
-                                  total_amount: 2838.72, // Update with real amount if you have it
-                                }),
-                              });
-
-                              const data = await response.json();
-                              if (data.fileName) {
-                                setDownloadLink(data.fileName);
-                              }
-                            } catch (err) {
-                              console.error("Failed to create invoice:", err);
-                              alert("Invoice generation failed");
-                            }
-
-                            setLoading(false);
-                          }}
-                        >
-                          {loading ? "Creating Invoice..." : "Create Invoice"}
-                        </button>
-                      )}
                       
                     </div>
                   ))}

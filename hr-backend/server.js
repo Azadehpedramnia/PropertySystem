@@ -21,12 +21,13 @@ app.use('/api/media', mediaRoutes);
 
 ///for saving creating invoice
 //const invoiceController = require('./controllers/invoice.controller');
-// POST /api/invoices/create
+ //POST /api/invoices/create
 //app.post('/api/invoices/create', invoiceController.createInvoice);
 
-//invoice fake:
+//invoice :
 const path = require('path');
-app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
+//app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
+
 
 
 
@@ -36,8 +37,10 @@ const puppeteer = require('puppeteer'); // 👈 Add this
 const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); // 👈 Add this too
 
 
+const invoiceController = require('./controllers/invoice.controller');
+app.post('/api/invoices/create', invoiceController.createInvoice);
 
-
+app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
 
 // ------------------------------
 // invoice

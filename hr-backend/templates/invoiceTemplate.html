@@ -1,12 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head><title>Test Invoice</title></head>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 794px;
+      height: 1123px;
+      background: url('file:///{{bg_absolute_path}}') no-repeat center top;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    .content {
+      position: absolute;
+      top: 190px;
+      left: 40px;
+      right: 40px;
+      width: 714px;
+    }
+    .invoice-header { font-size: 20px; font-weight: bold; }
+    .invoice-table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+    .invoice-table th, .invoice-table td { border: 1px solid #000; padding: 8px; text-align: left; }
+    .totals-row { font-weight: bold; }
+    .bank-details, .terms { margin-top: 32px; font-size: 14px; }
+    .terms { font-weight: bold; text-align: center; }
+  </style>
+</head>
 <body>
-  <h1>Invoice for {{organisation_name}}</h1>
-  <p>Email: {{organisation_email}}</p>
-  <p>Landlord: {{landlord_name}}</p>
-  <p>Address: {{property_address}}</p>
-  <p>Total: £{{total_amount}}</p>
+  <div class="content">
+    <div>
+      <div><b>INVOICE TO:</b> {{to_name}}</div>
+      <div>{{to_address}}</div>
+    </div>
+    <div style="float:right;text-align:right;">
+      <div>Invoice No: {{invoice_no}}</div>
+      <div>Invoice Date: {{invoice_date}}</div>
+    </div>
+    <div style="clear:both;"></div>
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>PROPERTY ADDRESS</th>
+          <th>RENT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{property_address}}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Rent Payable by the Tenant ({{rent_period}})</td>
+          <td>£{{tenant_rent}}</td>
+        </tr>
+        <tr>
+          <td>Cost Contribution Payable by the Landlord</td>
+          <td>£{{landlord_contribution}}</td>
+        </tr>
+        <tr>
+          <td>Total Donation Payable by the Landlord to the Tenant</td>
+          <td>£{{total_donation}}</td>
+        </tr>
+        <tr class="totals-row">
+          <td style="text-align:right;">TOTAL</td>
+          <td style="color:#1A73E8;">£{{total}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="bank-details">
+      <b>BANK DETAILS:</b><br>
+      Name of the Account: {{account_name}}<br>
+      Sort Code: {{sort_code}}<br>
+      Account No: {{account_no}}
+    </div>
+    <div class="terms">
+      TERMS & CONDITIONS:<br>
+      Please remit payment by <b>{{remit_date}}</b>. Thank you so much!
+    </div>
+  </div>
 </body>
 </html>
-

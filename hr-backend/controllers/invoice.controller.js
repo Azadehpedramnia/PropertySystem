@@ -38,6 +38,8 @@ exports.createInvoice = async (req, res) => {
   }
 };
 */}
+
+{/*}
 const generatePDF = require('../utils/generatePDFWithPuppeteer');
 
 const createInvoiceHandler = async (req, res) => {
@@ -58,5 +60,42 @@ const createInvoiceHandler = async (req, res) => {
   } catch (err) {
     console.error('Error:', err);
     res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+*/}
+const fs = require('fs');
+
+const path = require('path');
+const bgAbsolutePath = path.resolve(__dirname, '../templates/invoiceTemplate.png');
+const generateInvoiceHTML = require('../utils/generateInvoiceHTML');
+const generatePDF = require('../utils/generatePDFWithPuppeteer');
+
+
+exports.createInvoice = async (req, res) => {
+  try {
+    // 1. Gather invoice data from request
+    const invoiceData = req.body;
+
+    // 2. Set the absolute path for the PNG
+    const bgAbsolutePath = path.resolve(__dirname, '../templates/invoiceTemplate.png');
+    // When you prepare your invoiceData:
+    invoiceData.bg_absolute_path = bgAbsolutePath;
+    // 3. Generate the HTML with data
+    const html = generateInvoiceHTML(invoiceData);
+
+    // 4. Generate PDF path (invoices/INV-xxx.pdf)
+    const outputDir = path.resolve(__dirname, '../public/invoices');
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    const fileName = `INV-${Date.now()}.pdf`;
+    const outputPath = path.join(outputDir, fileName);
+
+    // 5. Render PDF
+    await generatePDF(html, outputPath);
+
+    // 6. Respond with the file path (or send/download/email)
+    res.json({ filePath: `/public/invoices/${fileName}`, fileName });
+  } catch (err) {
+    console.error('Error generating invoice:', err);
+    res.status(500).json({ error: 'Failed to generate invoice.' });
   }
 };
