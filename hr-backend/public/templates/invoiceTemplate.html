@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-image: url("{{bg_absolute_path}}");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 18px; /* or 16px depending on match */
+      text-transform: uppercase;
+    }
+    .header-box {
+      margin: 40px 40px 0 40px;
+      padding: 30px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      box-shadow: 2px 2px 16px #ccc;
+      display: flex;
+      justify-content: space-between;
+    }
+    .address-info { width: 50%; }
+    .invoice-info { width: 45%; text-align: right;}
+    .property-section {
+      margin: 30px 40px;
+      background: rgba(255,255,255,0.97);
+      border-radius: 20px;
+       box-shadow: 2px 2px 16px #ccc;
+      padding: 30px;
+    }
+    .property-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .property-table th, .property-table td {
+      border: none;
+      padding: 15px 14px;
+    }
+    .total-row { font-weight: bold; color: #3857a2; font-size: 22px; }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .left {text-align:left;}
+    .bank-details { margin-top: 28px; font-size: 16px; }
+    .bank-details b { font-weight: 700;}
+    .terms { font-weight: bold; text-align: center; }
+  </style>
+</head>
+<body>
+  <!-- HEADER BOX -->
+  <div class="header-box">
+    <div class="address-info">
+      <div>INVOICE TO:</div>
+      <div style="font-weight: bold; font-size: 18px; margin: 10px 0px">{{landlord_name}}</div>
+      <div>{{landlord_floor_number}}, {{landlord_first_line_address}},<br>
+      {{landlord_second_line_address}}, {{landlord_city}},<br>
+      {{landlord_county}}, {{landlord_post_code_address}}</div>
+    </div>
+    <div class="invoice-info">
+      <div><b>Invoice No:</b> {{invoice_no}}</div>
+      <div><b>Invoice Date:</b> {{invoice_date}}</div>
+    </div>
+  </div>
+
+  <!-- PROPERTY SECTION -->
+  <div class="property-section">
+    <table class="property-table">
+      <tr>
+        <th class="left">PROPERTY ADDRESS</th>
+        <th class="center">RENT</th>
+      </tr>
+      <tr>
+         <td style="
+        border-top: 2px solid #222;    
+        letter-spacing: 0.5px;
+        border-right: 2px solid #222;
+      ">
+          {{property_floor}}, {{property_first_line_address}},
+          {{property_second_line_address}}, {{city}}
+          {{property_county}}, {{country}}, {{post_code}}
+        </td>
+        <td style="
+        border-top: 2px solid #222;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+      "></td>
+      </tr>
+      <tr>
+        <td  style="
+        border-top: 1px solid #dee2e6; 
+        border-right: 2px solid #222;   
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+      ">Rent Payable by the Tenant ({{rent_period}})</td>
+        <td style="
+        border-top: 1px solid #dee2e6;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+      " class="right">£1.00</td>
+      </tr>
+      <tr>
+        <td style="
+        border-top: 1px solid #dee2e6;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+        border-right: 2px solid #222;
+      ">Cost Contribution Payable by the Landlord</td>
+        <td  style="
+        border-top: 1px solid #dee2e6;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+      " class="right">£{{landlord_contribution}}</td>
+      </tr>
+      <tr>
+        <td style="
+        border-top: 1px solid #dee2e6;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+        border-right: 2px solid #222;
+      ">Total Donation Payable by the Landlord to the Tenant</td>
+        <td  style="
+        border-top: 1px solid #dee2e6;    
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+      " class="right">£{{donation_due}}</td>
+      </tr>
+      <tr class="total-row right">
+        <td style="
+        border-top: 2px solid #222;    
+        border-bottom: 2px solid #222;
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+        text-align: right;
+        border-right: 2px solid #222;
+      ">TOTAL</td>
+        <td style="
+        border-top: 2px solid #222;    
+        border-bottom: 2px solid #222;
+        letter-spacing: 0.5px;
+        padding: 14px 10px 14px 15px;
+        text-align: right;
+      "class="right" >£{{total}}</td>
+      </tr>
+    </table>
+    
+
+    <!-- BANK DETAILS -->
+
+    <!-- BANK DETAILS: 2-column layout, matches Figma style -->
+    <table style="
+      width: 430px; 
+      margin-top: 36px;
+      margin-bottom: 8px;
+      border-radius: 13px;
+      font-size: 17px;
+      border-collapse: separate;
+      border-spacing: 0;
+    ">
+      <tr>
+        <td colspan="2" style="font-weight: bold; padding: 13px 20px 15px 0px; font-size: 19px;">
+          BANK DETAILS:
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 4px 50px 4px 0px; font-weight: 500; min-width: 160px;">Name of the Account:</td>
+        <td style="padding: 4px 20px 4px 0;">Humanitarian Operations</td>
+      </tr>
+      <tr>
+        <td style="padding: 4px 0 4px 0px; font-weight: 500;">Sort Code:</td>
+        <td style="padding: 4px 20px 4px 0;">20-57-76</td>
+      </tr>
+      <tr>
+        <td style="padding: 4px 0 13px 0px; font-weight: 500;">Account No:</td>
+        <td style="padding: 4px 20px 13px 0;">40632546</td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div class="terms">
+      TERMS & CONDITIONS:<br>
+      Please remit payment by <b>{{remit_date}}</b>. Thank you so much!
+  </div>
+
+
+</body>
+</html>
