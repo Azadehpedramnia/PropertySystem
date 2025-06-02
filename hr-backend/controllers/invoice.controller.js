@@ -66,7 +66,7 @@ const createInvoiceHandler = async (req, res) => {
 const fs = require('fs');
 
 const path = require('path');
-const bgAbsolutePath = path.resolve(__dirname, '../templates/invoiceTemplate.png');
+const bgAbsolutePath = path.resolve(__dirname, '../public/templates/invoiceTemplate.png');
 const generateInvoiceHTML = require('../utils/generateInvoiceHTML');
 const generatePDF = require('../utils/generatePDFWithPuppeteer');
 
@@ -77,11 +77,14 @@ exports.createInvoice = async (req, res) => {
     const invoiceData = req.body;
 
     // 2. Set the absolute path for the PNG
-    const bgAbsolutePath = path.resolve(__dirname, '../templates/invoiceTemplate.png');
-    // When you prepare your invoiceData:
-    invoiceData.bg_absolute_path = bgAbsolutePath;
-    // 3. Generate the HTML with data
+    const rawPath = path.resolve(__dirname, '../public/templates/invoiceTemplate.png');
+    const base64Png = fs.readFileSync(rawPath).toString('base64');
+    invoiceData.bg_absolute_path = `data:image/png;base64,${base64Png}`;
+
+
+       // 3. Generate the HTML with data
     const html = generateInvoiceHTML(invoiceData);
+
 
     // 4. Generate PDF path (invoices/INV-xxx.pdf)
     const outputDir = path.resolve(__dirname, '../public/invoices');
