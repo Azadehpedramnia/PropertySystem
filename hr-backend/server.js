@@ -33,8 +33,8 @@ const path = require('path');
 
 
 
-const puppeteer = require('puppeteer'); // 👈 Add this
-const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); // 👈 Add this too
+const puppeteer = require('puppeteer'); // 
+const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); // 
 
 
 const invoiceController = require('./controllers/invoice.controller');
@@ -45,42 +45,129 @@ app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices
 // ------------------------------
 // invoice
 // ------------------------------
-{/*
+const { generateInvoiceNo, generateInvoiceDate, generateRemitDate } = require('./utils/invoiceUtils');
+// services/invoiceService.js
 
-app.get('/api/invoice/:id/download', async (req, res) => {
-  const { id } = req.params;
+
+
+async function getNextInvoiceNo(country) {
+  const prefix = (country.trim().toUpperCase().slice(0,2) + 'O');
+  const searchPrefix = prefix + '-';
+  const result = await pool.query(
+    `SELECT invoice_no FROM invoice WHERE invoice_no LIKE $1 ORDER BY id DESC LIMIT 1`,
+    [`${searchPrefix}%`]
+  );
+  let lastNumber = 508;
+  if (result.rows.length) {
+    const lastInvoiceNo = result.rows[0].invoice_no;
+    const numPart = parseInt(lastInvoiceNo.split('-')[1]);
+    if (!isNaN(numPart)) lastNumber = numPart;
+  }
+  return generateInvoiceNo(country, lastNumber);
+}
+
+module.exports = { getNextInvoiceNo };
+
+
+
+app.post('/api/invoice', async (req, res) => {
+  const {
+    organisation_name,
+    organisation_email,
+    landlord_name,
+    property_address,
+    total_amount,
+    pdf_filename,
+    // maybe country, or extract it from address
+  } = req.body;
+
+  // Assume you get country from property_address or another field
+  const country = 'SC'; // replace this with your logic to get country
+
+  // 1. Get a unique invoice_no
+  const invoice_no = await getNextInvoiceNo(country);
+
+  // 2. Continue as before
+  const invoice_date = generateInvoiceDate();
+  const remit_date = generateRemitDate();
+  const is_paid = false;
 
   try {
-    // 1. Fetch invoice data from the database
-    const result = await pool.query('SELECT * FROM invoice WHERE id = $1', [id]);
-    const invoiceData = result.rows[0];
+    await pool.query(
+      `INSERT INTO invoice 
+      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        organisation_name,
+        organisation_email,
+        landlord_name,
+        property_address,
+        total_amount,
+        pdf_filename,
+        invoice_no,
+        remit_date,
+        invoice_date,
+        is_paid
+      ]
+    );
 
-    if (!invoiceData) {
-      return res.status(404).json({ error: 'Invoice not found' });
-    }
-
-    // 2. Generate HTML content using Handlebars
-    const html = await generateInvoiceHTML(invoiceData);
-
-    // 3. Launch Puppeteer and render PDF
-    const browser = await puppeteer.launch({ headless: 'new' });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
-    await browser.close();
-
-    // 4. Send PDF to user
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=${invoiceData.pdf_filename}`);
-    res.send(pdfBuffer);
+    res.status(200).json({ message: 'Invoice saved', invoice_no });
   } catch (err) {
-    console.error('Error creating invoice PDF:', err.stack || err.message || err);
+    console.error('Failed to save invoice:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-    res.status(500).json({ error: 'Failed to create invoice PDF' });
+{/*
+app.post('/api/invoice', async (req, res) => {
+  const {
+    organisation_name,
+    organisation_email,
+    landlord_name,
+    property_address,
+    total_amount,
+    pdf_filename,
+    // Optionally, is_paid (but usually this is set to false by default)
+  } = req.body;
+
+  // Generate your backend-only fields:
+  const invoice_no = generateInvoiceNo(/* pass country or other needed info here, or adjust logic );
+  const invoice_date = generateInvoiceDate();
+  const remit_date = generateRemitDate();
+  const is_paid = false; // or from req.body if you want to allow setting
+
+  try {
+    await pool.query(
+      `INSERT INTO invoice 
+      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        organisation_name,
+        organisation_email,
+        landlord_name,
+        property_address,
+        total_amount,
+        pdf_filename,
+        invoice_no,
+        remit_date,
+        invoice_date,
+        is_paid
+      ]
+    );
+
+    res.status(200).json({ message: 'Invoice saved', invoice_no });
+  } catch (err) {
+    console.error('Failed to save invoice:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 */}
+
+
+
+
+{/* 
+
 app.post('/api/invoice', async (req, res) => {
   const {
     organisation_name,
@@ -106,53 +193,6 @@ app.post('/api/invoice', async (req, res) => {
   }
 });
 
-// GET /api/invoices?person_id=1 or ?property_id=12
-{/*}
-app.get('/api/invoices', async (req, res) => {
-  const { person_id, property_id } = req.query;
-  let condition = "";
-  let params = [];
-
-  if (person_id) {
-    condition = "WHERE person_id = $1";
-    params.push(person_id);
-  } else if (property_id) {
-    condition = "WHERE property_id = $1";
-    params.push(property_id);
-  }
-
-  const result = await pool.query(`
-    SELECT * FROM invoices ${condition}
-    ORDER BY created_at DESC
-  `, params);
-
-  res.json(result.rows);
-});*/}
-{/*
-app.post('/api/invoices', async (req, res) => {
-  const {
-    organisation_name,
-    organisation_email,
-    landlord_name,
-    property_address,
-    total_amount,
-    pdf_filename,
-  } = req.body;
-
-  try {
-    await pool.query(
-      `INSERT INTO invoices 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename) 
-      VALUES ($1, $2, $3, $4, $5, $6)`,
-      [organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename]
-    );
-
-    res.status(200).json({ message: 'Invoice saved' });
-  } catch (err) {
-    console.error('Failed to save invoice:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 */}
 
 
