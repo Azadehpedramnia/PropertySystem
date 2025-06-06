@@ -196,6 +196,8 @@ export default function PeopleWithSignedPropertiesGrouped() {
 const [loadingIdx, setLoadingIdx] = useState<string | null>(null);
 const [downloadLinks, setDownloadLinks] = useState<{ [key: string]: string }>({});
 
+
+
 const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: number) => {
   setLoadingIdx(`${prop.person_id}-${prop.property_id}`);
   setDownloadLinks((links) => ({ ...links, [`${prop.person_id}-${prop.property_id}`]: "" }));
@@ -210,8 +212,8 @@ const invoiceData = {
   landlord_city: prop.landlord_city,
   landlord_county: prop.landlord_county,
   landlord_post_code_address: prop.landlord_post_code_address,
-  invoice_no: `SC${String(Date.now()).slice(-8)}`, // or as needed
-  invoice_date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+  //invoice_no: `SC${String(Date.now()).slice(-8)}`, // or as needed
+  //invoice_date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
   property_floor: prop.property_floor,
   property_first_line_address: prop.property_first_line_address,
   property_second_line_address: prop.property_second_line_address,
@@ -225,37 +227,6 @@ const invoiceData = {
   total: (2 * Number(prop.donation_due) + 1).toFixed(2),
   remit_date: "27th January 2025"
 };
-
-  {/*const invoiceData = {
-    landlord_name: prop.landlord_name,
-    landlord_address: [
-      prop.landlord_floor_number,
-      prop.landlord_first_line_address,
-      prop.landlord_second_line_address,
-      prop.landlord_county,
-      prop.landlord_post_code_address
-    ].filter(Boolean).join(", "),
-    invoice_no:`INV-${Date.now()}`, // Or dynamic if needed
-    invoice_date:new Date().toLocaleDateString(), // Or dynamic
-    property_address: [
-      prop.property_floor,
-      prop.property_first_line_address,
-      prop.property_second_line_address,
-      prop.property_county,
-      prop.city,
-      prop.country,
-      prop.post_code
-    ].filter(Boolean).join(", "),
-    rent_period: "July 2025",
-    tenant_rent: "1.00",
-    landlord_contribution: (parseFloat(prop.donation_due) + 1).toFixed(2), // donation_due + 1
-    total_donation: prop.donation_due,
-    total: (2 * parseFloat(prop.donation_due) + 1).toFixed(2), // 2*donation_due+1
-    account_name: "Humanitarian Operations",
-    sort_code: "20-57-76",
-    account_no: "40632546",
-    remit_date: "27th January 2025"
-  };*/}
 
   try {
     const response = await fetch("http://localhost:5000/api/invoices/create", {
@@ -303,24 +274,15 @@ const invoiceData = {
                         borderRadius: 5,
                       }}
                     >
-                      <p>
-                        <strong>Employee:</strong> {prop.name} ({prop.role}) -{" "}
-                        {prop.email}
-                      </p>
+                
                       <p>
                         <strong>Property Address:</strong>{" "}
                         {prop.property_floor}, {prop.property_first_line_address},{" "}
                         {prop.property_second_line_address}, {prop.city},{" "}
                         {prop.post_code}, {prop.country}
                       </p>
-                      <p>
-                        <strong>Landlord Address:</strong>{" "}
-                        {prop.landlord_floor_number},{" "}
-                        {prop.landlord_first_line_address},{" "}
-                        {prop.landlord_second_line_address},{" "}
-                        {prop.landlord_city}, {prop.landlord_post_code_address}
-                        {prop.donation_due}
-                      </p>
+                      {/* 
+                
                       {/* Create Invoice Button */}
                         <button
                             className="btn btn-primary"
@@ -341,9 +303,6 @@ const invoiceData = {
                             </a>
                           )}
 
-                      {/**/}
-
-                      
                     </div>
                   ))}
                 </div>
