@@ -26,7 +26,7 @@
       justify-content: space-between;
     }
     .address-info { width: 50%; }
-    .invoice-info { width: 45%; text-align: right;}
+    .invoice-info { width: 45%; text-align: right; style="line-height: 1.2;"}
     .property-section {
       margin: 30px 40px;
       background: rgba(255,255,255,0.65);
@@ -45,7 +45,10 @@
     .left {text-align:left;}
     .bank-details { margin-top: 28px; font-size: 16px; }
     .bank-details b { font-weight: 700;}
-    .terms { font-weight: bold; text-align: center; }
+    .terms-title { font-weight: bold; text-align: center; font-size: 20px;}
+    .terms { text-align: center;line-height: 1.5;  }
+
+
   </style>
 </head>
 <body>
@@ -55,13 +58,21 @@
       <div class="address-info">
         <div>INVOICE TO:</div>
         <div style="font-weight: bold; font-size: 18px; margin: 10px 0px">{{landlord_name}}</div>
-        <div>{{landlord_floor_number}}, {{landlord_first_line_address}},<br>
+        <div style="line-height: 1.2;">{{landlord_floor_number}}, {{landlord_first_line_address}},<br>
         {{landlord_second_line_address}}, {{landlord_city}},<br>
         {{landlord_county}}, {{landlord_post_code_address}}</div>
       </div>
       <div class="invoice-info">
-        <div><b>Invoice No:</b> {{invoice_no}}</div>
-        <div><b>Invoice Date:</b> {{invoice_date}}</div>
+        <div>
+          <span class=".right"><b>Invoice No:</b></span>
+          <span class=".left">{{invoice_no}}</span>
+        </div>
+        <div>
+          <span class=".right"><b>Invoice Date:</b></span>
+          <span class=".left"> {{invoice_date}}</span>
+        </div>
+        <!--<div style="padding:10px 0 0 0px;"><b>Invoice No:</b> {{invoice_no}}</div>
+        <div style="padding:10px 0 0 0px;"><b>Invoice Date:</b> {{invoice_date}}</div>-->
       </div>
     </div>
 
@@ -179,10 +190,12 @@
       </table>
     </div>
 
-    
+    <!-- Keep the Terms section outside the main white container -->
     <div class="terms">
-        TERMS & CONDITIONS:<br>
-        Please remit payment by <b>{{remit_date}}</b>. Thank you so much!
+      <span class="terms-title">TERMS &amp; CONDITIONS:<br></span>
+      <span>
+       Please remit payment by <b>{{remit_date}}</b>. Thank you so much!
+      </span>
     </div>
   </div>
 </body>

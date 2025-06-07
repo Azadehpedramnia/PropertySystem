@@ -225,7 +225,7 @@ const invoiceData = {
   landlord_contribution: (Number(prop.donation_due) + 1).toFixed(2),
   donation_due: prop.donation_due,
   total: (2 * Number(prop.donation_due) + 1).toFixed(2),
-  remit_date: "27th January 2025"
+  //remit_date: "27th January 2025"
 };
 
   try {

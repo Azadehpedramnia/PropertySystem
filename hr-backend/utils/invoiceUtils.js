@@ -1,15 +1,22 @@
 // utils/invoiceUtils.js
 
-// Generate a unique invoice number (example: SC20240606001)
-function generateInvoiceNo() {
-  const now = new Date();
-  // Example: SC + YYYYMMDD + random 3-digit
-  return 'SC' +
-    now.getFullYear().toString() +
-    String(now.getMonth() + 1).padStart(2, '0') +
-    String(now.getDate()).padStart(2, '0') +
-    String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+
+
+// Gets first two letters of country, uppercase, plus 'O' (e.g. "SCO")
+function getInvoicePrefix(country) {
+  if (!country) return 'XXO'; // fallback if country is missing
+  return country.trim().toUpperCase().slice(0,2) + 'O';
 }
+
+// Example function to generate the new invoice number
+// previousNumber is last used (e.g., 508)
+function generateInvoiceNo(country, previousNumber) {
+  const prefix = getInvoicePrefix(country);
+  const newNumber = (Number(previousNumber) || 508) + 1; // if none, start at 509
+  return `${prefix}-${newNumber}`;
+}
+
+
 
 // Format today's date in "06 June 2025" style
 function generateInvoiceDate() {
@@ -17,4 +24,17 @@ function generateInvoiceDate() {
   return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 }
 
-module.exports = { generateInvoiceNo, generateInvoiceDate };
+// Add this to utils/invoiceUtils.js
+
+function generateRemitDate() {
+  const now = new Date();
+  now.setDate(now.getDate() + 14); // 14 days after today
+  // Format as "27th January 2025"
+  return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+}
+
+module.exports = { 
+  generateInvoiceNo, 
+  generateInvoiceDate,
+  generateRemitDate,      
+};

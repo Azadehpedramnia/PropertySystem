@@ -40,15 +40,14 @@ const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); //
 const invoiceController = require('./controllers/invoice.controller');
 app.post('/api/invoices/create', invoiceController.createInvoice);
 
-app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
+//app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
 
 // ------------------------------
 // invoice
 // ------------------------------
 const { generateInvoiceNo, generateInvoiceDate, generateRemitDate } = require('./utils/invoiceUtils');
+
 // services/invoiceService.js
-
-
 
 async function getNextInvoiceNo(country) {
   const prefix = (country.trim().toUpperCase().slice(0,2) + 'O');
@@ -69,7 +68,6 @@ async function getNextInvoiceNo(country) {
 module.exports = { getNextInvoiceNo };
 
 
-
 app.post('/api/invoice', async (req, res) => {
   const {
     organisation_name,
@@ -78,14 +76,15 @@ app.post('/api/invoice', async (req, res) => {
     property_address,
     total_amount,
     pdf_filename,
+    country,
     // maybe country, or extract it from address
   } = req.body;
+ 
 
-  // Assume you get country from property_address or another field
-  const country = 'SC'; // replace this with your logic to get country
+let property_country = country; // default/fallback
 
   // 1. Get a unique invoice_no
-  const invoice_no = await getNextInvoiceNo(country);
+  const invoice_no = await getNextInvoiceNo(property_country);
 
   // 2. Continue as before
   const invoice_date = generateInvoiceDate();
@@ -95,8 +94,8 @@ app.post('/api/invoice', async (req, res) => {
   try {
     await pool.query(
       `INSERT INTO invoice 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid ,country) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
         organisation_name,
         organisation_email,
@@ -107,7 +106,8 @@ app.post('/api/invoice', async (req, res) => {
         invoice_no,
         remit_date,
         invoice_date,
-        is_paid
+        is_paid,
+        country,
       ]
     );
 
