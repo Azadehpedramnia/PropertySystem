@@ -19,28 +19,20 @@ const pool = new Pool({
 const mediaRoutes = require('./controllers/media.controller');
 app.use('/api/media', mediaRoutes);
 
-///for saving creating invoice
-//const invoiceController = require('./controllers/invoice.controller');
- //POST /api/invoices/create
-//app.post('/api/invoices/create', invoiceController.createInvoice);
 
 //invoice :
 const path = require('path');
-//app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
-
-
-
-
-
+//Imports the Puppeteer library and reads the invoiceTemplate.html
 const puppeteer = require('puppeteer'); // 
 const generateInvoiceHTML = require('./utils/generateInvoiceHTML'); // 
 
-
+//contains business logic for creating invoices 
 const invoiceController = require('./controllers/invoice.controller');
 app.post('/api/invoices/create', invoiceController.createInvoice);
 
-//app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
+//serves the resulting PDFs to the browser
+app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
 
 // ------------------------------
 // invoice
