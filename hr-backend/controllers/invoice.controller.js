@@ -1,68 +1,76 @@
-{/*const puppeteer = require('puppeteer');
+// controllers/invoice.controller.js
+
 const fs = require('fs');
 const path = require('path');
-const pool = require('../db');
+const generateInvoiceHTML = require('../utils/generateInvoiceHTML');
+const generatePDF = require('../utils/generatePDFWithPuppeteer');
+const { generateInvoiceNo, generateInvoiceDate, generateRemitDate, getNextInvoiceNo } = require('../utils/invoiceUtils');
+const pool = require('../db'); // adjust path if needed
 
 exports.createInvoice = async (req, res) => {
-  const { html, person_id, property_id } = req.body;
-
-  if (!html || !person_id || !property_id) {
-    return res.status(400).json({ error: 'Missing data in request' });
-  }
-
   try {
-    const browser = await puppeteer.launch({ headless: 'new' });
-    const page = await browser.newPage();
+    // 1. Gather invoice data from request
+    const invoiceData = {
+      ...req.body,
+      invoice_no: await getNextInvoiceNo(req.body.country), // Async!
+      invoice_date: generateInvoiceDate(),
+      remit_date: generateRemitDate()
+    };
 
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // 2. Set the absolute path for the PNG background (for PDF)
+    const rawPath = path.resolve(__dirname, '../public/templates/invoiceTemplate.png');
+    const base64Png = fs.readFileSync(rawPath).toString('base64');
+    invoiceData.bg_absolute_path = `data:image/png;base64,${base64Png}`;
 
-    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
-    await browser.close();
+    // 3. Generate the HTML for the invoice
+    const html = generateInvoiceHTML(invoiceData);
 
-    const invoiceId = `INV-${Date.now()}-${property_id}-${person_id}`;
-    const saveDir = path.join(__dirname, '..', 'public', 'invoices');
-    const savePath = path.join(saveDir, `${invoiceId}.pdf`);
+    // 4. Generate PDF and path
+    const invoiceIdentifier = String(invoiceData.invoice_no).replace(/[^\w\-]/g, '-'); 
+    const outputDir = path.resolve(__dirname, '../public/invoices');
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    //const fileName = `Rnc-${Date.now()}.pdf`;
+    const fileName = `INV-${invoiceIdentifier}.pdf`;
+    const outputPath = path.join(outputDir, fileName);
 
-    fs.mkdirSync(saveDir, { recursive: true });
-    fs.writeFileSync(savePath, pdfBuffer);
+    
+    // 5. Render PDF
+    await generatePDF(html, outputPath);
 
-    const result = await pool.query(`
-      INSERT INTO invoices (invoice_id, person_id, property_id, file_path)
-      VALUES ($1, $2, $3, $4) RETURNING *
-    `, [invoiceId, person_id, property_id, `/invoices/${invoiceId}.pdf`]);
-
-    res.status(200).json({ success: true, invoice: result.rows[0] });
-  } catch (err) {
-    console.error('Invoice generation error:', err);
-    res.status(500).json({ error: 'Failed to generate invoice', details: err.message });
-  }
-};
-*/}
-
-{/*}
-const generatePDF = require('../utils/generatePDFWithPuppeteer');
-
-const createInvoiceHandler = async (req, res) => {
-  const data = req.body;
-  const fileName = `invoice-${Date.now()}.pdf`;
-
-  try {
+    // 6. Save invoice info to database (adjust column names as needed!)
     await pool.query(
       `INSERT INTO invoice 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename) 
-      VALUES ($1, $2, $3, $4, $5, $6)`,
-      [data.organisation_name, data.organisation_email, data.landlord_name, data.property_address, data.total_amount, fileName]
+      (landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid, country) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [
+        invoiceData.landlord_name,
+        invoiceData.property_address,
+        invoiceData.total_amount,
+        fileName, // or outputPath if you want the path
+        invoiceData.invoice_no,
+        invoiceData.remit_date,
+        invoiceData.invoice_date,
+        false,
+        invoiceData.country,
+      ]
     );
 
-    const filePath = await generatePDF(data, fileName);
-
-    res.status(200).json({ message: 'Invoice saved and PDF generated', fileName, filePath });
+    // 7. Respond with PDF file info
+    res.json({ filePath: `/public/invoices/${fileName}`, fileName });
   } catch (err) {
-    console.error('Error:', err);
-    res.status(500).json({ error: 'Something went wrong' });
+    console.error('Error generating invoice:', err);
+    res.status(500).json({ error: 'Failed to generate invoice.' });
   }
 };
-*/}
+
+
+
+
+
+
+   
+
+{/*
 const fs = require('fs');
 
 const path = require('path');
@@ -77,8 +85,8 @@ exports.createInvoice = async (req, res) => {
     // 1. Gather invoice data from request
     const invoiceData = {
       ...req.body,
-      invoice_no: generateInvoiceNo(),     // from your utils
-      invoice_date: generateInvoiceDate(), // from your utils
+     // invoice_no: generateInvoiceNo(),     // from your utils
+      //invoice_date: generateInvoiceDate(), // from your utils
       remit_date :generateRemitDate()
     };
     
@@ -108,4 +116,7 @@ exports.createInvoice = async (req, res) => {
     console.error('Error generating invoice:', err);
     res.status(500).json({ error: 'Failed to generate invoice.' });
   }
-};
+};*/}
+
+
+
