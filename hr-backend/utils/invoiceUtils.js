@@ -1,5 +1,5 @@
 // utils/invoiceUtils.js
-
+const pool = require('../db');
 
 
 // Gets first two letters of country, uppercase, plus 'O' (e.g. "SCO")
@@ -17,7 +17,6 @@ function generateInvoiceNo(country, previousNumber) {
 }
 
 
-
 // Format today's date in "06 June 2025" style
 function generateInvoiceDate() {
   const now = new Date();
@@ -33,8 +32,26 @@ function generateRemitDate() {
   return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+
+async function getNextInvoiceNo(country) {
+  const prefix = (country.trim().toUpperCase().slice(0,2) + 'O');
+  const searchPrefix = prefix + '-';
+  const result = await pool.query(
+    `SELECT invoice_no FROM invoice WHERE invoice_no LIKE $1 ORDER BY id DESC LIMIT 1`,
+    [`${searchPrefix}%`]
+  );
+  let lastNumber = 508;
+  if (result.rows.length) {
+    const lastInvoiceNo = result.rows[0].invoice_no;
+    const numPart = parseInt(lastInvoiceNo.split('-')[1]);
+    if (!isNaN(numPart)) lastNumber = numPart;
+  }
+  return generateInvoiceNo(country, lastNumber);
+}
+
 module.exports = { 
   generateInvoiceNo, 
   generateInvoiceDate,
-  generateRemitDate,      
+  generateRemitDate,  
+  getNextInvoiceNo,    
 };

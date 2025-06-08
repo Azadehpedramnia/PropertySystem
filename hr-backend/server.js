@@ -37,10 +37,10 @@ app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices
 // ------------------------------
 // invoice
 // ------------------------------
-const { generateInvoiceNo, generateInvoiceDate, generateRemitDate } = require('./utils/invoiceUtils');
+const { generateInvoiceNo, generateInvoiceDate, generateRemitDate ,getNextInvoiceNo} = require('./utils/invoiceUtils');
 
 // services/invoiceService.js
-
+{/*
 async function getNextInvoiceNo(country) {
   const prefix = (country.trim().toUpperCase().slice(0,2) + 'O');
   const searchPrefix = prefix + '-';
@@ -58,7 +58,7 @@ async function getNextInvoiceNo(country) {
 }
 
 module.exports = { getNextInvoiceNo };
-
+*/}
 
 app.post('/api/invoice', async (req, res) => {
   const {
