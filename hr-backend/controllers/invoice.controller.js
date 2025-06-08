@@ -40,17 +40,18 @@ exports.createInvoice = async (req, res) => {
     // 6. Save invoice info to database (adjust column names as needed!)
     await pool.query(
       `INSERT INTO invoice 
-      (landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid, country) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      (landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid, property_id, country) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 )`,
       [
         invoiceData.landlord_name,
         invoiceData.property_address,
-        invoiceData.total_amount,
+        invoiceData.total,
         fileName, // or outputPath if you want the path
         invoiceData.invoice_no,
         invoiceData.remit_date,
         invoiceData.invoice_date,
         false,
+        invoiceData.property_id,
         invoiceData.country,
       ]
     );

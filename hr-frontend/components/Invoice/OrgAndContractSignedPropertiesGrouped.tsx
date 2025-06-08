@@ -205,7 +205,6 @@ const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: 
   // Construct invoice data for backend
 
 const invoiceData = {
-  property_id: prop.property_id,
   landlord_name: prop.landlord_name,
   landlord_floor_number: prop.landlord_floor_number,
   landlord_first_line_address: prop.landlord_first_line_address,
@@ -226,9 +225,11 @@ const invoiceData = {
   landlord_contribution: (Number(prop.donation_due) + 1).toFixed(2),
   donation_due: prop.donation_due,
   total: (2 * Number(prop.donation_due) + 1).toFixed(2),
+  property_id: prop.property_id,
   //remit_date: "27th January 2025"
 };
 
+//fetch URL
   try {
     const response = await fetch("http://localhost:5000/api/invoices/create", {
       method: "POST",
@@ -303,8 +304,8 @@ const invoiceData = {
                             >
                               Download Invoice PDF
                             </a>
+                            
                           )}
-
                     </div>
                   ))}
                 </div>
