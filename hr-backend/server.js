@@ -39,27 +39,6 @@ app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices
 // ------------------------------
 const { generateInvoiceNo, generateInvoiceDate, generateRemitDate ,getNextInvoiceNo} = require('./utils/invoiceUtils');
 
-// services/invoiceService.js
-{/*
-async function getNextInvoiceNo(country) {
-  const prefix = (country.trim().toUpperCase().slice(0,2) + 'O');
-  const searchPrefix = prefix + '-';
-  const result = await pool.query(
-    `SELECT invoice_no FROM invoice WHERE invoice_no LIKE $1 ORDER BY id DESC LIMIT 1`,
-    [`${searchPrefix}%`]
-  );
-  let lastNumber = 508;
-  if (result.rows.length) {
-    const lastInvoiceNo = result.rows[0].invoice_no;
-    const numPart = parseInt(lastInvoiceNo.split('-')[1]);
-    if (!isNaN(numPart)) lastNumber = numPart;
-  }
-  return generateInvoiceNo(country, lastNumber);
-}
-
-module.exports = { getNextInvoiceNo };
-*/}
-
 app.post('/api/invoice', async (req, res) => {
   const {
     landlord_name,
@@ -106,84 +85,9 @@ let property_country = country; // default/fallback
   }
 });
 
-{/*
-app.post('/api/invoice', async (req, res) => {
-  const {
-    organisation_name,
-    organisation_email,
-    landlord_name,
-    property_address,
-    total_amount,
-    pdf_filename,
-    // Optionally, is_paid (but usually this is set to false by default)
-  } = req.body;
-
-  // Generate your backend-only fields:
-  const invoice_no = generateInvoiceNo(/* pass country or other needed info here, or adjust logic );
-  const invoice_date = generateInvoiceDate();
-  const remit_date = generateRemitDate();
-  const is_paid = false; // or from req.body if you want to allow setting
-
-  try {
-    await pool.query(
-      `INSERT INTO invoice 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-      [
-        organisation_name,
-        organisation_email,
-        landlord_name,
-        property_address,
-        total_amount,
-        pdf_filename,
-        invoice_no,
-        remit_date,
-        invoice_date,
-        is_paid
-      ]
-    );
-
-    res.status(200).json({ message: 'Invoice saved', invoice_no });
-  } catch (err) {
-    console.error('Failed to save invoice:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-*/}
-
-
-
-
-{/* 
-
-app.post('/api/invoice', async (req, res) => {
-  const {
-    organisation_name,
-    organisation_email,
-    landlord_name,
-    property_address,
-    total_amount,
-    pdf_filename,
-  } = req.body;
-
-  try {
-    await pool.query(
-      `INSERT INTO invoice 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename) 
-      VALUES ($1, $2, $3, $4, $5, $6)`,
-      [organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename]
-    );
-
-    res.status(200).json({ message: 'Invoice saved' });
-  } catch (err) {
-    console.error('Failed to save invoice:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-*/}
-
-
+// ------------------------------
+// properties and organisations with signed contract
+// ------------------------------
 
 app.get('/api/people-with-signed-properties', async (req, res) => {
   try {
@@ -211,7 +115,8 @@ app.get('/api/people-with-signed-properties', async (req, res) => {
         pr.landlord_city,
         pr.landlord_county,
         pr.landlord_post_code_address,
-        pr.donation_due
+        pr.donation_due,
+        pr.start_date_of_lease
       FROM people p
       JOIN person_property pp ON p.id = pp.person_id
       JOIN propertiies pr ON pp.property_id = pr.id

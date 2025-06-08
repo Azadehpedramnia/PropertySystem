@@ -16,12 +16,14 @@ function generateInvoiceNo(country, previousNumber) {
   return `${prefix}-${newNumber}`;
 }
 
-
+{/*
 // Format today's date in "06 June 2025" style
 function generateInvoiceDate() {
   const now = new Date();
   return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 }
+*/}
+
 
 // Add this to utils/invoiceUtils.js
 
@@ -32,6 +34,8 @@ function generateRemitDate() {
   return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+
+//Invoice Number
 async function getNextInvoiceNo(country) {
   const prefix = getInvoicePrefix(country);
   let lastNumber = 508;
@@ -48,11 +52,47 @@ async function getNextInvoiceNo(country) {
 
   return `${prefix}-${lastNumber + 1}`;
 }
+//-------------------
+//Invoice Date
+//-------------------
+
+async function getNextInvoiceDate(propertyId) {
+  if (!propertyId) throw new Error("propertyId is required");
+
+  // Step 1: Check for the latest invoice date for this property
+  const result = await pool.query(
+    `SELECT invoice_date FROM invoice WHERE property_id = $1 ORDER BY id DESC LIMIT 1`,
+    [propertyId]
+  );
+
+  let baseDate;
+
+  if (result.rows.length === 0) {
+    // Step 2: No invoice exists → use start_date_of_lease
+    const leaseResult = await pool.query(
+      `SELECT start_date_of_lease FROM propertiies WHERE id = $1`,
+      [propertyId]
+    );
+
+    if (!leaseResult.rows.length) throw new Error("Property not found");
+
+    baseDate = new Date(leaseResult.rows[0].start_date_of_lease);
+  } else {
+    // Step 3: Invoices exist → get next month's first day
+    const lastInvoiceDate = new Date(result.rows[0].invoice_date);
+    baseDate = new Date(lastInvoiceDate.getFullYear(), lastInvoiceDate.getMonth() + 1, 1); // first day of next month
+  }
+
+  // Step 4: Format date as "01 July 2025"
+  return baseDate.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+}
+
 
 
 module.exports = { 
   generateInvoiceNo, 
-  generateInvoiceDate,
+  //generateInvoiceDate,
   generateRemitDate,  
   getNextInvoiceNo,    
+  getNextInvoiceDate,
 };

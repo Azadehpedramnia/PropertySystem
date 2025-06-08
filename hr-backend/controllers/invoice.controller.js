@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const generateInvoiceHTML = require('../utils/generateInvoiceHTML');
 const generatePDF = require('../utils/generatePDFWithPuppeteer');
-const { generateInvoiceNo, generateInvoiceDate, generateRemitDate, getNextInvoiceNo } = require('../utils/invoiceUtils');
+const { generateInvoiceNo, generateRemitDate, getNextInvoiceNo ,  getNextInvoiceDate} = require('../utils/invoiceUtils');
 const pool = require('../db'); // adjust path if needed
 
 exports.createInvoice = async (req, res) => {
@@ -13,9 +13,18 @@ exports.createInvoice = async (req, res) => {
     const invoiceData = {
       ...req.body,
       invoice_no: await getNextInvoiceNo(req.body.country), // Async!
-      invoice_date: generateInvoiceDate(),
-      remit_date: generateRemitDate()
+      property_id: req.body.property_id,  
+      //invoice_date: await getNextInvoiceDate(invoiceData.property_id),
+
+      //invoice_date: generateInvoiceDate(),
+      //remit_date: generateRemitDate()
     };
+
+    invoiceData.invoice_date = await getNextInvoiceDate(invoiceData.property_id);
+    invoiceData.remit_date = generateRemitDate();
+
+
+    
 
     // 2. Set the absolute path for the PNG background (for PDF)
     const rawPath = path.resolve(__dirname, '../public/templates/invoiceTemplate.png');
