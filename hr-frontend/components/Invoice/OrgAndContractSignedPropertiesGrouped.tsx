@@ -205,6 +205,7 @@ const handleCreateInvoice = async (prop: PersonWithContractSignedProperty, idx: 
   // Construct invoice data for backend
 
 const invoiceData = {
+  property_id: prop.property_id,
   landlord_name: prop.landlord_name,
   landlord_floor_number: prop.landlord_floor_number,
   landlord_first_line_address: prop.landlord_first_line_address,
@@ -245,6 +246,7 @@ const invoiceData = {
   }
   setLoadingIdx(null);
 };
+
 
 
 ///end of invoice things
