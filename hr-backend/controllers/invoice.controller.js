@@ -14,14 +14,11 @@ exports.createInvoice = async (req, res) => {
       ...req.body,
       invoice_no: await getNextInvoiceNo(req.body.country), // Async!
       property_id: req.body.property_id,  
-      //invoice_date: await getNextInvoiceDate(invoiceData.property_id),
-
-      //invoice_date: generateInvoiceDate(),
-      //remit_date: generateRemitDate()
+      
     };
 
     invoiceData.invoice_date = await getNextInvoiceDate(invoiceData.property_id);
-    invoiceData.remit_date = generateRemitDate();
+    invoiceData.remit_date = generateRemitDate(invoiceData.invoice_date);
 
 
     

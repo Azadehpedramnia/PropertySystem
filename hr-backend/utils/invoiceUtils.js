@@ -16,26 +16,11 @@ function generateInvoiceNo(country, previousNumber) {
   return `${prefix}-${newNumber}`;
 }
 
-{/*
-// Format today's date in "06 June 2025" style
-function generateInvoiceDate() {
-  const now = new Date();
-  return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
-}
-*/}
 
-
-// Add this to utils/invoiceUtils.js
-
-function generateRemitDate() {
-  const now = new Date();
-  now.setDate(now.getDate() + 14); // 14 days after today
-  // Format as "27th January 2025"
-  return now.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
-}
-
-
+//-------------------
 //Invoice Number
+//-------------------
+
 async function getNextInvoiceNo(country) {
   const prefix = getInvoicePrefix(country);
   let lastNumber = 508;
@@ -52,6 +37,8 @@ async function getNextInvoiceNo(country) {
 
   return `${prefix}-${lastNumber + 1}`;
 }
+
+
 //-------------------
 //Invoice Date
 //-------------------
@@ -85,6 +72,25 @@ async function getNextInvoiceDate(propertyId) {
 
   // Step 4: Format date as "01 July 2025"
   return baseDate.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+}
+
+
+//-------------------
+//Remit Date
+//-------------------
+
+function generateRemitDate(invoiceDateStr) {
+  if (!invoiceDateStr) throw new Error("invoiceDate is required");
+
+  const invoiceDate = new Date(invoiceDateStr);
+  const remitDate = new Date(invoiceDate.getFullYear(), invoiceDate.getMonth(), 27);
+
+  // Format as "27 June 2025"
+  return remitDate.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 
