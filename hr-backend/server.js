@@ -62,8 +62,6 @@ module.exports = { getNextInvoiceNo };
 
 app.post('/api/invoice', async (req, res) => {
   const {
-    organisation_name,
-    organisation_email,
     landlord_name,
     property_address,
     total_amount,
@@ -86,11 +84,9 @@ let property_country = country; // default/fallback
   try {
     await pool.query(
       `INSERT INTO invoice 
-      (organisation_name, organisation_email, landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid ,country) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      (landlord_name, property_address, total_amount, pdf_filename, invoice_no, remit_date, invoice_date, is_paid ,country) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
-        organisation_name,
-        organisation_email,
         landlord_name,
         property_address,
         total_amount,
