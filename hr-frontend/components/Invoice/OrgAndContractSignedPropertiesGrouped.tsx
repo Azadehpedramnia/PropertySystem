@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import EmailInvoiceButton from "./EmailInvoiceButton";
 
 type PersonWithContractSignedProperty = {
   person_id: number;
@@ -25,11 +26,12 @@ type PersonWithContractSignedProperty = {
   landlord_post_code_address: string;
   donation_due:string;
   start_date_of_lease:Date;
+  inquirer:string;
 };
 
 type GroupedData = {
   [organisation: string]: {
-    [landlord_name: string]: PersonWithContractSignedProperty[];
+    [inquirer: string]: PersonWithContractSignedProperty[];
   };
 };
 
@@ -47,7 +49,7 @@ export default function PeopleWithSignedPropertiesGrouped() {
 
         data.forEach((item) => {
           const org = item.organisation || "Unknown Organisation";
-          const landlord = item.landlord_name || "Unknown Landlord";
+          const landlord = item.inquirer || "Unknown Landlord";
 
           if (!groupedData[org]) {
             groupedData[org] = {};
@@ -85,8 +87,6 @@ const invoiceData = {
   landlord_city: prop.landlord_city,
   landlord_county: prop.landlord_county,
   landlord_post_code_address: prop.landlord_post_code_address,
-  //invoice_no: `SC${String(Date.now()).slice(-8)}`, // or as needed
-  //invoice_date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
   property_floor: prop.property_floor,
   property_first_line_address: prop.property_first_line_address,
   property_second_line_address: prop.property_second_line_address,
@@ -133,6 +133,7 @@ const invoiceData = {
           <summary>
             <strong>{org}</strong>
           </summary>
+          <EmailInvoiceButton organisation={org} />
           <div style={{ marginLeft: 20, marginTop: 5 }}>
             {Object.entries(landlords).map(([landlord, properties]) => (
               <details key={landlord} style={{ marginBottom: 5 }}>

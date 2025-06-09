@@ -34,6 +34,11 @@ app.post('/api/invoices/create', invoiceController.createInvoice);
 //serves the resulting PDFs to the browser
 app.use('/public/invoices', express.static(path.join(__dirname, 'public/invoices')));
 
+
+//email invoice
+const { emailInvoicesForOrganisation } = require('./controllers/email.controller');
+app.post('/api/email-invoices', emailInvoicesForOrganisation);
+
 // ------------------------------
 // invoice
 // ------------------------------
@@ -116,7 +121,8 @@ app.get('/api/people-with-signed-properties', async (req, res) => {
         pr.landlord_county,
         pr.landlord_post_code_address,
         pr.donation_due,
-        pr.start_date_of_lease
+        pr.start_date_of_lease,
+        pr.inquirer
       FROM people p
       JOIN person_property pp ON p.id = pp.person_id
       JOIN propertiies pr ON pp.property_id = pr.id
