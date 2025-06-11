@@ -215,7 +215,7 @@ interface Props {
                       {editPersonMode ? (
                         <>
                           <button className="btn btn-success me-2" onClick={async () => {
-                            const res = await fetch(`http://localhost:5000/api/people/${selectedPerson.id}`, {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/${selectedPerson.id}`, {
                               method: 'PUT',
                               headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify(selectedPerson),
@@ -238,7 +238,7 @@ interface Props {
                           <button className="btn btn-danger me-2" onClick={async () => {
                             const confirmDelete = confirm('Are you sure you want to delete this person?');
                             if (!confirmDelete) return;
-                            const res = await fetch(`http://localhost:5000/api/people/${selectedPerson.id}`, {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/${selectedPerson.id}`, {
                               method: 'DELETE',
                             });
                             if (res.ok) {
@@ -705,7 +705,7 @@ interface Props {
                                                 <button
                                                  className="btn btn-success me-2" 
                                                   onClick={async () => {
-                                                    const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/${property.id}`, {
                                                       method: 'PUT',
                                                       headers: { 'Content-Type': 'application/json' },
                                                       body: JSON.stringify({ ...property, ...editedProperty }),
@@ -814,7 +814,7 @@ interface Props {
                                                     const confirmDelete = confirm('Are you sure you want to delete this property?');
                                                     if (!confirmDelete) return;
                                         
-                                                    const res = await fetch(`http://localhost:5000/api/propertiies/${property.id}`, {
+                                                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/${property.id}`, {
                                                       method: 'DELETE',
                                                     });
                                         

@@ -23,15 +23,15 @@ export default function PropertyPage() {
       if (!isReady || isNaN(id)) return
   
       // Fetch the one property
-      fetch(`http://localhost:5000/api/propertiies/${id}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/${id}`)
         .then(r => r.ok ? r.json() : Promise.reject(r.status))
         .then((prop) => setSelectedProperty(prop))
         .catch(console.error)
   
       // Fetch people & relationships
       Promise.all([
-        fetch('http://localhost:5000/api/people').then(r => r.json()),
-        fetch('http://localhost:5000/api/person_property').then(r => r.json())
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people`).then(r => r.json()),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`).then(r => r.json())
       ]).then(([peopleList, rels]) => {
         setPeople(peopleList)
         setPersonProperties(rels)
@@ -47,17 +47,17 @@ export default function PropertyPage() {
         personProperties={personProperties}
         editPropertyMode={editPropertyMode}
         fetchPeople={() =>
-          fetch('http://localhost:5000/api/people')
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people`)
             .then(r => r.json())
             .then(setPeople)
         }
         fetchProperties={() =>
-          fetch('http://localhost:5000/api/propertiies')
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies`)
             .then(r => r.json())
            // .then((plist) => {/* you can update a list if needed */})
         }
         fetchPersonProperties={() =>
-          fetch('http://localhost:5000/api/person_property')
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`)
             .then(r => r.json())
             .then(setPersonProperties)
         }

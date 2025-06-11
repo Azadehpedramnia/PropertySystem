@@ -80,7 +80,7 @@ export function MediaList({
   const loadMedia = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/media/property/${propertyId}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/media/property/${propertyId}`
       )
       if (!res.ok) throw new Error(res.statusText)
       setMedia(await res.json())
@@ -95,7 +95,7 @@ export function MediaList({
   }, [propertyId, reloadTrigger])
 
   const handleDelete = async (mediaId: number) => {
-    await fetch(`http://localhost:5000/api/media/${mediaId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/media/${mediaId}`, {
       method: 'DELETE',
     })
     loadMedia()

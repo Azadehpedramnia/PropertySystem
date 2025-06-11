@@ -17,7 +17,7 @@ const PropertyActions: React.FC<Props> = ({
   fetchProperties,
 }) => {
   const handleSave = async () => {
-    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedProperty.id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/${selectedProperty.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(selectedProperty),
@@ -39,7 +39,7 @@ const PropertyActions: React.FC<Props> = ({
     const confirmDelete = confirm("Are you sure you want to delete this property?");
     if (!confirmDelete) return;
 
-    const res = await fetch(`http://localhost:5000/api/propertiies/${selectedProperty.id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/${selectedProperty.id}`, {
       method: "DELETE",
     });
 

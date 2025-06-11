@@ -37,7 +37,7 @@ export default function GroupedPropertyList() {
   ]
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/propertiies/grouped')
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies/grouped`)
       .then(res => res.json())
       .then(setData)
       .catch(console.error);

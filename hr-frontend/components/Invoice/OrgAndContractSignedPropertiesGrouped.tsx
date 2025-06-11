@@ -42,7 +42,7 @@ export default function PeopleWithSignedPropertiesGrouped() {
   
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/people-with-signed-properties")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people-with-signed-properties`)
       .then((res) => res.json())
       .then((data: PersonWithContractSignedProperty[]) => {
         const groupedData: GroupedData = {};
@@ -104,7 +104,7 @@ const invoiceData = {
 
 //fetch URL
   try {
-    const response = await fetch("http://localhost:5000/api/invoices/create", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/invoices/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(invoiceData)
@@ -113,7 +113,7 @@ const invoiceData = {
     const data = await response.json();
     setDownloadLinks((links) => ({
       ...links,
-      [`${prop.person_id}-${prop.property_id}`]: `http://localhost:5000/public/invoices/${data.fileName}`
+      [`${prop.person_id}-${prop.property_id}`]: `${process.env.NEXT_PUBLIC_API_BASE_URL}/public/invoices/${data.fileName}`
     }));
   } catch (error) {
     alert("Invoice creation failed");

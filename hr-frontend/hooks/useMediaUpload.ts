@@ -1,6 +1,6 @@
 export function useMediaUpload() {
 
-    const API_BASE = 'http://localhost:5000';
+    const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL}`;
     const postJson = (url: string, body: any) =>
       fetch(`${API_BASE}${url}`, {
         method: 'POST',

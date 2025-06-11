@@ -206,7 +206,7 @@ export default function Dashboard() {
 
 //fetching role 
   useEffect(() => {
-    fetch("http://localhost:5000/api/people/role")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/role`)
       .then((res) => {
         if (!res.ok) {
           console.error("Error fetching from /api/people/role:", res.status);
@@ -284,20 +284,20 @@ export default function Dashboard() {
   }
 
   const fetchPeople = useCallback(async () => {
-    const res = await fetch('http://localhost:5000/api/people');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people`);
     const data = await res.json();
     setPeople(data);
   }, []);
 
   const fetchProperties = useCallback(async () => {
-    const res = await fetch('http://localhost:5000/api/propertiies');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies`);
     const data = await res.json();
     setProperties(data);
   }, []);
 
   const fetchPersonProperties = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/person_property');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`);
       const data = await res.json();
       setPersonProperties(data);
     } catch (error) {
@@ -327,7 +327,7 @@ export default function Dashboard() {
 
   // Add Person
   const addPersoon = async () => {  
-    await fetch('http://localhost:5000/api/people', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // Pass the entire person object
@@ -419,7 +419,7 @@ useEffect(() => {
     // Add Property
     const addProperrty = async (e?: React.FormEvent) => {
       e?.preventDefault(); // Prevent full page reload
-      await fetch('http://localhost:5000/api/propertiies', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // Pass the entire property object
@@ -487,7 +487,7 @@ useEffect(() => {
         // If it exists, toggle the relationship with a PUT
         const newValue = !existing.is_related;
         const res = await fetch(
-          `http://localhost:5000/api/person_property/${existing.id}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property/${existing.id}`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -497,7 +497,7 @@ useEffect(() => {
         if (!res.ok) throw new Error('Failed to update relationship');
       } else {
         // If no row yet, create one with isRelated=true
-        const res = await fetch('http://localhost:5000/api/person_property', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

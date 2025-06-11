@@ -28,7 +28,7 @@ export default function PersonPage() {
     if (!isReady || isNaN(id)) return
 
     // fetch exactly like you do in Dashboard
-    fetch(`http://localhost:5000/api/people/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/${id}`)
       .then((r) => {
         if (!r.ok) throw new Error(`people/${id} returned ${r.status}`)
         return r.json()
@@ -36,12 +36,12 @@ export default function PersonPage() {
       .then(setSelectedPerson)
       .catch(console.error)
 
-    fetch('http://localhost:5000/api/propertiies')   
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies`)   
       .then((r) => r.json())
       .then(setProperties)
       .catch(console.error)
 
-    fetch('http://localhost:5000/api/person_property')
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`)
       .then((r) => r.json())
       .then(setPersonProperties)
       .catch(console.error)
@@ -64,12 +64,12 @@ export default function PersonPage() {
       // supply fetchers so “Save” buttons re‑reload the right bits
       fetchPeople={() => {}}
       fetchProperties={() =>
-        fetch('http://localhost:5000/api/propertiies')
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/propertiies`)
           .then((r) => r.json())
           .then(setProperties)
       }
       fetchPersonProperties={() =>
-        fetch('http://localhost:5000/api/person_property')
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/person_property`)
           .then((r) => r.json())
           .then(setPersonProperties)
       }

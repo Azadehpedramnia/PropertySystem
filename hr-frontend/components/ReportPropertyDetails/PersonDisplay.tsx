@@ -114,7 +114,7 @@ const PersonDisplay: React.FC<Props> = ({
 
       {proposalId && (
         <a
-          href={`http://localhost:5000/api/proposals/${proposalId}/download-pdf`}
+          href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proposals/${proposalId}/download-pdf`}
           className="ml-4 text-blue-600 hover:underline"
         >
           Download PDF
@@ -153,7 +153,7 @@ const PersonDisplay: React.FC<Props> = ({
             const confirmDelete = confirm("Are you sure you want to delete this person?");
             if (!confirmDelete) return;
 
-            const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/${person.id}`, {
               method: "DELETE",
             });
 

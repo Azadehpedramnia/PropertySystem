@@ -34,7 +34,7 @@ const SearchComponent: React.FC = () => {
     setHasSearched(true);
 
     try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://192.168.88.10:5000";  //serverip
         const url = `${API_URL}/api/${searchType}/search?q=${encodeURIComponent(query)}&field=${searchField}`;
         const response = await fetch(url);
         const text = await response.text();

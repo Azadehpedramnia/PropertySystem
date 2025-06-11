@@ -24,7 +24,7 @@ export const usePeople = () => {
 
   const fetchPeople = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/people');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people`);
       const data = await res.json();
       setPeople(data);
     } catch (error) {

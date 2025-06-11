@@ -13,7 +13,7 @@ interface ProposalStatusProps {
       async function fetchStatus() {
         try {
           const res = await fetch(
-            `http://localhost:5000/api/proposals/latest?personId=${personId}&propertyId=${propertyId}`
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proposals/latest?personId=${personId}&propertyId=${propertyId}`
           );
           if (res.ok) {
             const data = await res.json();

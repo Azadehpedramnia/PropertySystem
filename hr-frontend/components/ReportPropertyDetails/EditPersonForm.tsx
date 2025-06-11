@@ -23,7 +23,7 @@ const EditPersonForm: React.FC<Props> = ({
   fetchPeople,
 }) => {
   const handleSave = async () => {
-    const res = await fetch(`http://localhost:5000/api/people/${person.id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/people/${person.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...person, ...editedPerson }),

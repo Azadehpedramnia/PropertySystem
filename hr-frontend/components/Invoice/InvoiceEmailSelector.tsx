@@ -13,7 +13,7 @@ export default function InvoiceEmailSelector() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/invoices")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/invoices`)
       .then(res => res.json())
       .then(setInvoices);
   }, []);
@@ -26,7 +26,7 @@ export default function InvoiceEmailSelector() {
 
   const sendSelectedInvoices = async () => {
     const pdfs = Array.from(selected);
-    const response = await fetch("http://localhost:5000/api/email-invoices", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/email-invoices`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pdfs })

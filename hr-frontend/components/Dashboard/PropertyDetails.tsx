@@ -91,7 +91,7 @@ interface Props {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch('http://localhost:5000/api/proposals');
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proposals`);
         if (!res.ok) throw new Error(await res.text());
         setAllProposals(await res.json());
       } catch (err) {
