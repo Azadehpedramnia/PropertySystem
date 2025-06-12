@@ -1178,6 +1178,6 @@ app.get('/api/proposals/latest', async (req, res) => {
 
 // Start the Express server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0',() => {
   console.log(`Server running on port ${PORT}`);
 });
